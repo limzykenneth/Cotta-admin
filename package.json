@@ -1,0 +1,40 @@
+{
+  "name": "char-admin",
+  "version": "0.0.1",
+  "description": "Frontend admin module for Char",
+  "scripts": {
+    "favicon": "node favicon.js && echo 'Now copy contents of favicon.html into your HTML files.'"
+  },
+  "author": "Kenneth Lim <limzy.kenneth@gmail.com> (http://designerken.be)",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "browser-sync": "^2.17.5",
+    "browserify": "^14.5.0",
+    "browserify-shim": "~3.8.9",
+    "favicons": "^4.7.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-compile-handlebars": "^0.6.1",
+    "gulp-favicons": "^2.2.6",
+    "gulp-less": "^3.1.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-surge": "^0.1.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.7",
+    "uglify-es": "^3.1.6",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:$",
+    "underscore": "global:_",
+    "backbone": "global:Backbone"
+  }
+}
