@@ -5,6 +5,9 @@ var Backbone = require("backbone");
 Backbone.$ = $;
 var jwtDecode = require("jwt-decode");
 
+var Router = require("./routes.js");
+var router;
+
 window.host = "http://localhost:3001";
 
 // Check for cookie and if doesn't exist, go to login page
@@ -20,6 +23,12 @@ var getSchemas = fetch(`${host}/api/schema`, {
 	headers: fetchHeaders
 }).then(function(response){
 	return response.json();
+});
+
+// Bind routers
+getSchemas.then(function(schemas){
+	router = new Router(schemas);
+	Backbone.history.start({pushState: true});
 });
 
 $(document).ready(function() {

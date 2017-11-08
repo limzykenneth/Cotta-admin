@@ -13,7 +13,8 @@ var gulp = require("gulp"),
     composer = require("gulp-uglify/composer"),
     uglifyjs = composer(uglify, console),
     surge = require("gulp-surge"),
-    browserSync = require("browser-sync").create();
+    browserSync = require("browser-sync").create(),
+    historyApiFallback = require('connect-history-api-fallback');
 
 // Compilation tasks
 gulp.task("handlebars", function(){
@@ -112,7 +113,8 @@ gulp.task("copy-images", function(){
 // Server
 gulp.task("server", ["default"], function(){
 	browserSync.init({
-        server: "./dist"
+        server: "./dist",
+        middleware: [ historyApiFallback() ]
     });
 
     gulp.watch("./stylesheets/**/*.less", ["stylesheets"]);
