@@ -1,0 +1,47 @@
+<script id="model-template" type="text/template">
+	<h1><%= collectionName %> - ID: <%= data._uid %> <a class="edit-btn button" href="/admin/collections/<%= collectionSlug %>/<%= data._uid %>/edit">Edit</a>
+
+	<form class="delete-form" action="/admin/collections/<%= collectionSlug %>/<%= data._uid %>" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="_method" value="delete" />
+		<input class="delete-btn" type="submit" name="delete" value="Delete">
+	</form>
+	</h1>
+
+	<article class="model">
+		<%
+		_.each(fields, function(field, i){
+		%>
+			<div class="field">
+				<h3 class="field-name"><%= field.name %></h3>
+				<div class="field-value">
+		<%
+			if(["wysiwyg", "text", "email", "radio"].includes(field.type)){
+		%>
+				<%= data[field.slug] %>
+		<%
+			}else if(field.type == "checkbox"){
+		%>
+				<ul class="checkbox-value">
+					<%
+					_.each(data[field.slug], function(val){
+					%>
+						<li><%= val %></li>
+					<%
+					});
+					%>
+				</ul>
+		<%
+			}else if(field.type == "image"){
+		%>
+				<img class="image-value" src="<%= window.rootURL %>/<%= data[field.slug] %>">
+				<br>URL: <%= window.rootURL %>/<%= data[field.slug] %>
+		<%
+			}
+		%>
+			</div>
+		</div>
+		<%
+		});
+		%>
+	</article>
+</script>

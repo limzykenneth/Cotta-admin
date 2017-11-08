@@ -395,16 +395,16 @@ a.button {
 #page-content .main-content.user-container .user .delete-form .delete-btn {
   font-size: 1rem;
 }
-#page-content .main-content.model-container .model .field {
+#page-content .main-content .model .field {
   margin-bottom: 2rem;
 }
-#page-content .main-content.model-container .model .field .field-name {
+#page-content .main-content .model .field .field-name {
   margin-bottom: 0.5rem;
 }
-#page-content .main-content.model-container .model .field .field-value .checkbox-value {
+#page-content .main-content .model .field .field-value .checkbox-value {
   padding-left: 1.3rem;
 }
-#page-content .main-content.model-container .model .field .field-value .image-value {
+#page-content .main-content .model .field .field-value .image-value {
   max-width: 500px;
   height: auto;
 }

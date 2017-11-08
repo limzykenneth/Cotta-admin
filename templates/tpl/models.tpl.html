@@ -11,12 +11,12 @@
 		<%
 		if(data.length === 0){
 		%>
-			<p>No models created yet. Perhaps you want to click <a href="/admin/collections/{{collectionSlug}}/new">here</a> to create a new model?</p>
+			<p>No models created yet. Perhaps you want to click <a href="/admin/collections/<%= collectionSlug %>/new">here</a> to create a new model?</p>
 		<%
 		}else{
 			_.each(data, function(el, i){
 		%>
-				<a href="/admin/collections/<%= collectionSlug %>/<%= el._uid %>"><li class="model card">
+				<a href="/collections/<%= collectionSlug %>/<%= el._uid %>"><li class="model card">
 					<span class="model-id"><%= el._uid %></span>
 					<span class="created-by">Created by: <%= el._metadata.created_by %></span>
 					<span class="date-created">Date created: <%= el._metadata.date_created %></span>
