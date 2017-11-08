@@ -1,23 +1,43 @@
-var $ = require('jquery');
+var $ = require("jquery");
 // require other libraries after this line
 var _ = require("underscore");
 var Backbone = require("backbone");
 Backbone.$ = $;
+var jwtDecode = require("jwt-decode");
 
-var host = "http://localhost:3001";
+window.host = "http://localhost:3001";
+
+// Check for cookie and if doesn't exist, go to login page
 var authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MDk1NjA3MzEsImV4cCI6MTUxMDE2NTUzMX0.Ez_eeRy3eJRY9E2duE_M75XxcTZWZ1ltcisSjkZ1cc0";
+window.fetchHeaders = new Headers({
+	"Authorization": "Bearer " + authToken
+});
 
-var getSchema = fetch(`${host}/api/schema`, {
+var tokenData = jwtDecode(authToken);
+
+var getSchemas = fetch(`${host}/api/schema`, {
 	method: "get",
-	headers: new Headers({
-		"Authorization": "Bearer " + authToken
-	})
+	headers: fetchHeaders
 }).then(function(response){
 	return response.json();
 });
 
 $(document).ready(function() {
-	getSchema.then(function(schema){
+	// Run stuff common to all pages
+	getSchemas.then(function(schemas){
+		// Render schema into sidebar
+		var tpl = _.template($("#sidebar-list-template").html());
+		$("#page-content .sidebar .sidebar-list").html(tpl({
+			schemas: schemas
+		}));
+
+		// Check user role and render additional sidebar items as needed
+		tpl = _.template($("#sidebar-admin-list-template").html());
+		$("#page-content .sidebar .sidebar-admin-list").html(tpl(tokenData));
+	});
+
+	// Run stuff for specific pages
+	getSchemas.then(function(schemas){
 
 	});
 });

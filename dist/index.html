@@ -6,7 +6,7 @@
     <head profile="http://www.w3.org/2005/10/profile">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>The Site's Title</title>
+        <title>Char Admin</title>
         
         <!-- for Google -->
         <meta name="description" content="" />
@@ -86,8 +86,36 @@
         </header>
 
 		<div id="page-content">
-        
-		</div>
+            <section class="sidebar">
+            	<div class="sidebar-admin-list"></div>
+            
+            	<h3 class="sidebar-title">All Collections</h3>
+            	<div class="sidebar-list"></div>
+            </section>
+            
+            <script id="sidebar-list-template" type="text/template">
+            	<%
+            	_.each(schemas, function(el, i){
+            	%>
+            		<div class="sidebar-items"><a href="/<%= el.collectionSlug %>"><%= el.collectionName %></a></div>
+            	<%
+            	});
+            	%>
+            </script>
+            
+            <script id="sidebar-admin-list-template" type="text/template">
+            	<%
+            	if(role == "administrator"){
+            	%>
+            		<div class="sidebar-items"><a href="/admin/users">Users</a></div>
+            		<div class="sidebar-items"><a href="/admin/config">Configurations</a></div>
+            	<%
+            	}
+            	%>
+            </script>            <section class="main-content">
+            	<h1></h1>
+            	<p>Welcome </p>
+            </section>		</div>
 
         <footer id="page-footer">
         

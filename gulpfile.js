@@ -19,7 +19,7 @@ var gulp = require("gulp"),
 gulp.task("handlebars", function(){
 	var options = {
 		ignorePartials: true,
-		batch: ["./templates", "./templates/head"],
+		batch: ["./templates", "./templates/head", "./templates/tpl"],
 		helpers: {
 			capitals : function(str){
                 return str.fn(this).toUpperCase();

@@ -36,5 +36,8 @@
     "jquery": "global:$",
     "underscore": "global:_",
     "backbone": "global:Backbone"
+  },
+  "dependencies": {
+    "jwt-decode": "^2.2.0"
   }
 }

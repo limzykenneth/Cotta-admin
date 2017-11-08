@@ -1,0 +1,20 @@
+<script id="sidebar-list-template" type="text/template">
+	<%
+	_.each(schemas, function(el, i){
+	%>
+		<div class="sidebar-items"><a href="/<%= el.collectionSlug %>"><%= el.collectionName %></a></div>
+	<%
+	});
+	%>
+</script>
+
+<script id="sidebar-admin-list-template" type="text/template">
+	<%
+	if(role == "administrator"){
+	%>
+		<div class="sidebar-items"><a href="/admin/users">Users</a></div>
+		<div class="sidebar-items"><a href="/admin/config">Configurations</a></div>
+	<%
+	}
+	%>
+</script>
