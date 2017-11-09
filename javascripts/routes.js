@@ -24,7 +24,7 @@ var router = Backbone.Router.extend({
 						data: collection.toJSON(),
 						collectionSlug: el.collectionSlug,
 						collectionName: el.collectionName
-					}));
+					})).attr("class", "main-content").addClass("models-container");
 				});
 			});
 
@@ -41,7 +41,7 @@ var router = Backbone.Router.extend({
 						collectionSlug: el.collectionSlug,
 						collectionName: el.collectionName,
 						fields: el.fields
-					}));
+					})).attr("class", "main-content").addClass("model-container");
 				});
 			});
 		}, this);

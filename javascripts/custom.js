@@ -11,7 +11,7 @@ var router;
 window.host = "http://localhost:3001";
 
 // Check for cookie and if doesn't exist, go to login page
-var authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MDk1NjA3MzEsImV4cCI6MTUxMDE2NTUzMX0.Ez_eeRy3eJRY9E2duE_M75XxcTZWZ1ltcisSjkZ1cc0";
+var authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTAyMTE3NzAsImV4cCI6MTUxMDgxNjU3MH0.4XQeUuUB2l1b29zKdBlSrziDovQDxbdw4YjiaJBLZXU";
 window.fetchHeaders = new Headers({
 	"Authorization": "Bearer " + authToken
 });

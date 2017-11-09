@@ -295,37 +295,37 @@ a.button {
 #page-content .main-content.edit-collection .schema-definition .submit {
   margin-top: 1rem;
 }
-#page-content .main-content .new-btn {
+#page-content .main-content.models-container .new-btn {
   font-size: 1.5rem;
 }
-#page-content .main-content .delete-btn {
+#page-content .main-content.models-container .delete-btn {
   font-size: 1.5rem;
 }
-#page-content .main-content .models {
+#page-content .main-content.models-container .models {
   padding-left: 0;
   list-style: none;
 }
-#page-content .main-content .models .model {
+#page-content .main-content.models-container .models .model {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
-#page-content .main-content .models .model:hover {
+#page-content .main-content.models-container .models .model:hover {
   color: #235076;
 }
-#page-content .main-content .models .model .model-id {
+#page-content .main-content.models-container .models .model .model-id {
   width: 5%;
 }
-#page-content .main-content .models .model .created-by {
+#page-content .main-content.models-container .models .model .created-by {
   width: 25%;
 }
-#page-content .main-content .models .model .date-created {
+#page-content .main-content.models-container .models .model .date-created {
   text-align: right;
   width: 35%;
   min-width: 260px;
 }
-#page-content .main-content .models .model .date-modified {
+#page-content .main-content.models-container .models .model .date-modified {
   text-align: right;
   width: 35%;
   min-width: 260px;
@@ -395,16 +395,16 @@ a.button {
 #page-content .main-content.user-container .user .delete-form .delete-btn {
   font-size: 1rem;
 }
-#page-content .main-content .model .field {
+#page-content .main-content.model-container .model .field {
   margin-bottom: 2rem;
 }
-#page-content .main-content .model .field .field-name {
+#page-content .main-content.model-container .model .field .field-name {
   margin-bottom: 0.5rem;
 }
-#page-content .main-content .model .field .field-value .checkbox-value {
+#page-content .main-content.model-container .model .field .field-value .checkbox-value {
   padding-left: 1.3rem;
 }
-#page-content .main-content .model .field .field-value .image-value {
+#page-content .main-content.model-container .model .field .field-value .image-value {
   max-width: 500px;
   height: auto;
 }
