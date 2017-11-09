@@ -12,6 +12,8 @@ window.host = "http://localhost:3001";
 
 // Check for cookie and if doesn't exist, go to login page
 var authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTAyMTE3NzAsImV4cCI6MTUxMDgxNjU3MH0.4XQeUuUB2l1b29zKdBlSrziDovQDxbdw4YjiaJBLZXU";
+window.rootURL = "http://localhost:3003";
+
 window.fetchHeaders = new Headers({
 	"Authorization": "Bearer " + authToken
 });

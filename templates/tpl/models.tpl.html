@@ -1,7 +1,7 @@
 <script id="models-list-template" type="text/template">
-	<h1><%= collectionName %> <a class="new-btn button" href="/admin/collections/<%= collectionSlug %>/new">New</a>
+	<h1><%= collectionName %> <a class="new-btn button" href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">New</a>
 
-	<form class="delete-form" action="/admin/schema/delete/<%= collectionSlug %>" method="post">
+	<form class="delete-form" action="<%= window.rootURL %>/schema/delete/<%= collectionSlug %>" method="post">
 		<input type="hidden" name="_method" value="delete" />
 		<input class="delete-btn" type="submit" name="delete" value="Delete">
 	</form>
@@ -11,7 +11,7 @@
 		<%
 		if(data.length === 0){
 		%>
-			<p>No models created yet. Perhaps you want to click <a href="/admin/collections/<%= collectionSlug %>/new">here</a> to create a new model?</p>
+			<p>No models created yet. Perhaps you want to click <a href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">here</a> to create a new model?</p>
 		<%
 		}else{
 			_.each(data, function(el, i){

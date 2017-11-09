@@ -2,7 +2,7 @@
 	<%
 	_.each(schemas, function(el, i){
 	%>
-		<div class="sidebar-items"><a href="/collections/<%= el.collectionSlug %>"><%= el.collectionName %></a></div>
+		<div class="sidebar-items"><a href="<%= window.rootURL %>/collections/<%= el.collectionSlug %>"><%= el.collectionName %></a></div>
 	<%
 	});
 	%>
@@ -12,8 +12,8 @@
 	<%
 	if(role == "administrator"){
 	%>
-		<div class="sidebar-items"><a href="/admin/users">Users</a></div>
-		<div class="sidebar-items"><a href="/admin/config">Configurations</a></div>
+		<div class="sidebar-items"><a href="<%= window.rootURL %>/users">Users</a></div>
+		<div class="sidebar-items"><a href="<%= window.rootURL %>/config">Configurations</a></div>
 	<%
 	}
 	%>

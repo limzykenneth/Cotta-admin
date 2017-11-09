@@ -9,6 +9,7 @@ var charCollection = require("./collection.js");
 var router = Backbone.Router.extend({
 	initialize: function(schemas){
 		_.each(schemas, function(el, i){
+			// Routes for each collection
 			this.route("collections/" + el.collectionSlug, el.collectionName, function(){
 				fetch(`${window.host}/api/collections/${el.collectionSlug}`, {
 					headers: window.fetchHeaders
@@ -28,6 +29,7 @@ var router = Backbone.Router.extend({
 				});
 			});
 
+			// Routes for each model under each collection
 			this.route("collections/" + el.collectionSlug + "/:uid", el.collectionName, function(uid){
 				fetch(`${window.host}/api/collections/${el.collectionSlug}/${uid}`, {
 					headers: window.fetchHeaders

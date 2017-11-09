@@ -1,7 +1,7 @@
 <script id="model-template" type="text/template">
-	<h1><%= collectionName %> - ID: <%= data._uid %> <a class="edit-btn button" href="/admin/collections/<%= collectionSlug %>/<%= data._uid %>/edit">Edit</a>
+	<h1><%= collectionName %> - ID: <%= data._uid %> <a class="edit-btn button" href="<%= window.rootURL %>/collections/<%= collectionSlug %>/<%= data._uid %>/edit">Edit</a>
 
-	<form class="delete-form" action="/admin/collections/<%= collectionSlug %>/<%= data._uid %>" method="post" enctype="multipart/form-data">
+	<form class="delete-form" action="<%= window.rootURL %>/collections/<%= collectionSlug %>/<%= data._uid %>" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="_method" value="delete" />
 		<input class="delete-btn" type="submit" name="delete" value="Delete">
 	</form>
