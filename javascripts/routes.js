@@ -5,6 +5,8 @@ var Backbone = require("backbone");
 Backbone.$ = $;
 
 var charCollection = require("./collection.js");
+var charModel = require("./model.js");
+var collections = {};
 
 var router = Backbone.Router.extend({
 	initialize: function(schemas){
@@ -17,15 +19,13 @@ var router = Backbone.Router.extend({
 					return response.json();
 				}).then(function(col){
 					var schema = el;
-					var collection = new charCollection(col);
 
 					// Render collection
-					var tpl = _.template($("#models-list-template").html());
-					$("#page-content .main-content").html(tpl({
-						data: collection.toJSON(),
-						collectionSlug: el.collectionSlug,
-						collectionName: el.collectionName
-					})).attr("class", "main-content").addClass("models-container");
+					collections[schema.collectionSlug] = new charCollection(col);
+					var collection = collections[schema.collectionSlug];
+					collection.slug = schema.collectionSlug;
+					collection.name = schema.collectionName;
+					collection.render();
 				});
 			});
 
@@ -35,15 +35,12 @@ var router = Backbone.Router.extend({
 					headers: window.fetchHeaders
 				}).then(function(response){
 					return response.json();
-				}).then(function(model){
-					// Render model
-					var tpl = _.template($("#model-template").html());
-					$("#page-content .main-content").html(tpl({
-						data: model,
-						collectionSlug: el.collectionSlug,
-						collectionName: el.collectionName,
-						fields: el.fields
-					})).attr("class", "main-content").addClass("model-container");
+				}).then(function(m){
+					var model = new charModel(m);
+					model.collectionSlug = el.collectionSlug;
+					model.collectionName = el.collectionName;
+					model.fields = el.fields;
+					model.render();
 				});
 			});
 		}, this);
