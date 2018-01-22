@@ -1,6 +1,5 @@
 var gulp = require("gulp"),
 	gutil = require("gulp-util"),
-    handlebars = require("gulp-compile-handlebars"),
     rename = require("gulp-rename"),
     less = require("gulp-less"),
     cleanCSS = require("gulp-clean-css"),
@@ -12,43 +11,13 @@ var gulp = require("gulp"),
     uglify = require("uglify-es"),
     composer = require("gulp-uglify/composer"),
     uglifyjs = composer(uglify, console),
-    surge = require("gulp-surge"),
-    browserSync = require("browser-sync").create(),
-    historyApiFallback = require('connect-history-api-fallback');
+    browserSync = require("browser-sync").create();
+
+require("./gulp-tasks/deploy.js");
+require("./gulp-tasks/assets.js");
+require("./gulp-tasks/server.js");
 
 // Compilation tasks
-gulp.task("handlebars", function(){
-	var options = {
-		ignorePartials: true,
-		batch: ["./templates", "./templates/head", "./templates/tpl"],
-		helpers: {
-			capitals : function(str){
-                return str.fn(this).toUpperCase();
-            },
-            titleCase: function(str){
-            	return str.fn(this).replace(/\w\S*/g, function(txt){
-					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-				});
-            },
-            ifEquals: function(a, b, opts){
-            	if(a == b){
-			        return opts.fn(this);
-            	}else{
-			        return opts.inverse(this);
-			    }
-            }
-		}
-	};
-
-	return gulp.src("templates/main.hbs")
-		.pipe(plumber({
-			errorHandler: onError
-		}))
-        .pipe(handlebars({page: "index"}, options))
-        .pipe(rename("index.html"))
-        .pipe(gulp.dest("dist"));
-});
-
 gulp.task("stylesheets", function(){
 	var lessOptions = {
 		paths: ["./stylesheets"]
@@ -89,69 +58,8 @@ gulp.task("javascripts", function(){
         .pipe(gulp.dest("./dist/javascripts/"));
 });
 
-gulp.task("copy-libraries-js", function(){
-	return gulp.src("./javascripts/vendor/*")
-		.pipe(gulp.dest("./dist/javascripts/vendor"));
-});
 
-gulp.task("copy-css", function(){
-	gulp.src("./stylesheets/fonts/*")
-		.pipe(gulp.dest("./dist/stylesheets/fonts"));
-
-	gulp.src("./stylesheets/img/*")
-		.pipe(gulp.dest("./dist/stylesheets/img"));
-
-	return gulp.src("./stylesheets/normalize.min.css")
-		.pipe(gulp.dest("./dist/stylesheets"));
-});
-
-gulp.task("copy-images", function(){
-	return gulp.src("./images/**/*")
-		.pipe(gulp.dest("./dist/images"));
-});
-
-// Server
-gulp.task("server", ["default"], function(){
-	browserSync.init({
-        server: "./dist",
-        middleware: [ historyApiFallback() ]
-    });
-
-    gulp.watch("./stylesheets/**/*.less", ["stylesheets"]);
-    gulp.watch("./stylesheets/(normalize.min.css|fonts/*|img/*)", ["copy-css"]);
-
-    gulp.watch("./javascripts/**/*.js", ["javascripts"]);
-    gulp.watch("./javascripts/vendor/*", ["copy-libraries-js"]);
-
-    gulp.watch("./templates/**/*", ["handlebars"]);
-
-    gulp.watch("./images/**/*", ["copy-images"]);
-
-    gulp.watch("./dist/*.html").on("change", browserSync.reload);
-    gulp.watch("./dist/javascripts/**/*").on("change", browserSync.reload);
-    gulp.watch("./dist/stylesheets/(normalize.min.css|fonts/*|img/*)").on("change", browserSync.reload);
-});
-
-
-// Deployment tasks
-gulp.task("deploy:dev", ["default"], function(){
-	return surge({
-    	project: "./dist",         // Path to your static build directory
-    	domain: ""  // Your domain or Surge subdomain
-	});
-});
-
-gulp.task("deploy:prod", ["default"], function(){
-	return surge({
-    	project: "./dist",         // Path to your static build directory
-    	domain: ""  // Your domain or Surge subdomain
-	});
-});
-
-
-gulp.task("static-files", ["copy-libraries-js", "copy-css", "copy-images"]);
-gulp.task("default", ["handlebars", "stylesheets", "javascripts", "static-files"]);
-gulp.task("deploy", ["deploy:dev"]);
+gulp.task("default", ["stylesheets", "javascripts", "static-assets"]);
 
 
 function onError(err){
