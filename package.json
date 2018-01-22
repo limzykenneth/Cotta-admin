@@ -39,6 +39,7 @@
     "backbone": "global:Backbone"
   },
   "dependencies": {
-    "jwt-decode": "^2.2.0"
+    "jwt-decode": "^2.2.0",
+    "store": "^2.0.12"
   }
 }

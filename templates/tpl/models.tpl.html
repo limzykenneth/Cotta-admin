@@ -1,22 +1,19 @@
 <script id="models-list-template" type="text/template">
-	<h1><%= collectionName %> <a class="new-btn button" href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">New</a>
+	<h1><%= schema.collectionName %> <a class="new-btn button" href="<%= window.rootURL %>/collections/<%= schema.collectionSlug %>/new">New</a>
 
-	<form class="delete-form" action="<%= window.rootURL %>/schema/delete/<%= collectionSlug %>" method="post">
-		<input type="hidden" name="_method" value="delete" />
-		<input class="delete-btn" type="submit" name="delete" value="Delete">
-	</form>
+		<input class="delete-btn" type="submit" name="delete" value="Delete" action="<%= window.host %>/api/schema/<%= schema.collectionSlug %>">
 	</h1>
 
 	<ul class="models">
 		<%
 		if(data.length === 0){
 		%>
-			<p>No models created yet. Perhaps you want to click <a href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">here</a> to create a new model?</p>
+			<p>No models created yet. Perhaps you want to click <a href="<%= window.rootURL %>/collections/<%= schema.collectionSlug %>/new">here</a> to create a new model?</p>
 		<%
 		}else{
 			_.each(data, function(el, i){
 		%>
-				<a href="/collections/<%= collectionSlug %>/<%= el._uid %>"><li class="model card">
+				<a href="/collections/<%= schema.collectionSlug %>/<%= el._uid %>"><li class="model card">
 					<span class="model-id"><%= el._uid %></span>
 					<span class="created-by">Created by: <%= el._metadata.created_by %></span>
 					<span class="date-created">Date created: <%= el._metadata.date_created %></span>

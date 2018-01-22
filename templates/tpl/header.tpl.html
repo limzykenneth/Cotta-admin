@@ -1,0 +1,15 @@
+<script id="header-right-template" type="text/template">
+	<%
+	if(window.tokenData){
+	%>
+		<a href="<%= window.rootURL %>/account"><i class="fa fa-2x fa-user" aria-hidden="true"></i></a>
+		<a href="<%= window.rootURL %>/logout"><i class="fa fa-2x fa-sign-out" aria-hidden="true"></i></a>
+	<%
+	}else{
+	%>
+		<a href="<%= window.rootURL %>/signup"><i class="fa fa-2x fa-user-plus" aria-hidden="true"></i></a>
+		<a href="<%= window.rootURL %>/login"><i class="fa fa-2x fa-sign-in" aria-hidden="true"></i></a>
+	<%
+	}
+	%>
+</script>

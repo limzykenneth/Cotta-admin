@@ -185,10 +185,7 @@ a.button {
 #page-content .main-content .edit-btn:hover {
   color: #fff;
 }
-#page-content .main-content .delete-form {
-  display: inline-block;
-}
-#page-content .main-content .delete-form .delete-btn {
+#page-content .main-content .delete-btn {
   font-size: 15px;
   display: inline-block;
   -webkit-transform: translateY(-5px);

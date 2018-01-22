@@ -4,6 +4,7 @@ var _ = require("underscore");
 var Backbone = require("backbone");
 Backbone.$ = $;
 var jwtDecode = require("jwt-decode");
+var localStore = require("store");
 
 var Router = require("./routes.js");
 var router;
@@ -11,21 +12,31 @@ var router;
 window.host = "http://localhost:3001";
 
 // Check for cookie and if doesn't exist, go to login page
-var authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTAyMTE3NzAsImV4cCI6MTUxMDgxNjU3MH0.4XQeUuUB2l1b29zKdBlSrziDovQDxbdw4YjiaJBLZXU";
+var authToken = localStore.get("accessToken");
 window.rootURL = "http://localhost:3003";
 
 window.fetchHeaders = new Headers({
-	"Authorization": "Bearer " + authToken
+	"Authorization": "Bearer " + authToken,
+	"Content-Type": "application/json"
 });
 
-var tokenData = jwtDecode(authToken);
-
-var getSchemas = fetch(`${host}/api/schema`, {
-	method: "get",
-	headers: fetchHeaders
-}).then(function(response){
-	return response.json();
-});
+window.tokenData = null;
+if(authToken){
+	tokenData = jwtDecode(authToken);
+}
+if(!tokenData || moment(tokenData.exp).isAfter(Date.now())){
+	window.getSchemas = Promise.reject(new Error("Authentication token invalid or missing")).catch(function(err){});
+	if(window.location.pathname != "/login"){
+		window.location.replace("/login");
+	}
+}else{
+	window.getSchemas = fetch(`${host}/api/schema`, {
+		method: "get",
+		headers: fetchHeaders
+	}).then(function(response){
+		return response.json();
+	});
+}
 
 // Bind routers
 getSchemas.then(function(schemas){
@@ -34,6 +45,10 @@ getSchemas.then(function(schemas){
 });
 
 $(document).ready(function() {
+	// Render header
+	var tpl = _.template($("#header-right-template").html());
+	$("#page-header .right").html(tpl());
+
 	// Run stuff common to all pages
 	getSchemas.then(function(schemas){
 		// Render schema into sidebar
@@ -45,10 +60,14 @@ $(document).ready(function() {
 		// Check user role and render additional sidebar items as needed
 		tpl = _.template($("#sidebar-admin-list-template").html());
 		$("#page-content .sidebar .sidebar-admin-list").html(tpl(tokenData));
+	}).catch(function(err){
+
 	});
 
 	// Run stuff for specific pages
 	getSchemas.then(function(schemas){
+
+	}).catch(function(err){
 
 	});
 });

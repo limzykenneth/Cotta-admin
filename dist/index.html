@@ -77,6 +77,9 @@
         <!-- Font Awesome -->
         <script src="https://use.fontawesome.com/501e4ec8bc.js"></script>
         
+        <!-- moment.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+        
     </head>
 
     <body>
@@ -88,8 +91,26 @@
         	<span class="left">
         		<a href="/"><i class="fa fa-2x fa-home" aria-hidden="true"></i></a>
         	</span>
+        
+        	<span class="right">
+        	</span>
         </header>
-
+        
+        <script id="header-right-template" type="text/template">
+        	<%
+        	if(window.tokenData){
+        	%>
+        		<a href="<%= window.rootURL %>/account"><i class="fa fa-2x fa-user" aria-hidden="true"></i></a>
+        		<a href="<%= window.rootURL %>/logout"><i class="fa fa-2x fa-sign-out" aria-hidden="true"></i></a>
+        	<%
+        	}else{
+        	%>
+        		<a href="<%= window.rootURL %>/signup"><i class="fa fa-2x fa-user-plus" aria-hidden="true"></i></a>
+        		<a href="<%= window.rootURL %>/login"><i class="fa fa-2x fa-sign-in" aria-hidden="true"></i></a>
+        	<%
+        	}
+        	%>
+        </script>
 		<div id="page-content">
             <section class="sidebar">
             	<div class="sidebar-admin-list"></div>
@@ -123,24 +144,21 @@
             </section>
             
             <script id="models-list-template" type="text/template">
-            	<h1><%= collectionName %> <a class="new-btn button" href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">New</a>
+            	<h1><%= schema.collectionName %> <a class="new-btn button" href="<%= window.rootURL %>/collections/<%= schema.collectionSlug %>/new">New</a>
             
-            	<form class="delete-form" action="<%= window.rootURL %>/schema/delete/<%= collectionSlug %>" method="post">
-            		<input type="hidden" name="_method" value="delete" />
-            		<input class="delete-btn" type="submit" name="delete" value="Delete">
-            	</form>
+            		<input class="delete-btn" type="submit" name="delete" value="Delete" action="<%= window.host %>/api/schema/<%= schema.collectionSlug %>">
             	</h1>
             
             	<ul class="models">
             		<%
             		if(data.length === 0){
             		%>
-            			<p>No models created yet. Perhaps you want to click <a href="<%= window.rootURL %>/collections/<%= collectionSlug %>/new">here</a> to create a new model?</p>
+            			<p>No models created yet. Perhaps you want to click <a href="<%= window.rootURL %>/collections/<%= schema.collectionSlug %>/new">here</a> to create a new model?</p>
             		<%
             		}else{
             			_.each(data, function(el, i){
             		%>
-            				<a href="/collections/<%= collectionSlug %>/<%= el._uid %>"><li class="model card">
+            				<a href="/collections/<%= schema.collectionSlug %>/<%= el._uid %>"><li class="model card">
             					<span class="model-id"><%= el._uid %></span>
             					<span class="created-by">Created by: <%= el._metadata.created_by %></span>
             					<span class="date-created">Date created: <%= el._metadata.date_created %></span>
@@ -154,10 +172,7 @@
             </script><script id="model-template" type="text/template">
             	<h1><%= collectionName %> - ID: <%= data._uid %> <a class="edit-btn button" href="<%= window.rootURL %>/collections/<%= collectionSlug %>/<%= data._uid %>/edit">Edit</a>
             
-            	<form class="delete-form" action="<%= window.rootURL %>/collections/<%= collectionSlug %>/<%= data._uid %>" method="post" enctype="multipart/form-data">
-            		<input type="hidden" name="_method" value="delete" />
-            		<input class="delete-btn" type="submit" name="delete" value="Delete">
-            	</form>
+            	<input class="delete-btn" type="submit" name="delete" value="Delete" action="<%= window.host %>/api/collections/<%= collectionSlug %>/<%= data._uid %>">
             	</h1>
             
             	<article class="model">
@@ -197,6 +212,55 @@
             		});
             		%>
             	</article>
+            </script><script type="text/template" id="model-creation-template">
+            	<h1>New <%= collectionName %></h1>
+            
+            	<form method="post" action="<%= window.host %>/api/collections/<%= collectionSlug %>" class="model-form" enctype="multipart/form-data">
+            		<%
+            		_.each(fields, function(field){
+            		%>
+            			<p>
+            				<label for="<%= field.slug %>"><%= field.name %></label><br>
+            			<%
+            			if(field.type == "text" || field.type == "email"){
+            			%>
+            				<input type="<%= field.type %>" name="<%= field.slug %>">
+            			<%
+            			}else if(field.type == "checkbox" || field.type == "radio"){
+            				_.each(field.properties.choices, function(value, key){
+            			%>
+            				<input type="<%= field.type %>" name="<%= field.slug %>" value="<%= value %>"> <%= key %><br>
+            			<%
+            				});
+            			}else if(field.type == "wysiwyg"){
+            			%>
+            				<textarea name="<%= field.slug %>" class="wysiwyg-editor"></textarea>
+            			<%
+            			}else if(field.type == "image"){
+            			%>
+            				<input type="file" name="<%= field.slug %>" accept="image/gif,image/jpeg,image/png,.jpg,.jpeg,.png,.gif">
+            			<%
+            			}
+            			%>
+            			</p>
+            		<%
+            		});
+            		%>
+            		<p class="submit"><input type="submit" value="Save"></p>
+            	</form>
+            </script><script id="login-form-template" type="text/template">
+            	<div class="login-container">
+            		<div class="login-form">
+            			<h1>Login</h1>
+            			<form method="post" action="<%= window.host %>/api/tokens/generate_new_token">
+            				<p>
+            					<input name="username" type="text" placeholder="Username"><br>
+            					<input name="password" type="password" placeholder="Password">
+            				</p>
+            				<p><input type="submit" value="Login"></p>
+            			</form>
+            		</div>
+            	</div>
             </script>		</div>
 
         <footer id="page-footer">

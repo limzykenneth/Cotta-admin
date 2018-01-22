@@ -1,0 +1,37 @@
+<script type="text/template" id="model-creation-template">
+	<h1>New <%= collectionName %></h1>
+
+	<form method="post" action="<%= window.host %>/api/collections/<%= collectionSlug %>" class="model-form" enctype="multipart/form-data">
+		<%
+		_.each(fields, function(field){
+		%>
+			<p>
+				<label for="<%= field.slug %>"><%= field.name %></label><br>
+			<%
+			if(field.type == "text" || field.type == "email"){
+			%>
+				<input type="<%= field.type %>" name="<%= field.slug %>">
+			<%
+			}else if(field.type == "checkbox" || field.type == "radio"){
+				_.each(field.properties.choices, function(value, key){
+			%>
+				<input type="<%= field.type %>" name="<%= field.slug %>" value="<%= value %>"> <%= key %><br>
+			<%
+				});
+			}else if(field.type == "wysiwyg"){
+			%>
+				<textarea name="<%= field.slug %>" class="wysiwyg-editor"></textarea>
+			<%
+			}else if(field.type == "image"){
+			%>
+				<input type="file" name="<%= field.slug %>" accept="image/gif,image/jpeg,image/png,.jpg,.jpeg,.png,.gif">
+			<%
+			}
+			%>
+			</p>
+		<%
+		});
+		%>
+		<p class="submit"><input type="submit" value="Save"></p>
+	</form>
+</script>
