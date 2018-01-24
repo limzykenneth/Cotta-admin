@@ -2,23 +2,17 @@
 var gulp = require("gulp");
 
 gulp.task("copy-libraries-js", function(){
-	return gulp.src("./javascripts/vendor/*")
+	return gulp.src("./assets/javascripts/**/*")
 		.pipe(gulp.dest("./dist/javascripts/vendor"));
 });
 
 gulp.task("copy-css", function(){
-	gulp.src("./stylesheets/fonts/*")
-		.pipe(gulp.dest("./dist/stylesheets/fonts"));
-
-	gulp.src("./stylesheets/img/*")
-		.pipe(gulp.dest("./dist/stylesheets/img"));
-
-	return gulp.src("./stylesheets/normalize.min.css")
+	return gulp.src("./assets/stylesheets/**/*")
 		.pipe(gulp.dest("./dist/stylesheets"));
 });
 
 gulp.task("copy-images", function(){
-	return gulp.src("./images/**/*")
+	return gulp.src("./assets/images/**/*")
 		.pipe(gulp.dest("./dist/images"));
 });
 

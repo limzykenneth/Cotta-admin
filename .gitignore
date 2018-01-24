@@ -62,6 +62,7 @@ typings/
 .env
 
 
+
 # End of https://www.gitignore.io/api/node
 
 # Created by https://www.gitignore.io/api/macos
@@ -92,5 +93,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
 
 # End of https://www.gitignore.io/api/macos

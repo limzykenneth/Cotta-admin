@@ -1,45 +1,44 @@
 {
   "name": "char-admin",
   "version": "0.0.1",
-  "description": "Frontend admin module for Char",
+  "description": "Admin panel for Char",
+  "author": "limzykenneth <limzy.kenneth@gmail.com>",
+  "private": true,
   "scripts": {
-    "favicon": "node favicon.js && echo 'Now copy contents of favicon.html into your HTML files.'"
-  },
-  "author": "Kenneth Lim <limzy.kenneth@gmail.com> (http://designerken.be)",
-  "license": "BSD-3-Clause",
-  "devDependencies": {
-    "browser-sync": "^2.17.5",
-    "browserify": "^14.5.0",
-    "browserify-shim": "~3.8.9",
-    "connect-history-api-fallback": "^1.4.0",
-    "favicons": "^4.7.1",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-clean-css": "^3.9.0",
-    "gulp-favicons": "^2.2.6",
-    "gulp-less": "^3.1.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-surge": "^0.1.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.7",
-    "uglify-es": "^3.1.6",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "serve": "gulp server",
+    "build": "gulp"
   },
   "browserify": {
     "transform": [
-      "browserify-shim"
+      "babelify",
+      "vueify"
     ]
   },
-  "browserify-shim": {
-    "jquery": "global:$",
-    "underscore": "global:_",
-    "backbone": "global:Backbone"
-  },
   "dependencies": {
-    "jwt-decode": "^2.2.0",
-    "store": "^2.0.12",
-    "vue": "^2.5.13"
+    "vue": "^2.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "babel-core": "^6.0.0",
+    "babel-plugin-transform-runtime": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-2": "^6.0.0",
+    "babel-runtime": "^6.0.0",
+    "babelify": "^7.2.0",
+    "browser-sync": "^2.23.5",
+    "browserify": "^13.1.0",
+    "change-case": "^3.0.1",
+    "connect-history-api-fallback": "^1.5.0",
+    "gulp": "^3.9.1",
+    "gulp-compile-handlebars": "^0.6.1",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "less": "^2.7.3",
+    "uglify-es": "^3.3.8",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "vueify": "^9.0.0"
   }
 }
