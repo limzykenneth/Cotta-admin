@@ -29,12 +29,18 @@ a:visited {
   width: 200px;
   height: 100%;
   padding-top: 10px;
+  overflow-y: scroll;
 }
 #page-sidebar .lists[data-v-a314d62c] {
   font-size: 18px;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+#page-sidebar .lists .list-section-title[data-v-a314d62c] {
+  margin: 10px 0;
+  padding: 0 20px;
+  color: rgba(0, 0, 0, 0.5);
 }
 #page-sidebar .lists li[data-v-a314d62c] {
   width: 100%;
@@ -45,6 +51,11 @@ a:visited {
 }
 #page-sidebar .lists li.spacer[data-v-a314d62c]:hover {
   background-color: initial;
+}
+#page-sidebar .lists li .fa[data-v-a314d62c] {
+  text-align: center;
+  width: 1rem;
+  margin-right: 15px;
 }
 #page-header[data-v-19202aef] {
   font-size: 20px;
