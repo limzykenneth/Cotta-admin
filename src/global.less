@@ -1,3 +1,22 @@
+@import "./mixins.less";
+
 * {
 	box-sizing: border-box;
+}
+
+body{
+	.body-font();
+}
+
+a{
+	text-decoration: none;
+	color: inherit;
+
+	&:hover{
+		text-decoration: none;
+	}
+
+	&:visited{
+		color: inherit;
+	}
 }
