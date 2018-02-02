@@ -7,7 +7,7 @@
 			<a href="schemas" v-on:click.prevent="renderSchemasList"><li>
 				<i class="fa fa-table" aria-hidden="true"></i>Schemas
 			</li></a>
-			<a href="users"><li>
+			<a href="users" v-on:click.prevent="renderUsersList"><li>
 				<i class="fa fa-users" aria-hidden="true"></i>Users
 			</li></a>
 			<a href="settings"><li>
@@ -37,6 +37,9 @@ export default {
 		},
 		renderCollection: function(collectionSlug){
 			this.$emit("renderCollection", collectionSlug);
+		},
+		renderUsersList: function(){
+			this.$emit("renderUsersList");
 		}
 	}
 };

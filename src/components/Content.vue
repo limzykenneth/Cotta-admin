@@ -4,6 +4,7 @@
 			:schemas="schemas"
 			:current-collection="currentCollection"
 			:current-collection-schema="currentCollectionSchema"
+			:users-list="usersList"
 		></component>
 	</section>
 </template>
@@ -12,6 +13,7 @@
 import SchemasList from "./ContentSchemasList.vue";
 import Dashboard from "./ContentDashboard.vue";
 import CollectionList from "./ContentCollectionList.vue";
+import UsersList from "./ContentUsersList.vue";
 
 export default {
 	name: "content",
@@ -19,12 +21,14 @@ export default {
 		"schemas",
 		"currentView",
 		"currentCollection",
-		"currentCollectionSchema"
+		"currentCollectionSchema",
+		"usersList"
 	],
 	components: {
 		"app-dashboard": Dashboard,
 		"schemas-list": SchemasList,
-		"collection-list": CollectionList
+		"collection-list": CollectionList,
+		"users-list": UsersList
 	},
 	methods: {
 	}

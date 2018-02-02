@@ -17,6 +17,8 @@ fetch(generateRequest("schema")).then((res) => res.json()).then((schemas) => {
 			currentContentView: "app-dashboard",
 			currentCollection: {},
 
+			usersList: {},
+
 			contentViews: {
 				dashboard: "app-dashboard",
 				schemasList: "schemas-list",

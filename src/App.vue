@@ -7,12 +7,14 @@
 				v-on:renderSchemasList="renderSchemasList"
 				v-on:renderDashboard="renderDashboard"
 				v-on:renderCollection="renderCollection"
+				v-on:renderUsersList="renderUsersList"
 			></app-sidebar>
 			<app-content
 				:schemas="schemas"
 				:current-view="currentContentView"
 				:current-collection="currentCollection"
 				:current-collection-schema="currentCollectionSchema"
+				:users-list="usersList"
 			></app-content>
 		</div>
 	</div>
@@ -45,6 +47,13 @@ export default {
 				this.currentCollectionSchema = _.find(this.schemas, function(el){
 					return el.collectionSlug == collectionSlug;
 				});
+			});
+		},
+		renderUsersList: function(){
+			var request = this.utils.generateRequest("users");
+			fetch(request).then((res) => res.json()).then((users) => {
+				this.currentContentView = "users-list";
+				this.usersList = users;
 			});
 		}
 	}
