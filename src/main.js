@@ -4,7 +4,7 @@ var urljoin = require('url-join');
 var App = require("./App.vue");
 
 var url = "http://localhost:3001/api";
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTY4MTc3MzUsImV4cCI6MTUxNzQyMjUzNX0.3yC_KIkDeFE7skngt7_lsai4LHMa3jIiaHnmOOcJQRI";
+var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTc1NjUyMDIsImV4cCI6MTUxODE3MDAwMn0.sarbO9x6h_iuTe4pibkbem67Rjk4lc4XuP5N8851WMI";
 
 fetch(generateRequest("schema")).then((res) => res.json()).then((schemas) => {
 	App.data = function(){
