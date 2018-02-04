@@ -4,17 +4,33 @@ var urljoin = require('url-join');
 var App = require("./App.vue");
 
 var url = "http://localhost:3001/api";
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE1MTc1NjUyMDIsImV4cCI6MTUxODE3MDAwMn0.sarbO9x6h_iuTe4pibkbem67Rjk4lc4XuP5N8851WMI";
 
-fetch(generateRequest("schema")).then((res) => res.json()).then((schemas) => {
+fetch(generateRequest("schema")).then((res) => {
+	return res.json();
+}).then((schemas) => {
+	var initialRenderPage = "app-dashboard";
+	var loggedIn = true;
+	if(schemas.errors && schemas.errors.length > 0){
+		_.each(schemas.errors, function(error){
+			if(error.title !== "Auth Token Invalid"){
+				throw new Error(error);
+				return false;
+			}
+			schemas = {};
+			initialRenderPage = "login-page";
+			loggedIn = false;
+			return false;
+		});
+	}
+
 	App.data = function(){
 		return {
 			siteTitle: siteTitle,
 			serverURL: url,
-			serverToken: token,
 			schemas: schemas,
+			loggedIn: loggedIn,
 
-			currentContentView: "app-dashboard",
+			currentContentView: initialRenderPage,
 			currentCollection: {},
 
 			usersList: {},
@@ -39,13 +55,25 @@ fetch(generateRequest("schema")).then((res) => res.json()).then((schemas) => {
 	});
 });
 
-function generateRequest(path, method="GET"){
+function generateRequest(path, method="GET", payload=null){
 	var finalURL = urljoin(url, path);
+	var token = store.get("access_token");
+
+	var header = {};
+	header["Content-Type"] = "application/json";
+	if(path !== "token/generate_new_token"){
+		header["Authorization"] = `Bearer ${token}`;
+	}
+
+	var body;
+	if(payload !== null){
+		body = JSON.stringify(payload);
+	}
+
 	var request = new Request(finalURL, {
 		method: method,
-		headers: new Headers({
-			"Authorization": `Bearer ${token}`
-		})
+		body: body,
+		headers: new Headers(header)
 	});
 
 	return request;

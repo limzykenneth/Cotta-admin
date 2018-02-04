@@ -57,6 +57,13 @@ a:visited {
   width: 1rem;
   margin-right: 15px;
 }
+#page-content[data-v-a08230f2] {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  margin: 10px;
+  padding: 10px;
+}
 #page-header[data-v-19202aef] {
   font-size: 20px;
   font-weight: bold;
@@ -91,13 +98,6 @@ a:visited {
 .right[data-v-19202aef] {
   float: right;
 }
-#page-content[data-v-a08230f2] {
-  -webkit-box-flex: 2;
-      -ms-flex-positive: 2;
-          flex-grow: 2;
-  margin: 10px;
-  padding: 10px;
-}
 #collection-container #collection-list[data-v-0c88c87a] {
   list-style: none;
   margin: 0;
@@ -123,6 +123,23 @@ a:visited {
 }
 #users-container #users-list .list-items:first-child li[data-v-f64733a2] {
   border-top: 1px solid black;
+}
+#login-container[data-v-3e156dd2] {
+  position: relative;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  display: block;
+  text-align: center;
+  width: 200px;
+}
+#login-container form[data-v-3e156dd2] {
+  display: inline-block;
+}
+#login-container form input[data-v-3e156dd2] {
+  display: inline-block;
+  margin-bottom: 10px;
 }
 .schema-container[data-v-46a3320c] {
   border: 1px solid black;

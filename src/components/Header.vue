@@ -3,14 +3,31 @@
 		<span class="header-items left">{{ siteTitle }}</span>
 		<span class="spacer"></span>
 		<span class="header-items right">Account</span>
-		<span class="header-items right">Logout</span>
+		<a href="/logout" v-if="loggedIn" v-on:click.prevent="logoutUser">
+			<span class="header-items right">Logout</span>
+		</a>
+		<a href="/login" v-else v-on:click.prevent="renderLogin">
+			<span class="header-items right">Login</span>
+		</a>
 	</header>
 </template>
 
 <script>
 export default {
 	name: "header",
-	props: ["site-title"]
+	props: [
+		"site-title",
+		"logged-in"
+	],
+	methods: {
+		renderLogin: function(){
+			this.$emit("renderLogin");
+		},
+		logoutUser: function(){
+			this.$emit("logoutUser");
+			this.$emit("renderLogin");
+		}
+	}
 };
 </script>
 

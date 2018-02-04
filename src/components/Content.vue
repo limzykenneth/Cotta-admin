@@ -5,6 +5,8 @@
 			:current-collection="currentCollection"
 			:current-collection-schema="currentCollectionSchema"
 			:users-list="usersList"
+
+			v-on:loginUser="loginUser"
 		></component>
 	</section>
 </template>
@@ -14,6 +16,7 @@ import SchemasList from "./ContentSchemasList.vue";
 import Dashboard from "./ContentDashboard.vue";
 import CollectionList from "./ContentCollectionList.vue";
 import UsersList from "./ContentUsersList.vue";
+import LoginPage from "./ContentLogin.vue";
 
 export default {
 	name: "content",
@@ -28,9 +31,13 @@ export default {
 		"app-dashboard": Dashboard,
 		"schemas-list": SchemasList,
 		"collection-list": CollectionList,
-		"users-list": UsersList
+		"users-list": UsersList,
+		"login-page": LoginPage
 	},
 	methods: {
+		loginUser: function(loginDetails){
+			this.$emit("loginUser", loginDetails);
+		}
 	}
 }
 </script>

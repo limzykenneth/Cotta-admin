@@ -1,6 +1,12 @@
 <template>
 	<div id="page-container">
-		<app-header :site-title="siteTitle"></app-header>
+		<app-header
+			:site-title="siteTitle"
+			:logged-in="loggedIn"
+
+			v-on:renderLogin="renderLogin"
+			v-on:logoutUser="logoutUser"
+		></app-header>
 
 		<div class="flex-container">
 			<app-sidebar :schemas="schemas"
@@ -15,6 +21,8 @@
 				:current-collection="currentCollection"
 				:current-collection-schema="currentCollectionSchema"
 				:users-list="usersList"
+
+				v-on:loginUser="loginUser"
 			></app-content>
 		</div>
 	</div>
@@ -55,6 +63,22 @@ export default {
 				this.currentContentView = "users-list";
 				this.usersList = users;
 			});
+		},
+		renderLogin: function(){
+			this.currentContentView = "login-page";
+		},
+		loginUser: function(loginDetails){
+			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
+			fetch(request).then((res) => res.json()).then((token) => {
+				store.set("access_token", token.access_token);
+				this.currentContentView = "app-dashboard";
+			});
+		},
+		logoutUser: function(){
+			store.remove("access_token");
+			this.schemas = {};
+			this.usersList = {};
+			this.loggedIn = false;
 		}
 	}
 };
