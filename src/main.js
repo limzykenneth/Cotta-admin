@@ -11,7 +11,10 @@ var appStore = new Vuex.Store({
 		loggedIn: false,
 		schemas: [],
 		usersList: [],
-		currentContentView: "app-dashboard"
+
+		currentContentView: "app-dashboard",
+		currentCollection: {},
+		currentCollectionSchema: {}
 	},
 	mutations: {
 		updateSchemas: function(state, newSchemas){
@@ -25,6 +28,12 @@ var appStore = new Vuex.Store({
 		},
 		setLoggedIn: function(state, loggedIn){
 			state.loggedIn = loggedIn;
+		},
+		setCurrentCollection: function(state, result){
+			state.currentCollection = result.collection;
+			state.currentCollectionSchema = _.find(state.schemas, function(el){
+				return el.collectionSlug == result.collectionSlug;
+			});
 		}
 	},
 	actions: {
@@ -50,13 +59,22 @@ var appStore = new Vuex.Store({
 		},
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
-			fetch(request).then((res) => res.json()).then(function(users){
+			fetch(request).then((res) => res.json()).then((users) => {
 				context.commit("updateUsersList", users);
 			});
 		},
 		fetchInitialData: function(context){
 			context.dispatch("fetchSchemas");
 			context.dispatch("fetchUsersList");
+		},
+		fetchCollection: function(context, collectionSlug){
+			var request = generateRequest(`collections/${collectionSlug}`);
+			fetch(request).then((res) => res.json()).then((collection) => {
+				context.commit("setCurrentCollection", {
+					collection,
+					collectionSlug
+				});
+			})
 		}
 	}
 });
@@ -66,8 +84,6 @@ App.data = function(){
 	return {
 		siteTitle: siteTitle,
 		serverURL: url,
-
-		currentCollection: {},
 
 		contentViews: {
 			dashboard: "app-dashboard",
@@ -93,6 +109,12 @@ App.computed = {
 	},
 	currentContentView: function(){
 		return appStore.state.currentContentView;
+	},
+	currentCollection: function(){
+		return appStore.state.currentCollection;
+	},
+	currentCollectionSchema: function(){
+		return appStore.state.currentCollectionSchema;
 	}
 };
 

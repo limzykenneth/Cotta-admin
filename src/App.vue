@@ -48,17 +48,11 @@ export default {
 			this.$store.commit("setContentView", this.contentViews.schemasList);
 		},
 		renderCollection: function(collectionSlug){
-			var request = this.utils.generateRequest(`collections/${collectionSlug}`);
-			fetch(request).then((res) => res.json()).then((collection) => {
+			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
 				this.$store.commit("setContentView", this.contentViews.collectionList);
-				this.currentCollection = collection;
-				this.currentCollectionSchema = _.find(this.schemas, function(el){
-					return el.collectionSlug == collectionSlug;
-				});
 			});
 		},
 		renderUsersList: function(){
-			var request = this.utils.generateRequest("users");
 			this.$store.commit("setContentView", "users-list");
 		},
 		renderLogin: function(){
