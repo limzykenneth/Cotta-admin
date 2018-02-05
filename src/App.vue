@@ -42,15 +42,15 @@ export default {
 	},
 	methods: {
 		renderDashboard: function(){
-			this.currentContentView = this.contentViews.dashboard;
+			this.$store.commit("setContentView", this.contentViews.dashboard);
 		},
 		renderSchemasList: function(){
-			this.currentContentView = this.contentViews.schemasList;
+			this.$store.commit("setContentView", this.contentViews.schemasList);
 		},
 		renderCollection: function(collectionSlug){
 			var request = this.utils.generateRequest(`collections/${collectionSlug}`);
 			fetch(request).then((res) => res.json()).then((collection) => {
-				this.currentContentView = this.contentViews.collectionList;
+				this.$store.commit("setContentView", this.contentViews.collectionList);
 				this.currentCollection = collection;
 				this.currentCollectionSchema = _.find(this.schemas, function(el){
 					return el.collectionSlug == collectionSlug;
@@ -59,26 +59,24 @@ export default {
 		},
 		renderUsersList: function(){
 			var request = this.utils.generateRequest("users");
-			fetch(request).then((res) => res.json()).then((users) => {
-				this.currentContentView = "users-list";
-				this.usersList = users;
-			});
+			this.$store.commit("setContentView", "users-list");
 		},
 		renderLogin: function(){
-			this.currentContentView = "login-page";
+			this.$store.commit("setContentView", "login-page");
 		},
 		loginUser: function(loginDetails){
 			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
 			fetch(request).then((res) => res.json()).then((token) => {
 				store.set("access_token", token.access_token);
-				this.currentContentView = "app-dashboard";
+				this.$store.commit("setContentView", "app-dashboard");
+				this.$store.dispatch("fetchInitialData");
 			});
 		},
 		logoutUser: function(){
 			store.remove("access_token");
-			this.schemas = {};
-			this.usersList = {};
-			this.loggedIn = false;
+			this.$store.commit("updateSchemas", []);
+			this.$store.commit("setLoggedIn", false);
+			this.$store.commit("updateUsersList", []);
 		}
 	}
 };

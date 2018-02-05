@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "url-join": "^3.0.0",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",

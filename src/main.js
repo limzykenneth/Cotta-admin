@@ -1,58 +1,109 @@
-var siteTitle = "Char Admin"
-var Vue = require("vue");
-var urljoin = require('url-join');
-var App = require("./App.vue");
+const siteTitle = "Char Admin"
+const url = "http://localhost:3001/api";
 
-var url = "http://localhost:3001/api";
+const Vue = require("vue");
+const Vuex = require("vuex");
+Vue.use(Vuex);
+const urljoin = require('url-join');
 
-fetch(generateRequest("schema")).then((res) => {
-	return res.json();
-}).then((schemas) => {
-	var initialRenderPage = "app-dashboard";
-	var loggedIn = true;
-	if(schemas.errors && schemas.errors.length > 0){
-		_.each(schemas.errors, function(error){
-			if(error.title !== "Auth Token Invalid"){
-				throw new Error(error);
-				return false;
-			}
-			schemas = {};
-			initialRenderPage = "login-page";
-			loggedIn = false;
-			return false;
-		});
-	}
-
-	App.data = function(){
-		return {
-			siteTitle: siteTitle,
-			serverURL: url,
-			schemas: schemas,
-			loggedIn: loggedIn,
-
-			currentContentView: initialRenderPage,
-			currentCollection: {},
-
-			usersList: {},
-
-			contentViews: {
-				dashboard: "app-dashboard",
-				schemasList: "schemas-list",
-				collectionList: "collection-list"
-			},
-
-			utils: {
-				generateRequest: generateRequest
-			}
-		};
-	};
-
-	new Vue({
-		el: "#page-content",
-		render: function(h){
-			return h(App);
+var appStore = new Vuex.Store({
+	state: {
+		loggedIn: false,
+		schemas: [],
+		usersList: [],
+		currentContentView: "app-dashboard"
+	},
+	mutations: {
+		updateSchemas: function(state, newSchemas){
+			state.schemas = newSchemas;
+		},
+		updateUsersList: function(state, newUsersList){
+			state.usersList = newUsersList;
+		},
+		setContentView: function(state, view){
+			state.currentContentView = view;
+		},
+		setLoggedIn: function(state, loggedIn){
+			state.loggedIn = loggedIn;
 		}
-	});
+	},
+	actions: {
+		fetchSchemas: function(context){
+			var request = generateRequest("schema");
+			fetch(request).then((res) => res.json()).then(function(schemas){
+				if(schemas.errors && schemas.errors.length > 0){
+					context.commit("setLoggedIn", false);
+					context.commit("updateSchemas", []);
+
+					_.each(schemas.errors, function(error){
+						if(error.title !== "Auth Token Invalid"){
+							throw new Error(error);
+						}else{
+							context.commit("setContentView", "login-page");
+						}
+					});
+				}else{
+					context.commit("updateSchemas", schemas);
+					context.commit("setLoggedIn", true);
+				}
+			});
+		},
+		fetchUsersList: function(context){
+			var request = generateRequest("users");
+			fetch(request).then((res) => res.json()).then(function(users){
+				context.commit("updateUsersList", users);
+			});
+		},
+		fetchInitialData: function(context){
+			context.dispatch("fetchSchemas");
+			context.dispatch("fetchUsersList");
+		}
+	}
+});
+
+var App = require("./App.vue");
+App.data = function(){
+	return {
+		siteTitle: siteTitle,
+		serverURL: url,
+
+		currentCollection: {},
+
+		contentViews: {
+			dashboard: "app-dashboard",
+			schemasList: "schemas-list",
+			collectionList: "collection-list"
+		},
+
+		utils: {
+			generateRequest: generateRequest
+		}
+	};
+};
+
+App.computed = {
+	loggedIn: function(){
+		return appStore.state.loggedIn;
+	},
+	schemas: function(){
+		return appStore.state.schemas;
+	},
+	usersList: function(){
+		return appStore.state.usersList;
+	},
+	currentContentView: function(){
+		return appStore.state.currentContentView;
+	}
+};
+
+new Vue({
+	el: "#page-content",
+	store: appStore,
+	render: function(h){
+		appStore.dispatch("fetchUsersList");
+		appStore.dispatch("fetchSchemas");
+		return h(App);
+	}
 });
 
 function generateRequest(path, method="GET", payload=null){
