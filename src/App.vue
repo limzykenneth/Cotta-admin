@@ -53,16 +53,16 @@ export default {
 			});
 		},
 		renderUsersList: function(){
-			this.$store.commit("setContentView", "users-list");
+			this.$store.commit("setContentView", this.contentViews.usersList);
 		},
 		renderLogin: function(){
-			this.$store.commit("setContentView", "login-page");
+			this.$store.commit("setContentView", this.contentViews.loginPage);
 		},
 		loginUser: function(loginDetails){
 			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
 			fetch(request).then((res) => res.json()).then((token) => {
 				store.set("access_token", token.access_token);
-				this.$store.commit("setContentView", "app-dashboard");
+				this.$store.commit("setContentView", this.contentViews.dashboard);
 				this.$store.dispatch("fetchInitialData");
 			});
 		},

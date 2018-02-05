@@ -87,8 +87,10 @@ App.data = function(){
 
 		contentViews: {
 			dashboard: "app-dashboard",
+			loginPage: "login-page",
 			schemasList: "schemas-list",
-			collectionList: "collection-list"
+			collectionList: "collection-list",
+			usersList: "users-list"
 		},
 
 		utils: {
