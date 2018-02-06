@@ -9,7 +9,7 @@
 import SchemaListItem from "./ContentSchemasListItem.vue";
 
 export default {
-	name: "schemas-list",
+	name: "SchemasList",
 	props: ["schemas"],
 	components: {
 		"schemas-list-item": SchemaListItem

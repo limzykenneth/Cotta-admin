@@ -14,7 +14,7 @@
 
 <script>
 export default {
-	name: "collection-list",
+	name: "CollectionList",
 	props: [
 		"currentCollection",
 		"currentCollectionSchema"

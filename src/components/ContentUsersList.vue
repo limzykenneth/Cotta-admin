@@ -14,7 +14,7 @@
 
 <script>
 export default {
-	name: "users-list",
+	name: "UsersList",
 	props: ["usersList"]
 }
 </script>

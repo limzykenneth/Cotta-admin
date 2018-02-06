@@ -4,7 +4,7 @@
 
 <script>
 export default {
-	name: "schemas-list-item",
+	name: "SchemasListItem",
 	props: ["schema"]
 }
 </script>

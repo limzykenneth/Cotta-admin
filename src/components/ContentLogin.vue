@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "login",
+	name: "LoginPage",
 	methods: {
 		loginUser: function(e){
 			var username = e.target.querySelector("#username").value;

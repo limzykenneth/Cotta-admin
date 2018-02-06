@@ -26,7 +26,7 @@
 
 <script>
 export default {
-	name: "sidebar",
+	name: "AppSidebar",
 	props: ["schemas"],
 	methods: {
 		renderDashboard: function(e){

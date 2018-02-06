@@ -15,15 +15,18 @@
 </template>
 
 <script>
-import SchemasList from "./ContentSchemasList.vue";
 import Dashboard from "./ContentDashboard.vue";
-import CollectionList from "./ContentCollectionList.vue";
-import UsersList from "./ContentUsersList.vue";
 import LoginPage from "./ContentLogin.vue";
+import CollectionList from "./ContentCollectionList.vue";
+import SchemasList from "./ContentSchemasList.vue";
+import SchemasEdit from "./ContentSchemasEdit.vue";
+import UsersList from "./ContentUsersList.vue";
+import UsersEdit from "./ContentUsersEdit.vue";
 import ModelPage from "./ContentModel.vue";
+import ModelEdit from "./ContentModelEdit.vue";
 
 export default {
-	name: "content",
+	name: "AppContent",
 	props: [
 		"schemas",
 		"currentView",
@@ -34,11 +37,14 @@ export default {
 	],
 	components: {
 		"app-dashboard": Dashboard,
-		"schemas-list": SchemasList,
-		"collection-list": CollectionList,
-		"users-list": UsersList,
 		"login-page": LoginPage,
-		"model-page": ModelPage
+		"collection-list": CollectionList,
+		"schemas-list": SchemasList,
+		"schemas-edit": SchemasEdit,
+		"users-list": UsersList,
+		"users-edit": UsersEdit,
+		"model-page": ModelPage,
+		"model-edit": ModelEdit
 	},
 	methods: {
 		loginUser: function(loginDetails){
