@@ -20,9 +20,11 @@
 				:current-view="currentContentView"
 				:current-collection="currentCollection"
 				:current-collection-schema="currentCollectionSchema"
+				:current-model="currentModel"
 				:users-list="usersList"
 
 				v-on:loginUser="loginUser"
+				v-on:renderModel="renderModel"
 			></app-content>
 		</div>
 	</div>
@@ -58,6 +60,15 @@ export default {
 		renderLogin: function(){
 			this.$store.commit("setContentView", this.contentViews.loginPage);
 		},
+		renderModel: function(collectionSlug, uid){
+			this.$store.dispatch("fetchModel", {
+				collectionSlug,
+				uid
+			}).then(() => {
+				this.$store.commit("setContentView", this.contentViews.modelPage);
+			});
+		},
+
 		loginUser: function(loginDetails){
 			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
 			fetch(request).then((res) => res.json()).then((token) => {

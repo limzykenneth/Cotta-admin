@@ -97,6 +97,7 @@ a:visited {
           flex-grow: 2;
   margin: 10px;
   padding: 10px;
+  overflow: scroll;
 }
 #collection-container #collection-list[data-v-0c88c87a] {
   list-style: none;
@@ -140,6 +141,17 @@ a:visited {
 #login-container form input[data-v-3e156dd2] {
   display: inline-block;
   margin-bottom: 10px;
+}
+#model-container[data-v-2cb79992] {
+  max-width: calc(100vw - 220px);
+}
+#model-container #model-list[data-v-2cb79992] {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#model-container #model-list li[data-v-2cb79992] {
+  margin-bottom: 1rem;
 }
 .schema-container[data-v-46a3320c] {
   border: 1px solid black;

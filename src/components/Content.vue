@@ -5,8 +5,11 @@
 			:current-collection="currentCollection"
 			:current-collection-schema="currentCollectionSchema"
 			:users-list="usersList"
+			:current-model="currentModel"
 
 			v-on:loginUser="loginUser"
+
+			v-on:renderModel="renderModel"
 		></component>
 	</section>
 </template>
@@ -17,6 +20,7 @@ import Dashboard from "./ContentDashboard.vue";
 import CollectionList from "./ContentCollectionList.vue";
 import UsersList from "./ContentUsersList.vue";
 import LoginPage from "./ContentLogin.vue";
+import ModelPage from "./ContentModel.vue";
 
 export default {
 	name: "content",
@@ -25,6 +29,7 @@ export default {
 		"currentView",
 		"currentCollection",
 		"currentCollectionSchema",
+		"currentModel",
 		"usersList"
 	],
 	components: {
@@ -32,11 +37,15 @@ export default {
 		"schemas-list": SchemasList,
 		"collection-list": CollectionList,
 		"users-list": UsersList,
-		"login-page": LoginPage
+		"login-page": LoginPage,
+		"model-page": ModelPage
 	},
 	methods: {
 		loginUser: function(loginDetails){
 			this.$emit("loginUser", loginDetails);
+		},
+		renderModel: function(collectionSlug, uid){
+			this.$emit("renderModel", collectionSlug, uid);
 		}
 	}
 }
@@ -50,5 +59,6 @@ export default {
 
 		margin: 10px;
 		padding: 10px;
+		overflow: scroll;
 	}
 </style>

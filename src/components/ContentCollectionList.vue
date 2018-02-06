@@ -3,9 +3,11 @@
 		<h1>{{ currentCollectionSchema.collectionName }}</h1>
 
 		<ul id="collection-list">
-			<a href="" class="list-items" v-for="model in currentCollection"><li>
-				{{ model._uid }}
-			</li></a>
+			<a :href="'collections/' + currentCollectionSchema.collectionSlug + '/' + model._uid" class="list-items" v-on:click.prevent="renderModel(currentCollectionSchema.collectionSlug, model._uid)" v-for="model in currentCollection">
+				<li>
+					{{ model._uid }}
+				</li>
+			</a>
 		</ul>
 	</article>
 </template>
@@ -16,7 +18,12 @@ export default {
 	props: [
 		"currentCollection",
 		"currentCollectionSchema"
-	]
+	],
+	methods: {
+		renderModel: function(collectionSlug, uid){
+			this.$emit("renderModel", collectionSlug, uid);
+		}
+	}
 }
 </script>
 
@@ -25,9 +32,7 @@ export default {
 
 	#collection-container{
 		#collection-list{
-			list-style: none;
-			margin: 0;
-			padding: 0;
+			.unstyled-list();
 
 			.list-items{
 				li{

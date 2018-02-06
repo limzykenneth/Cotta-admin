@@ -24,9 +24,7 @@ export default {
 
 #users-container{
 	#users-list{
-		list-style: none;
-		margin: 0;
-		padding: 0;
+		.unstyled-list();
 
 		.list-items{
 			li{
