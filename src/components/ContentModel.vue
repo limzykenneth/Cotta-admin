@@ -1,20 +1,20 @@
 <template>
 	<article id="model-container">
-		<h1>{{ currentModel._uid }}</h1>
+		<h1>{{currentCollectionSchema.collectionName}} - {{ currentModel._uid }}</h1>
 
 		<ul id="model-list">
 			<li v-for="field in currentCollectionSchema.fields">
 				<h4>{{ field.name }}</h4>
 
-				<div v-if="field.type == 'wysiwyg'" v-html="currentModel[field.slug]"></div>
-				<div v-else-if="field.type == 'text'">{{ currentModel[field.slug] }}</div>
-				<div v-else-if="field.type == 'email'">{{ currentModel[field.slug] }}</div>
-				<div v-else-if="field.type == 'checkbox'">
+				<div class="field" v-if="field.type == 'wysiwyg'" v-html="currentModel[field.slug]"></div>
+				<div class="field" v-else-if="field.type == 'text'">{{ currentModel[field.slug] }}</div>
+				<div class="field" v-else-if="field.type == 'email'">{{ currentModel[field.slug] }}</div>
+				<div class="field" v-else-if="field.type == 'checkbox'">
 					<ul>
 						<li v-for="option in currentModel[field.slug]">{{ option }}</li>
 					</ul>
 				</div>
-				<div v-else-if="field.type == 'radio'">{{ currentModel[field.slug] }}</div>
+				<div class="field" v-else-if="field.type == 'radio'">{{ currentModel[field.slug] }}</div>
 			</li>
 		</ul>
 	</article>
@@ -41,6 +41,12 @@ export default {
 
 			li{
 				margin-bottom: 1rem;
+
+				.field{
+					ul{
+						.unpadded-list();
+					}
+				}
 			}
 		}
 	}
