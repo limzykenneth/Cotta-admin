@@ -13,7 +13,7 @@ var appStore = new Vuex.Store({
 		usersList: [],
 
 		currentContentView: "app-dashboard",
-		currentCollection: {},
+		currentCollection: [],
 		currentCollectionSchema: {},
 		currentModel: {}
 	},

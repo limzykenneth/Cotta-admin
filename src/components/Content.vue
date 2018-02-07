@@ -27,14 +27,33 @@ import ModelEdit from "./ContentModelEdit.vue";
 
 export default {
 	name: "AppContent",
-	props: [
-		"schemas",
-		"currentView",
-		"currentCollection",
-		"currentCollectionSchema",
-		"currentModel",
-		"usersList"
-	],
+	props: {
+		"schemas": {
+			type: Array,
+			default: []
+		},
+		"currentView": {
+			type: String,
+			default: "app-dashboard",
+			required: true
+		},
+		"currentCollection": {
+			type: Array,
+			default: []
+		},
+		"currentCollectionSchema": {
+			type: Object,
+			default: {}
+		},
+		"currentModel": {
+			type: Object,
+			default: {}
+		},
+		"usersList": {
+			type: Array,
+			default: []
+		}
+	},
 	components: {
 		"app-dashboard": Dashboard,
 		"login-page": LoginPage,

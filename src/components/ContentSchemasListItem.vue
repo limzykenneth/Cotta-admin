@@ -5,7 +5,12 @@
 <script>
 export default {
 	name: "SchemasListItem",
-	props: ["schema"]
+	props: {
+		"schema": {
+			type: Object,
+			required: true
+		}
+	}
 }
 </script>
 

@@ -15,7 +15,12 @@
 <script>
 export default {
 	name: "UsersList",
-	props: ["usersList"]
+	props: {
+		"usersList": {
+			type: Array,
+			required: true
+		}
+	}
 }
 </script>
 

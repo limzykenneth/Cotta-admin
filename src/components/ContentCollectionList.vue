@@ -15,10 +15,16 @@
 <script>
 export default {
 	name: "CollectionList",
-	props: [
-		"currentCollection",
-		"currentCollectionSchema"
-	],
+	props: {
+		"currentCollection": {
+			type: Array,
+			required: true
+		},
+		"currentCollectionSchema": {
+			type: Object,
+			required: true
+		}
+	},
 	methods: {
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);

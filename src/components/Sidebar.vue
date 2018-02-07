@@ -27,7 +27,12 @@
 <script>
 export default {
 	name: "AppSidebar",
-	props: ["schemas"],
+	props: {
+		"schemas": {
+			type: Array,
+			default: []
+		}
+	},
 	methods: {
 		renderDashboard: function(e){
 			this.$emit("renderDashboard")

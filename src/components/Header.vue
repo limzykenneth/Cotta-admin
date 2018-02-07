@@ -15,10 +15,16 @@
 <script>
 export default {
 	name: "AppHeader",
-	props: [
-		"site-title",
-		"logged-in"
-	],
+	props: {
+		"site-title": {
+			type: String,
+			required: true
+		},
+		"logged-in": {
+			type: Boolean,
+			default: false
+		}
+	},
 	methods: {
 		renderLogin: function(){
 			this.$emit("renderLogin");

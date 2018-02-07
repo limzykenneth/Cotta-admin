@@ -23,10 +23,16 @@
 <script>
 export default {
 	name: "ModelPage",
-	props: [
-		"currentModel",
-		"currentCollectionSchema"
-	]
+	props: {
+		"currentModel": {
+			type: Object,
+			required: true
+		},
+		"currentCollectionSchema": {
+			type: Object,
+			required: true
+		}
+	}
 }
 </script>
 
