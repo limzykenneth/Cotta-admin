@@ -3,7 +3,11 @@
 		<h1>{{ currentCollectionSchema.collectionName }}</h1>
 
 		<ul id="collection-list">
-			<a :href="'collections/' + currentCollectionSchema.collectionSlug + '/' + model._uid" class="list-items" v-on:click.prevent="renderModel(currentCollectionSchema.collectionSlug, model._uid)" v-for="model in currentCollection">
+			<a class="list-items"
+				:href="'collections/' + currentCollectionSchema.collectionSlug + '/' + model._uid"
+				v-on:click.prevent="renderModel(currentCollectionSchema.collectionSlug, model._uid)"
+				v-for="model in currentCollection" :key="model._uid"
+			>
 				<li>
 					{{ model._uid }}
 				</li>

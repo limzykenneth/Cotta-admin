@@ -17,7 +17,10 @@
 		</ul>
 		<ul class="lists schema-list">
 			<h4 class="list-section-title">Collections</h4>
-			<a v-for="schema in schemas" v-bind:href="schema.collectionSlug" v-on:click.prevent="renderCollection(schema.collectionSlug)">
+			<a v-for="schema in schemas" :key="schema.collectionSlug"
+				v-bind:href="schema.collectionSlug"
+				v-on:click.prevent="renderCollection(schema.collectionSlug)"
+			>
 				<li><i class="fa fa-file" aria-hidden="true"></i>{{ schema.collectionName }}</li>
 			</a>
 		</ul>

@@ -3,7 +3,7 @@
 		<h1>{{currentCollectionSchema.collectionName}} - {{ currentModel._uid }}</h1>
 
 		<ul id="model-list">
-			<li v-for="field in currentCollectionSchema.fields">
+			<li v-for="field in currentCollectionSchema.fields" :key="field.slug">
 				<h4>{{ field.name }}</h4>
 
 				<div class="field" v-if="field.type == 'wysiwyg'" v-html="currentModel[field.slug]"></div>

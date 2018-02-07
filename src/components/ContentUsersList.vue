@@ -3,7 +3,10 @@
 		<h1>Users</h1>
 
 		<ul id="users-list">
-			<a :href="'/users/'+user.username" class="list-items" v-for="user in usersList">
+			<a class="list-items"
+				:href="'/users/'+user.username"
+				v-for="user in usersList" :key="user.username"
+			>
 				<li>
 					{{ user.username }}
 				</li>
