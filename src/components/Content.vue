@@ -84,8 +84,8 @@ export default {
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);
 		},
-		renderModelForm: function(collectionSlug){
-			this.$emit("renderModelForm", collectionSlug);
+		renderModelForm: function(collectionSlug, uid){
+			this.$emit("renderModelForm", collectionSlug, uid);
 		},
 		submitModel: function(model, collectionSlug, uid=""){
 			this.$emit("submitModel", model, collectionSlug, uid);

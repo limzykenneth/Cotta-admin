@@ -2,6 +2,11 @@
 	<article id="model-container">
 		<h1>{{currentCollectionSchema.collectionName}} - {{ currentModel._uid }}</h1>
 
+		<button
+			v-on:click.prevent="renderModelForm(currentCollectionSchema.collectionSlug, currentModel._uid)">
+			Edit
+		</button>
+
 		<ul id="model-list">
 			<li v-for="field in currentCollectionSchema.fields" :key="field.slug">
 				<h4>{{ field.name }}</h4>
@@ -31,6 +36,11 @@ export default {
 		"currentCollectionSchema": {
 			type: Object,
 			required: true
+		}
+	},
+	methods: {
+		renderModelForm: function(collectionSlug, uid){
+			this.$emit("renderModelForm", collectionSlug, uid);
 		}
 	}
 }

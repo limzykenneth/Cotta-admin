@@ -8,12 +8,15 @@
 			</span>
 
 			<span class="field" v-if="field.type == 'checkbox' || field.type == 'radio'">
-				<span class="v-for-container" v-for="(choice, key) in field.properties.choices">
+				<span class="v-for-container"
+					v-for="(choice, key) in field.properties.choices"
+				>
 					<input
 						:type="field.type"
 						:name="field.slug"
 						:value="choice"
 						:id="choice"
+						:checked="checkboxChecked(choice, field.slug)"
 					>
 					<label :for="choice">{{ key }}</label>
 				</span>
@@ -22,6 +25,7 @@
 				<input
 					:type="field.type"
 					:name="field.slug"
+					:value="currentModel[field.slug]"
 				>
 			</span>
 
@@ -76,6 +80,9 @@ export default{
 				// Other validations go here, return false if failed
 			}
 			return true;
+		},
+		checkboxChecked: function(choice, slug){
+			return this.currentModel[slug].includes(choice);
 		},
 
 		// Private functions

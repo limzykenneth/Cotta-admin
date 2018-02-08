@@ -73,12 +73,21 @@ export default {
 		renderModelForm: function(collectionSlug, uid){
 			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
 				if(!uid){
+					// If not uid is defined, render blank form
 					this.$store.commit("setCurrentModel", {
 						model: {},
 						collectionSlug
 					});
+					this.$store.commit("setContentView", this.contentViews.modelEdit);
+				}else{
+					// If uid is defined, fetch model then render populated form
+					this.$store.dispatch("fetchModel", {
+						collectionSlug,
+						uid
+					}).then(() => {
+						this.$store.commit("setContentView", this.contentViews.modelEdit);
+					});
 				}
-				this.$store.commit("setContentView", this.contentViews.modelEdit);
 			});
 		},
 		submitModel: function(model, collectionSlug, uid=""){
