@@ -2,6 +2,8 @@
 	<article id="collection-container">
 		<h1>{{ currentCollectionSchema.collectionName }}</h1>
 
+		<button v-on:click.prevent="renderModelForm">New</button>
+
 		<ul id="collection-list">
 			<a class="list-items"
 				:href="'collections/' + currentCollectionSchema.collectionSlug + '/' + model._uid"
@@ -32,6 +34,9 @@ export default {
 	methods: {
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);
+		},
+		renderModelForm: function(){
+			this.$emit("renderModelForm");
 		}
 	}
 }

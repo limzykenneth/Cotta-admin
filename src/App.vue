@@ -25,6 +25,8 @@
 
 				v-on:loginUser="loginUser"
 				v-on:renderModel="renderModel"
+				v-on:renderModelForm="renderModelForm"
+				v-on:submitModel="submitModel"
 			></app-content>
 		</div>
 	</div>
@@ -65,6 +67,22 @@ export default {
 				collectionSlug,
 				uid
 			}).then(() => {
+				this.$store.commit("setContentView", this.contentViews.modelPage);
+			});
+		},
+		renderModelForm: function(){
+			this.$store.commit("setContentView", this.contentViews.modelNew);
+		},
+		submitModel: function(model, collectionSlug, uid=""){
+			this.$store.dispatch("submitModel", {
+				model,
+				collectionSlug,
+				uid
+			}).then((model) => {
+				this.$store.commit("setCurrentModel", {
+					model,
+					collectionSlug
+				});
 				this.$store.commit("setContentView", this.contentViews.modelPage);
 			});
 		},

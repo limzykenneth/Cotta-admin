@@ -95,6 +95,17 @@ var appStore = new Vuex.Store({
 
 				return Promise.resolve();
 			});
+		},
+		submitModel: function(context, options){
+			var model = options.model;
+			var collectionSlug = options.collectionSlug;
+			var uid = options.uid;
+
+			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+			// Hold off on full implementation
+			console.log(request);
+			// Should resolve with what's returned from the server for the _uid
+			return Promise.resolve(model);
 		}
 	}
 });
@@ -111,7 +122,9 @@ App.data = function(){
 			schemasList: "schemas-list",
 			collectionList: "collection-list",
 			usersList: "users-list",
-			modelPage: "model-page"
+			modelPage: "model-page",
+			modelEdit: "model-edit",
+			modelNew: "model-new"
 		},
 
 		utils: {

@@ -10,6 +10,8 @@
 			v-on:loginUser="loginUser"
 
 			v-on:renderModel="renderModel"
+			v-on:renderModelForm="renderModelForm"
+			v-on:submitModel="submitModel"
 		></component>
 	</section>
 </template>
@@ -24,6 +26,7 @@ import UsersList from "./ContentUsersList.vue";
 import UsersEdit from "./ContentUsersEdit.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
+import ModelNew from "./ContentModelNew.vue";
 
 export default {
 	name: "AppContent",
@@ -63,7 +66,8 @@ export default {
 		"users-list": UsersList,
 		"users-edit": UsersEdit,
 		"model-page": ModelPage,
-		"model-edit": ModelEdit
+		"model-edit": ModelEdit,
+		"model-new": ModelNew
 	},
 	methods: {
 		loginUser: function(loginDetails){
@@ -71,6 +75,12 @@ export default {
 		},
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);
+		},
+		renderModelForm: function(){
+			this.$emit("renderModelForm");
+		},
+		submitModel: function(model, collectionSlug, id=""){
+			this.$emit("submitModel", model, collectionSlug, id);
 		}
 	}
 }
