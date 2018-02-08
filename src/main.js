@@ -108,6 +108,14 @@ var appStore = new Vuex.Store({
 			console.log(request);
 			// Should resolve with what's returned from the server for the _uid
 			return Promise.resolve(model);
+
+			// return fetch(request).then((res) => res.json()).then((model) => {
+			// 	context.commit("setCurrentModel", {
+			// 		collectionSlug,
+			// 		model
+			// 	});
+			// 	return Promise.resolve();
+			// });
 		}
 	}
 });
