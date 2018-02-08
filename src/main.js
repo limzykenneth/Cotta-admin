@@ -76,11 +76,13 @@ var appStore = new Vuex.Store({
 		},
 		fetchCollection: function(context, collectionSlug){
 			var request = generateRequest(`collections/${collectionSlug}`);
-			fetch(request).then((res) => res.json()).then((collection) => {
+			return fetch(request).then((res) => res.json()).then((collection) => {
 				context.commit("setCurrentCollection", {
 					collection,
 					collectionSlug
 				});
+
+				return Promise.resolve();
 			})
 		},
 		fetchModel: function(context, options){
@@ -123,8 +125,7 @@ App.data = function(){
 			collectionList: "collection-list",
 			usersList: "users-list",
 			modelPage: "model-page",
-			modelEdit: "model-edit",
-			modelNew: "model-new"
+			modelEdit: "model-edit"
 		},
 
 		utils: {

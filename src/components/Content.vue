@@ -26,14 +26,15 @@ import UsersList from "./ContentUsersList.vue";
 import UsersEdit from "./ContentUsersEdit.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
-import ModelNew from "./ContentModelNew.vue";
 
 export default {
 	name: "AppContent",
 	props: {
 		"schemas": {
 			type: Array,
-			default: []
+			default: function(){
+				return [];
+			}
 		},
 		"currentView": {
 			type: String,
@@ -42,19 +43,27 @@ export default {
 		},
 		"currentCollection": {
 			type: Array,
-			default: []
+			default: function(){
+				return [];
+			}
 		},
 		"currentCollectionSchema": {
 			type: Object,
-			default: {}
+			default: function(){
+				return {};
+			}
 		},
 		"currentModel": {
 			type: Object,
-			default: {}
+			default: function(){
+				return {};
+			}
 		},
 		"usersList": {
 			type: Array,
-			default: []
+			default: function(){
+				return [];
+			}
 		}
 	},
 	components: {
@@ -66,8 +75,7 @@ export default {
 		"users-list": UsersList,
 		"users-edit": UsersEdit,
 		"model-page": ModelPage,
-		"model-edit": ModelEdit,
-		"model-new": ModelNew
+		"model-edit": ModelEdit
 	},
 	methods: {
 		loginUser: function(loginDetails){
@@ -76,11 +84,11 @@ export default {
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);
 		},
-		renderModelForm: function(){
-			this.$emit("renderModelForm");
+		renderModelForm: function(collectionSlug){
+			this.$emit("renderModelForm", collectionSlug);
 		},
-		submitModel: function(model, collectionSlug, id=""){
-			this.$emit("submitModel", model, collectionSlug, id);
+		submitModel: function(model, collectionSlug, uid=""){
+			this.$emit("submitModel", model, collectionSlug, uid);
 		}
 	}
 }

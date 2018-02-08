@@ -38,16 +38,22 @@ export default{
 		"currentCollectionSchema": {
 			type: Object,
 			required: true
+		},
+		"currentModel": {
+			type: Object,
+			default: function(){
+				return {};
+			}
 		}
 	},
 	methods: {
 		submitModel: function(e){
 			var result = this.$_formToJSON(e.target);
 			var slug = this.currentCollectionSchema.collectionSlug;
-			var id = null;
+			var uid;
 
 			if(this.validateModel(result)){
-				this.$emit("submitModel", result, slug, id);
+				this.$emit("submitModel", result, slug, uid);
 			}else{
 				// Validation failed, show message
 			}

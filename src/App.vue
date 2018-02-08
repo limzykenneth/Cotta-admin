@@ -70,8 +70,16 @@ export default {
 				this.$store.commit("setContentView", this.contentViews.modelPage);
 			});
 		},
-		renderModelForm: function(){
-			this.$store.commit("setContentView", this.contentViews.modelNew);
+		renderModelForm: function(collectionSlug, uid){
+			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
+				if(!uid){
+					this.$store.commit("setCurrentModel", {
+						model: {},
+						collectionSlug
+					});
+				}
+				this.$store.commit("setContentView", this.contentViews.modelEdit);
+			});
 		},
 		submitModel: function(model, collectionSlug, uid=""){
 			this.$store.dispatch("submitModel", {
