@@ -12,6 +12,8 @@
 			v-on:renderModel="renderModel"
 			v-on:renderModelForm="renderModelForm"
 			v-on:submitModel="submitModel"
+
+			v-on:renderSchemaForm="renderSchemaForm"
 		></component>
 	</section>
 </template>
@@ -48,10 +50,7 @@ export default {
 			}
 		},
 		"currentCollectionSchema": {
-			type: Object,
-			default: function(){
-				return {};
-			}
+			type: Object
 		},
 		"currentModel": {
 			type: Object,
@@ -89,6 +88,10 @@ export default {
 		},
 		submitModel: function(model, collectionSlug, uid=""){
 			this.$emit("submitModel", model, collectionSlug, uid);
+		},
+
+		renderSchemaForm: function(collectionSlug){
+			this.$emit("renderSchemaForm", collectionSlug);
 		}
 	}
 }

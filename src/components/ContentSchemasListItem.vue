@@ -1,5 +1,7 @@
 <template>
-	<div class="schema-container">{{ schema.collectionName }}</div>
+	<div class="schema-container">
+		{{ schema.collectionName }} <button v-on:click.prevent="renderSchemaForm">Edit</button>
+	</div>
 </template>
 
 <script>
@@ -9,6 +11,11 @@ export default {
 		"schema": {
 			type: Object,
 			required: true
+		}
+	},
+	methods: {
+		renderSchemaForm: function(){
+			this.$emit("renderSchemaForm");
 		}
 	}
 }

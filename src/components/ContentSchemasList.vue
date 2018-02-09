@@ -1,7 +1,12 @@
 <template>
 	<article>
 		<h1>Schemas</h1>
-		<schemas-list-item v-for="schema in schemas" :key="schema.collectionSlug" :schema="schema"></schemas-list-item>
+		<button v-on:click.prevent="renderSchemaForm">New</button>
+		<schemas-list-item
+			v-for="schema in schemas" :key="schema.collectionSlug"
+			:schema="schema"
+			v-on:renderSchemaForm="renderSchemaForm(schema.collectionSlug)"
+		></schemas-list-item>
 	</article>
 </template>
 
@@ -18,6 +23,11 @@ export default {
 	},
 	components: {
 		"schemas-list-item": SchemaListItem
+	},
+	methods: {
+		renderSchemaForm: function(collectionSlug){
+			this.$emit("renderSchemaForm", collectionSlug);
+		}
 	}
 }
 </script>

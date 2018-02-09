@@ -32,15 +32,17 @@ var appStore = new Vuex.Store({
 		},
 		setCurrentCollection: function(state, result){
 			state.currentCollection = result.collection;
-			state.currentCollectionSchema = _.find(state.schemas, function(el){
-				return el.collectionSlug == result.collectionSlug;
+			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+		},
+		setCurrentCollectionSchema: function(state, collectionSlug){
+			var selectedSchema = _.find(state.schemas, function(el){
+				return el.collectionSlug == collectionSlug;
 			});
+			state.currentCollectionSchema = selectedSchema;
 		},
 		setCurrentModel: function(state, result){
 			state.currentModel = result.model;
-			state.currentCollectionSchema = _.find(state.schemas, function(el){
-				return el.collectionSlug == result.collectionSlug;
-			});
+			this.commit("setCurrentCollectionSchema", result.collectionSlug);
 		}
 	},
 	actions: {
@@ -130,6 +132,7 @@ App.data = function(){
 			dashboard: "app-dashboard",
 			loginPage: "login-page",
 			schemasList: "schemas-list",
+			schemasEdit: "schemas-edit",
 			collectionList: "collection-list",
 			usersList: "users-list",
 			modelPage: "model-page",

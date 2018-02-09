@@ -27,6 +27,8 @@
 				v-on:renderModel="renderModel"
 				v-on:renderModelForm="renderModelForm"
 				v-on:submitModel="submitModel"
+
+				v-on:renderSchemaForm="renderSchemaForm"
 			></app-content>
 		</div>
 	</div>
@@ -102,6 +104,11 @@ export default {
 				});
 				this.$store.commit("setContentView", this.contentViews.modelPage);
 			});
+		},
+
+		renderSchemaForm: function(collectionSlug=""){
+			this.$store.commit("setCurrentCollectionSchema", collectionSlug);
+			this.$store.commit("setContentView", this.contentViews.schemasEdit);
 		},
 
 		loginUser: function(loginDetails){
