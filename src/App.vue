@@ -31,6 +31,7 @@
 
 				v-on:renderSchemaForm="renderSchemaForm"
 				v-on:submitSchema="submitSchema"
+				v-on:deleteSchema="deleteSchema"
 			></app-content>
 		</div>
 	</div>
@@ -122,6 +123,11 @@ export default {
 		},
 		submitSchema: function(schema){
 			this.$store.dispatch("submitSchema", schema);
+		},
+		deleteSchema: function(collectionSlug){
+			this.$store.dispatch("deleteSchema", collectionSlug).then((schema) => {
+				console.log("Deleted schema", schema);
+			});
 		},
 
 		loginUser: function(loginDetails){

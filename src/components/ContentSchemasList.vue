@@ -5,7 +5,9 @@
 		<schemas-list-item
 			v-for="schema in schemas" :key="schema.collectionSlug"
 			:schema="schema"
-			v-on:renderSchemaForm="renderSchemaForm(schema.collectionSlug)"
+
+			v-on:renderSchemaForm="renderSchemaForm"
+			v-on:deleteSchema="deleteSchema"
 		></schemas-list-item>
 	</article>
 </template>
@@ -27,6 +29,9 @@ export default {
 	methods: {
 		renderSchemaForm: function(collectionSlug){
 			this.$emit("renderSchemaForm", collectionSlug);
+		},
+		deleteSchema: function(collectionSlug){
+			this.$emit("deleteSchema", collectionSlug);
 		}
 	}
 }

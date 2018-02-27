@@ -100,6 +100,9 @@ export default {
 		},
 		submitSchema: function(schema){
 			this.$emit("submitSchema", schema);
+		},
+		deleteSchema: function(collectionSlug){
+			this.$emit("deleteSchema", collectionSlug);
 		}
 	}
 }

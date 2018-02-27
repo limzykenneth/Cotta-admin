@@ -81,6 +81,7 @@ var appStore = new Vuex.Store({
 				return Promise.resolve(schema);
 			});
 		},
+
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
 			fetch(request).then((res) => {

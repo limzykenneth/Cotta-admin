@@ -1,6 +1,8 @@
 <template>
 	<div class="schema-container">
-		{{ schema.collectionName }} <button v-on:click.prevent="renderSchemaForm">Edit</button>
+		{{ schema.collectionName }}
+		<button v-on:click.prevent="renderSchemaForm">Edit</button>
+		<button v-on:click.prevent="deleteSchema">Delete</button>
 	</div>
 </template>
 
@@ -15,7 +17,10 @@ export default {
 	},
 	methods: {
 		renderSchemaForm: function(){
-			this.$emit("renderSchemaForm");
+			this.$emit("renderSchemaForm", this.schema.collectionSlug);
+		},
+		deleteSchema: function(){
+			this.$emit("deleteSchema", this.schema.collectionSlug);
 		}
 	}
 }
