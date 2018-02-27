@@ -68,8 +68,18 @@ var appStore = new Vuex.Store({
 		},
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
-			fetch(request).then((res) => res.json()).then((users) => {
+			fetch(request).then((res) => {
+				if(res.status < 400){
+					return res.json();
+				}else{
+					throw new Error(res);
+				}
+			}).then((users) => {
 				context.commit("updateUsersList", users);
+			}).catch((err) => {
+				if(err.status == 403){
+					// do nothing
+				}
 			});
 		},
 		fetchInitialData: function(context){
