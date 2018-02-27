@@ -27,6 +27,7 @@
 				v-on:renderModel="renderModel"
 				v-on:renderModelForm="renderModelForm"
 				v-on:submitModel="submitModel"
+				v-on:deleteModel="deleteModel"
 
 				v-on:renderSchemaForm="renderSchemaForm"
 				v-on:submitSchema="submitSchema"
@@ -104,6 +105,14 @@ export default {
 					collectionSlug
 				});
 				this.$store.commit("setContentView", this.contentViews.modelPage);
+			});
+		},
+		deleteModel: function(collectionSlug, uid){
+			this.$store.dispatch("deleteModel", {
+				collectionSlug,
+				uid
+			}).then((model) => {
+				console.log("Deleted model: ", model);
 			});
 		},
 

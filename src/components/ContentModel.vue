@@ -3,8 +3,14 @@
 		<h1>{{currentCollectionSchema.collectionName}} - {{ currentModel._uid }}</h1>
 
 		<button
-			v-on:click.prevent="renderModelForm(currentCollectionSchema.collectionSlug, currentModel._uid)">
+			v-on:click.prevent="renderModelForm">
 			Edit
+		</button>
+
+		<button
+			v-on:click.prevent="deleteModel"
+		>
+			Delete
 		</button>
 
 		<ul id="model-list">
@@ -39,8 +45,17 @@ export default {
 		}
 	},
 	methods: {
-		renderModelForm: function(collectionSlug, uid){
-			this.$emit("renderModelForm", collectionSlug, uid);
+		renderModelForm: function(){
+			this.$emit("renderModelForm",
+				this.currentCollectionSchema.collectionSlug,
+				this.currentModel._uid
+			);
+		},
+		deleteModel: function(){
+			this.$emit("deleteModel",
+				this.currentCollectionSchema.collectionSlug,
+				this.currentModel._uid
+			);
 		}
 	}
 }

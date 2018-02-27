@@ -66,6 +66,14 @@ var appStore = new Vuex.Store({
 				}
 			});
 		},
+		submitSchema: function(context, schema){
+			var request = generateRequest("schema", "POST", schema);
+
+			return fetch(request).then((res) => res.json()).then((schema) => {
+				context.commit("setCurrentCollectionSchema", schema);
+				return Promise.resolve(schema);
+			})
+		},
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
 			fetch(request).then((res) => {
@@ -125,13 +133,14 @@ var appStore = new Vuex.Store({
 				return Promise.resolve(model);
 			});
 		},
-		submitSchema: function(context, schema){
-			var request = generateRequest("schema", "POST", schema);
+		deleteModel: function(context, options){
+			var collectionSlug = options.collectionSlug;
+			var uid = options.uid;
+			var request = generateRequest(`collections/${collectionSlug}/${uid}`);
 
-			return fetch(request).then((res) => res.json()).then((schema) => {
-				context.commit("setCurrentCollectionSchema", schema);
-				return Promise.resolve(schema);
-			})
+			return fetch(request).then((res) => res.json()).then((model) => {
+				return Promise.resolve(model);
+			});
 		}
 	}
 });

@@ -12,6 +12,7 @@
 			v-on:renderModel="renderModel"
 			v-on:renderModelForm="renderModelForm"
 			v-on:submitModel="submitModel"
+			v-on:deleteModel="deleteModel"
 
 			v-on:renderSchemaForm="renderSchemaForm"
 			v-on:submitSchema="submitSchema"
@@ -89,6 +90,9 @@ export default {
 		},
 		submitModel: function(model, collectionSlug, uid=""){
 			this.$emit("submitModel", model, collectionSlug, uid);
+		},
+		deleteModel: function(collectionSlug, uid){
+			this.$emit("deleteModel", collectionSlug, uid);
 		},
 
 		renderSchemaForm: function(collectionSlug){
