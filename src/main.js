@@ -116,23 +116,17 @@ var appStore = new Vuex.Store({
 			var uid = options.uid;
 
 			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
-			// Hold off on full implementation
-			console.log(request);
-			// Should resolve with what's returned from the server for the _uid
-			return Promise.resolve(model);
 
-			// return fetch(request).then((res) => res.json()).then((model) => {
-			// 	context.commit("setCurrentModel", {
-			// 		collectionSlug,
-			// 		model
-			// 	});
-			// 	return Promise.resolve();
-			// });
+			return fetch(request).then((res) => res.json()).then((model) => {
+				context.commit("setCurrentModel", {
+					collectionSlug,
+					model
+				});
+				return Promise.resolve(model);
+			});
 		},
 		submitSchema: function(context, schema){
 			var request = generateRequest("schema", "POST", schema);
-			// console.log(request);
-			// return Promise.resolve(schema);
 
 			return fetch(request).then((res) => res.json()).then((schema) => {
 				context.commit("setCurrentCollectionSchema", schema);
