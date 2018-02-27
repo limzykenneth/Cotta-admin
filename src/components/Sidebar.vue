@@ -10,7 +10,7 @@
 			<a href="users" v-on:click.prevent="renderUsersList"><li>
 				<i class="fa fa-users" aria-hidden="true"></i>Users
 			</li></a>
-			<a href="settings"><li>
+			<a href="settings" v-on:click.prevent="renderSettings"><li>
 				<i class="fa fa-cog" aria-hidden="true"></i>Settings
 			</li></a>
 			<li class="spacer"></li>
@@ -48,6 +48,9 @@ export default {
 		},
 		renderUsersList: function(){
 			this.$emit("renderUsersList");
+		},
+		renderSettings: function(){
+
 		}
 	}
 };
