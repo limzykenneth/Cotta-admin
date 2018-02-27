@@ -74,6 +74,9 @@ var appStore = new Vuex.Store({
 				return Promise.resolve(schema);
 			})
 		},
+		deleteSchema: function(context, collectionSlug){
+			var request = generateRequest
+		},
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
 			fetch(request).then((res) => {
@@ -136,7 +139,7 @@ var appStore = new Vuex.Store({
 		deleteModel: function(context, options){
 			var collectionSlug = options.collectionSlug;
 			var uid = options.uid;
-			var request = generateRequest(`collections/${collectionSlug}/${uid}`);
+			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
 
 			return fetch(request).then((res) => res.json()).then((model) => {
 				return Promise.resolve(model);
