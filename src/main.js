@@ -131,13 +131,13 @@ var appStore = new Vuex.Store({
 		},
 		submitSchema: function(context, schema){
 			var request = generateRequest("schema", "POST", schema);
-			console.log(request);
-			return Promise.resolve(schema);
+			// console.log(request);
+			// return Promise.resolve(schema);
 
-			// return fetch(request).then((res) => res.json()).then((schema) => {
-			// 	context.commit("setCurrentCollectionSchema", schema);
-			// 	return Promise.resolve(schema);
-			// })
+			return fetch(request).then((res) => res.json()).then((schema) => {
+				context.commit("setCurrentCollectionSchema", schema);
+				return Promise.resolve(schema);
+			})
 		}
 	}
 });
