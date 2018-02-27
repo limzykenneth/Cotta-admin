@@ -82,6 +82,7 @@ export default{
 			return true;
 		},
 		checkboxChecked: function(choice, slug){
+			if(!this.currentModel[slug]) return false;
 			return this.currentModel[slug].includes(choice);
 		},
 
