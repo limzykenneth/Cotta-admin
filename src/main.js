@@ -75,7 +75,11 @@ var appStore = new Vuex.Store({
 			})
 		},
 		deleteSchema: function(context, collectionSlug){
-			var request = generateRequest
+			var request = generateRequest(`schema/${collectionSlug}`, "DELETE");
+
+			return fetch(request).then((res) => res.json()).then((schema) => {
+				return Promise.resolve(schema);
+			});
 		},
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
