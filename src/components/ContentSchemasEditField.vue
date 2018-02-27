@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<input type="text" name="field_1" :value="fieldName">
+		<input type="text" name="field" :value="fieldName">
 		<select v-on:input="selectionChanged" :value="value">
 			<option disabled selected value> -- select an option -- </option>
 			<option value="wysiwyg" :selected="isSelected('wysiwyg')">wysiwyg</option>
