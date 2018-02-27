@@ -14,6 +14,7 @@
 			v-on:submitModel="submitModel"
 
 			v-on:renderSchemaForm="renderSchemaForm"
+			v-on:submitSchema="submitSchema"
 		></component>
 	</section>
 </template>
@@ -92,6 +93,9 @@ export default {
 
 		renderSchemaForm: function(collectionSlug){
 			this.$emit("renderSchemaForm", collectionSlug);
+		},
+		submitSchema: function(schema){
+			this.$emit("submitSchema", schema);
 		}
 	}
 }

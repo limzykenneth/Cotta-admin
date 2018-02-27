@@ -39,8 +39,6 @@ export default {
 			this.$emit("removeField", index);
 		},
 		selectionChanged: function(value){
-			console.log(value);
-			console.log(this.value);
 			this.$emit("input");
 		}
 	}

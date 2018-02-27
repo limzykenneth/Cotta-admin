@@ -128,6 +128,16 @@ var appStore = new Vuex.Store({
 			// 	});
 			// 	return Promise.resolve();
 			// });
+		},
+		submitSchema: function(context, schema){
+			var request = generateRequest("schema", "POST", schema);
+			console.log(request);
+			return Promise.resolve(schema);
+
+			// return fetch(request).then((res) => res.json()).then((schema) => {
+			// 	context.commit("setCurrentCollectionSchema", schema);
+			// 	return Promise.resolve(schema);
+			// })
 		}
 	}
 });

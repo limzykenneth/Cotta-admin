@@ -29,6 +29,7 @@
 				v-on:submitModel="submitModel"
 
 				v-on:renderSchemaForm="renderSchemaForm"
+				v-on:submitSchema="submitSchema"
 			></app-content>
 		</div>
 	</div>
@@ -109,6 +110,9 @@ export default {
 		renderSchemaForm: function(collectionSlug=""){
 			this.$store.commit("setCurrentCollectionSchema", collectionSlug);
 			this.$store.commit("setContentView", this.contentViews.schemasEdit);
+		},
+		submitSchema: function(schema){
+			this.$store.dispatch("submitSchema", schema);
 		},
 
 		loginUser: function(loginDetails){

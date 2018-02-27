@@ -65,11 +65,17 @@ export default{
 	},
 	methods: {
 		submitSchema: function(){
-			console.log(this.collectionName);
-			console.log(JSON.stringify(this.fields));
+			var schema = {
+				collectionName: this.collectionName,
+				collectionSlug: this.collectionSlug,
+				fields: this.fields
+			}
+			this.$emit("submitSchema", schema);
 		},
-		validateInput: function(fields){
-
+		validateInput: function(collectionName, fields){
+			if(!collectionName){
+				return false;
+			}
 		},
 		addField: function(){
 			var newField = {
