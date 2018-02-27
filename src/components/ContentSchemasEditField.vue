@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<input type="text" name="field_1" :value="fieldName">
-		<select>
+		<select v-on:input="selectionChanged" :value="value">
 			<option disabled selected value> -- select an option -- </option>
 			<option value="wysiwyg" :selected="isSelected('wysiwyg')">wysiwyg</option>
 			<option value="text" :selected="isSelected('text')">text</option>
@@ -22,7 +22,7 @@ export default {
 			type: String,
 			default: ""
 		},
-		"fieldType": {
+		"value": {
 			type: String,
 			default: ""
 		},
@@ -33,10 +33,15 @@ export default {
 	},
 	methods: {
 		isSelected: function(fieldValue){
-			return fieldValue == this.fieldType;
+			return fieldValue == this.value;
 		},
 		removeField: function(index){
 			this.$emit("removeField", index);
+		},
+		selectionChanged: function(value){
+			console.log(value);
+			console.log(this.value);
+			this.$emit("input");
 		}
 	}
 }

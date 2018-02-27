@@ -1,12 +1,17 @@
 <template>
 	<article>
 		<form v-on:submit.prevent="submitSchema">
+			<label for="collectionName">Collection Name: </label>
+			<input id="collectionName" type="text" name="collectionName" disabled="true"
+				v-model="collectionName"
+			>
+
 			<schemas-edit-field
 				v-for="(field, index) in fields" :key="index"
 
 				:fieldName="field.name"
-				:fieldType="field.type"
 				:selfIndex="index"
+				v-model="field.type"
 
 				v-on:removeField="removeField"
 			></schemas-edit-field>
@@ -19,6 +24,7 @@
 </template>
 
 <script>
+import snakeCase from "snake-case";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
 export default{
@@ -33,8 +39,11 @@ export default{
 	},
 	data: function(){
 		var fields = [];
+		var collectionName = "";
+
 		if(this.currentCollectionSchema){
 			fields = this.currentCollectionSchema.fields.slice(0);
+			collectionName = this.currentCollectionSchema.collectionName;
 		}else{
 			fields = [{
 				properties: {},
@@ -43,12 +52,23 @@ export default{
 				type: ""
 			}];
 		}
+
 		return {
+			collectionName,
 			fields
 		};
 	},
+	computed: {
+		collectionSlug: function(){
+			return snakeCase(this.collectionName);
+		}
+	},
 	methods: {
 		submitSchema: function(){
+			console.log(this.collectionName);
+			console.log(JSON.stringify(this.fields));
+		},
+		validateInput: function(fields){
 
 		},
 		addField: function(){
