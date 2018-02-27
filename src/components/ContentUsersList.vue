@@ -6,6 +6,7 @@
 			<a class="list-items"
 				:href="'/users/'+user.username"
 				v-for="user in usersList" :key="user.username"
+				v-on:click.prevent="renderUser"
 			>
 				<li>
 					{{ user.username }}
@@ -22,6 +23,11 @@ export default {
 		"usersList": {
 			type: Array,
 			required: true
+		}
+	},
+	methods:{
+		renderUser: function(){
+
 		}
 	}
 }
