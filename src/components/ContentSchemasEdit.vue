@@ -2,7 +2,7 @@
 	<article>
 		<form v-on:submit.prevent="submitSchema">
 			<label for="collectionName">Collection Name: </label>
-			<input id="collectionName" type="text" name="collectionName" disabled="true"
+			<input id="collectionName" type="text" name="collectionName" :disabled="editName"
 				v-model="collectionName"
 			>
 
@@ -61,6 +61,13 @@ export default{
 	computed: {
 		collectionSlug: function(){
 			return snakeCase(this.collectionName);
+		},
+		editName: function(){
+			if(typeof this.currentCollectionSchema == "undefined"){
+				return false;
+			}else{
+				return true;
+			}
 		}
 	},
 	methods: {
