@@ -122,11 +122,13 @@ export default {
 			this.$store.commit("setContentView", this.contentViews.schemasEdit);
 		},
 		submitSchema: function(schema){
-			this.$store.dispatch("submitSchema", schema);
+			this.$store.dispatch("submitSchema", schema).then((schema) => {
+				this.$store.commit("setContentView", this.contentViews.schemasList);
+			});
 		},
 		deleteSchema: function(collectionSlug){
-			this.$store.dispatch("deleteSchema", collectionSlug).then((schema) => {
-				console.log("Deleted schema", schema);
+			this.$store.dispatch("deleteSchema", collectionSlug).then((message) => {
+				this.$store.commit("setContentView", this.contentViews.schemasList);
 			});
 		},
 

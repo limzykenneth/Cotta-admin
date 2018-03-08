@@ -16,6 +16,7 @@
 
 			v-on:renderSchemaForm="renderSchemaForm"
 			v-on:submitSchema="submitSchema"
+			v-on:deleteSchema="deleteSchema"
 		></component>
 	</section>
 </template>
@@ -105,7 +106,7 @@ export default {
 			this.$emit("deleteSchema", collectionSlug);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

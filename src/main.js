@@ -71,14 +71,18 @@ var appStore = new Vuex.Store({
 
 			return fetch(request).then((res) => res.json()).then((schema) => {
 				context.commit("setCurrentCollectionSchema", schema);
+				context.state.schemas.push(schema);
 				return Promise.resolve(schema);
-			})
+			});
 		},
 		deleteSchema: function(context, collectionSlug){
 			var request = generateRequest(`schema/${collectionSlug}`, "DELETE");
 
-			return fetch(request).then((res) => res.json()).then((schema) => {
-				return Promise.resolve(schema);
+			return fetch(request).then((res) => res.json()).then((message) => {
+				context.state.schemas = _.filter(context.state.schemas, function(el){
+					return el.collectionSlug != collectionSlug;
+				});
+				return Promise.resolve(message);
 			});
 		},
 

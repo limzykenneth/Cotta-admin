@@ -23,7 +23,7 @@ export default {
 			this.$emit("deleteSchema", this.schema.collectionSlug);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>
