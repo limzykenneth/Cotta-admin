@@ -54,7 +54,7 @@ export default{
 		submitModel: function(e){
 			var result = this.$_formToJSON(e.target);
 			var slug = this.currentCollectionSchema.collectionSlug;
-			var uid;
+			var uid = this.currentModel._uid || "";
 
 			if(this.validateModel(result)){
 				this.$emit("submitModel", result, slug, uid);
@@ -108,7 +108,7 @@ export default{
 			return result;
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

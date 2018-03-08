@@ -113,7 +113,7 @@ export default {
 				collectionSlug,
 				uid
 			}).then((model) => {
-				console.log("Deleted model: ", model);
+				this.$store.commit("setContentView", this.contentViews.collectionList);
 			});
 		},
 

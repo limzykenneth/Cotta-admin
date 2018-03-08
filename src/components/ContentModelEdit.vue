@@ -32,7 +32,7 @@ export default{
 			this.$emit("submitModel", model, collectionSlug, uid);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

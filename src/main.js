@@ -43,6 +43,14 @@ var appStore = new Vuex.Store({
 		setCurrentModel: function(state, result){
 			state.currentModel = result.model;
 			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+		},
+		removeModel: function(state, options){
+			var collectionSlug = options.collectionSlug;
+			var model = options.model;
+
+			state.currentCollection = _.filter(state.currentCollection, function(el){
+				return el._uid != model._uid;
+			});
 		}
 	},
 	actions: {
@@ -115,7 +123,7 @@ var appStore = new Vuex.Store({
 				});
 
 				return Promise.resolve();
-			})
+			});
 		},
 		fetchModel: function(context, options){
 			var collectionSlug = options.collectionSlug;
@@ -151,6 +159,10 @@ var appStore = new Vuex.Store({
 			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
 
 			return fetch(request).then((res) => res.json()).then((model) => {
+				context.commit("removeModel", {
+					collectionSlug,
+					model
+				});
 				return Promise.resolve(model);
 			});
 		}
