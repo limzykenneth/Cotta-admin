@@ -13,6 +13,7 @@
 				:selfIndex="index"
 				v-model="field.type"
 
+				v-on:nameChanged="nameChanged"
 				v-on:removeField="removeField"
 			></schemas-edit-field>
 
@@ -71,12 +72,17 @@ export default{
 		}
 	},
 	methods: {
+		nameChanged: function(newName, i){
+			this.fields[i].name = newName;
+			this.fields[i].slug = snakeCase(newName);
+		},
 		submitSchema: function(){
 			var schema = {
 				collectionName: this.collectionName,
 				collectionSlug: this.collectionSlug,
 				fields: this.fields
-			}
+			};
+			// Handles new schemas only, edit not yet implemented in server
 			this.$emit("submitSchema", schema);
 		},
 		validateInput: function(collectionName, fields){
