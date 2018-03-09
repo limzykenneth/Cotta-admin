@@ -103,7 +103,7 @@ export default{
 			this.fields.splice(index, 1);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

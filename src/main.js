@@ -1,10 +1,10 @@
-const siteTitle = "Char Admin"
+const siteTitle = "Char Admin";
 const url = "http://localhost:3000/api";
 
 const Vue = require("vue");
 const Vuex = require("vuex");
 Vue.use(Vuex);
-const urljoin = require('url-join');
+const urljoin = require("url-join");
 
 var appStore = new Vuex.Store({
 	state: {
@@ -21,8 +21,15 @@ var appStore = new Vuex.Store({
 		updateSchemas: function(state, newSchemas){
 			state.schemas = newSchemas;
 		},
-		addNewSchema: function(state, schema){
-			state.schemas.push(schema);
+		addNewEditSchema: function(state, schema){
+			var matchedSchemaIndex = _.findIndex(state.schemas, function(el){
+				return el.collectionSlug == schema.collectionSlug;
+			});
+			if(matchedSchemaIndex > -1){
+				state.schemas[matchedSchemaIndex] = schema;
+			}else{
+				state.schemas.push(schema);
+			}
 		},
 		removeSchema: function(state, collectionSlug){
 			state.schemas = _.filter(state.schemas, function(el){
@@ -86,8 +93,9 @@ var appStore = new Vuex.Store({
 			var request = generateRequest("schema", "POST", schema);
 
 			return fetch(request).then((res) => res.json()).then((schema) => {
+				console.log(schema);
 				context.commit("setCurrentCollectionSchema", schema);
-				context.commit("addNewSchema", schema);
+				context.commit("addNewEditSchema", schema);
 				return Promise.resolve(schema);
 			});
 		},
@@ -232,6 +240,7 @@ new Vue({
 	}
 });
 
+// Utils ------------------------------------------------
 function generateRequest(path, method="GET", payload=null){
 	var finalURL = urljoin(url, path);
 	var token = store.get("access_token");
