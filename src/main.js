@@ -93,7 +93,6 @@ var appStore = new Vuex.Store({
 			var request = generateRequest("schema", "POST", schema);
 
 			return fetch(request).then((res) => res.json()).then((schema) => {
-				console.log(schema);
 				context.commit("setCurrentCollectionSchema", schema);
 				context.commit("addNewEditSchema", schema);
 				return Promise.resolve(schema);
