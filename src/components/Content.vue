@@ -6,6 +6,7 @@
 			:current-collection-schema="currentCollectionSchema"
 			:users-list="usersList"
 			:current-model="currentModel"
+			:current-view-user="currentViewUser"
 
 			v-on:loginUser="loginUser"
 
@@ -17,6 +18,8 @@
 			v-on:renderSchemaForm="renderSchemaForm"
 			v-on:submitSchema="submitSchema"
 			v-on:deleteSchema="deleteSchema"
+
+			v-on:renderUser="renderUser"
 		></component>
 	</section>
 </template>
@@ -29,6 +32,7 @@ import SchemasList from "./ContentSchemasList.vue";
 import SchemasEdit from "./ContentSchemasEdit.vue";
 import UsersList from "./ContentUsersList.vue";
 import UsersEdit from "./ContentUsersEdit.vue";
+import UserPage from "./ContentUser.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
 
@@ -66,6 +70,9 @@ export default {
 			default: function(){
 				return [];
 			}
+		},
+		"currentViewUser": {
+			type: Object
 		}
 	},
 	components: {
@@ -76,6 +83,7 @@ export default {
 		"schemas-edit": SchemasEdit,
 		"users-list": UsersList,
 		"users-edit": UsersEdit,
+		"user-page": UserPage,
 		"model-page": ModelPage,
 		"model-edit": ModelEdit
 	},
@@ -104,6 +112,10 @@ export default {
 		},
 		deleteSchema: function(collectionSlug){
 			this.$emit("deleteSchema", collectionSlug);
+		},
+
+		renderUser: function(username){
+			this.$emit("renderUser", username);
 		}
 	}
 };

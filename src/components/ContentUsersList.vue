@@ -6,7 +6,7 @@
 			<a class="list-items"
 				:href="'/users/'+user.username"
 				v-for="user in usersList" :key="user.username"
-				v-on:click.prevent="renderUser"
+				v-on:click.prevent="renderUser(user.username)"
 			>
 				<li>
 					{{ user.username }}
@@ -26,8 +26,8 @@ export default {
 		}
 	},
 	methods:{
-		renderUser: function(){
-
+		renderUser: function(username){
+			this.$emit("renderUser", username);
 		}
 	}
 }

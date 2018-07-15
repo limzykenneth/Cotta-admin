@@ -22,6 +22,7 @@
 				:current-collection-schema="currentCollectionSchema"
 				:current-model="currentModel"
 				:users-list="usersList"
+				:current-view-user="currentViewUser"
 
 				v-on:loginUser="loginUser"
 				v-on:renderModel="renderModel"
@@ -32,6 +33,8 @@
 				v-on:renderSchemaForm="renderSchemaForm"
 				v-on:submitSchema="submitSchema"
 				v-on:deleteSchema="deleteSchema"
+
+				v-on:renderUser="renderUser"
 			></app-content>
 		</div>
 	</div>
@@ -129,6 +132,12 @@ export default {
 		deleteSchema: function(collectionSlug){
 			this.$store.dispatch("deleteSchema", collectionSlug).then((message) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
+			});
+		},
+
+		renderUser: function(username){
+			this.$store.dispatch("fetchUser", username).then((user) => {
+				this.$store.commit("setContentView", this.contentViews.userPage);
 			});
 		},
 

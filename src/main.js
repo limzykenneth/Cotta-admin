@@ -15,7 +15,8 @@ var appStore = new Vuex.Store({
 		currentContentView: "app-dashboard",
 		currentCollection: [],
 		currentCollectionSchema: {},
-		currentModel: {}
+		currentModel: {},
+		currentViewUser: {}
 	},
 	mutations: {
 		updateSchemas: function(state, newSchemas){
@@ -38,6 +39,9 @@ var appStore = new Vuex.Store({
 		},
 		updateUsersList: function(state, newUsersList){
 			state.usersList = newUsersList;
+		},
+		setCurrentViewUser: function(state, currentViewUser){
+			state.currentViewUser = currentViewUser;
 		},
 		setContentView: function(state, view){
 			state.currentContentView = view;
@@ -178,6 +182,15 @@ var appStore = new Vuex.Store({
 				});
 				return Promise.resolve(model);
 			});
+		},
+
+		fetchUser: function(context, username){
+			var request = generateRequest(`users/${username}`);
+
+			return fetch(request).then((res) => res.json()).then((user) => {
+				context.commit("setCurrentViewUser", user);
+				return Promise.resolve(user);
+			});
 		}
 	}
 });
@@ -195,6 +208,7 @@ App.data = function(){
 			schemasEdit: "schemas-edit",
 			collectionList: "collection-list",
 			usersList: "users-list",
+			userPage: "user-page",
 			modelPage: "model-page",
 			modelEdit: "model-edit"
 		},
@@ -214,6 +228,9 @@ App.computed = {
 	},
 	usersList: function(){
 		return appStore.state.usersList;
+	},
+	currentViewUser: function(){
+		return appStore.state.currentViewUser;
 	},
 	currentContentView: function(){
 		return appStore.state.currentContentView;
