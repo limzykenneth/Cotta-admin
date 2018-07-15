@@ -2,16 +2,20 @@
 	<article id="user-container">
 		<h1>{{ currentViewUser.username }}</h1>
 
-		<p>User role: </p>
+		<p>User role: {{ currentViewUser.role }}</p>
 
 		<p>
 			User models:
 			<ul id="user-models-list">
-				<li class="user-model"
+				<a class="list-items"
 					v-for="(model, index) in currentViewUser.models" :key="index"
+					:href="userModelLinks[index].link"
+					v-on:click.prevent="renderModel(userModelLinks[index].collectionSlug, userModelLinks[index].modelID)"
 				>
-					{{ model }}
-				</li>
+					<li >
+						{{ model }}
+					</li>
+				</a>
 			</ul>
 		</p>
 	</article>
@@ -25,10 +29,51 @@ export default{
 			type: Object,
 			required: true
 		}
+	},
+	computed: {
+		userModelLinks: function(){
+			let models = [];
+			_.each(this.currentViewUser.models, (model, i) => {
+				let modelPaths = model.split(".");
+				let collectionSlug = modelPaths[0];
+				let modelID = modelPaths[1];
+				let link = `collections/${collectionSlug}/${modelID}`;
+				models.push({
+					collectionSlug,
+					modelID,
+					link
+				});
+			});
+
+			return models;
+		}
+	},
+	methods: {
+		renderModel: function(collectionSlug, uid){
+			this.$emit("renderModel", collectionSlug, uid);
+		}
 	}
 }
 </script>
 
 <style lang="less" scoped>
-@import "../mixins.less";
+	@import "../mixins.less";
+
+	#user-container{
+		#user-models-list{
+			.unstyled-list();
+
+			.list-items{
+				li{
+					padding: 10px;
+					border: 1px solid black;
+					border-top: none;
+				}
+
+				&:first-child li{
+					border-top: 1px solid black;
+				}
+			}
+		}
+	}
 </style>
