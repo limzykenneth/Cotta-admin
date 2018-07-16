@@ -195,6 +195,13 @@ var appStore = new Vuex.Store({
 				context.commit("setCurrentViewUser", user);
 				return Promise.resolve(user);
 			});
+		},
+		deleteUser: function(context, username){
+			var request = generateRequest(`users/${username}`, "DELETE");
+
+			return fetch(request).then((res) => res.json()).then((message) => {
+				return Promise.resolve(message);
+			});
 		}
 	}
 });

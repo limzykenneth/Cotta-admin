@@ -40,6 +40,7 @@
 				v-on:deleteSchema="deleteSchema"
 
 				v-on:renderUser="renderUser"
+				v-on:deleteUser="deleteUser"
 			></app-content>
 		</div>
 	</div>
@@ -70,7 +71,9 @@ export default {
 			});
 		},
 		renderUsersList: function(){
-			this.$store.commit("setContentView", this.contentViews.usersList);
+			this.$store.dispatch("fetchUsersList").then(() => {
+				this.$store.commit("setContentView", this.contentViews.usersList);
+			});
 		},
 		renderLogin: function(){
 			this.$store.commit("setContentView", this.contentViews.loginPage);
@@ -143,6 +146,11 @@ export default {
 		renderUser: function(username){
 			this.$store.dispatch("fetchUser", username).then((user) => {
 				this.$store.commit("setContentView", this.contentViews.userPage);
+			});
+		},
+		deleteUser: function(username){
+			this.$store.dispatch("deleteUser", username).then((message) => {
+				this.$store.dispatch("fetchUsersList");
 			});
 		},
 

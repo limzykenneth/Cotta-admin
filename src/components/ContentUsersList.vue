@@ -1,22 +1,24 @@
 <template>
 	<article id="users-container">
 		<h1>Users</h1>
+		<button v-on:click.prevent="renderUserForm">New</button>
 
 		<ul id="users-list">
-			<a class="list-items"
-				:href="'/users/'+user.username"
+			<users-list-item
 				v-for="user in usersList" :key="user.username"
-				v-on:click.prevent="renderUser(user.username)"
-			>
-				<li>
-					{{ user.username }}
-				</li>
-			</a>
+				:user="user"
+
+				v-on:renderUser="renderUser"
+				v-on:renderUserForm="renderUserForm"
+				v-on:deleteUser="deleteUser"
+			></users-list-item>
 		</ul>
 	</article>
 </template>
 
 <script>
+import UsersListItem from "./ContentUsersListItem.vue";
+
 export default {
 	name: "UsersList",
 	props: {
@@ -25,9 +27,19 @@ export default {
 			required: true
 		}
 	},
+	components: {
+		"users-list-item": UsersListItem
+	},
 	methods:{
 		renderUser: function(username){
 			this.$emit("renderUser", username);
+		},
+		renderUserForm: function(username){
+			// Implementation pending
+			this.$emit("renderUserForm", username);
+		},
+		deleteUser: function(username){
+			this.$emit("deleteUser", username)
 		}
 	}
 }

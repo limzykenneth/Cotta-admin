@@ -23,6 +23,7 @@
 			v-on:deleteSchema="deleteSchema"
 
 			v-on:renderUser="renderUser"
+			v-on:deleteUser="deleteUser"
 		></component>
 	</section>
 </template>
@@ -131,6 +132,9 @@ export default {
 
 		renderUser: function(username){
 			this.$emit("renderUser", username);
+		},
+		deleteUser: function(username){
+			this.$emit("deleteUser", username);
 		}
 	}
 };
