@@ -1,11 +1,15 @@
+// App constants
 const siteTitle = "Char Admin";
 const url = "http://localhost:3000/api";
 
+// Dependencies
 const Vue = require("vue");
 const Vuex = require("vuex");
 Vue.use(Vuex);
-const urljoin = require("url-join");
+const urlJoin = require("url-join");
 
+//---------------------------------------------------------------
+// App storage (Vuex)
 var appStore = new Vuex.Store({
 	state: {
 		loggedIn: false,
@@ -195,6 +199,8 @@ var appStore = new Vuex.Store({
 	}
 });
 
+//-----------------------------------------------------------------
+// App initialization
 var App = require("./App.vue");
 App.data = function(){
 	return {
@@ -214,11 +220,13 @@ App.data = function(){
 		},
 
 		utils: {
-			generateRequest: generateRequest
+			generateRequest: generateRequest,
+			urlJoin: urlJoin
 		}
 	};
 };
 
+// Computed properties controlled by Vuex
 App.computed = {
 	loggedIn: function(){
 		return appStore.state.loggedIn;
@@ -246,6 +254,7 @@ App.computed = {
 	}
 };
 
+// Start the app!
 new Vue({
 	el: "#page-content",
 	store: appStore,
@@ -258,7 +267,7 @@ new Vue({
 
 // Utils ------------------------------------------------
 function generateRequest(path, method="GET", payload=null){
-	var finalURL = urljoin(url, path);
+	var finalURL = urlJoin(url, path);
 	var token = store.get("access_token");
 
 	var header = {};
