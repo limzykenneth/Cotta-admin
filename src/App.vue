@@ -161,7 +161,11 @@ export default {
 			this.$store.commit("updateUsersList", []);
 		},
 		signupUser: function(signupDetails){
-			console.log(signupDetails);
+			// route not implemented yet
+			// var request = this.utils.generateRequest("signup", "POST", signupDetails);
+			// fetch(request).then((res) => res.json()).then(() => {
+			// 	this.$store.commit("setContentView", this.contentViews.loginPage);
+			// });
 		},
 		renderSignup: function(){
 			this.$store.commit("setContentView", this.contentViews.signupPage);
