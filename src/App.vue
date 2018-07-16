@@ -40,7 +40,9 @@
 				v-on:deleteSchema="deleteSchema"
 
 				v-on:renderUser="renderUser"
+				v-on:renderUserForm="renderUserForm"
 				v-on:deleteUser="deleteUser"
+				v-on:submitUser="submitUser"
 			></app-content>
 		</div>
 	</div>
@@ -145,13 +147,28 @@ export default {
 
 		renderUser: function(username){
 			this.$store.dispatch("fetchUser", username).then((user) => {
+				this.$store.commit("setCurrentViewUser", user);
 				this.$store.commit("setContentView", this.contentViews.userPage);
 			});
+		},
+		renderUserForm: function(username){
+			if(username){
+				this.$store.dispatch("fetchUser", username).then((user) => {
+					this.$store.commit("setCurrentViewUser", user);
+					this.$store.commit("setContentView", this.contentViews.userEdit);
+				});
+			}else{
+				this.$store.commit("setCurrentViewUser", {});
+				this.$store.commit("setContentView", this.contentViews.userEdit);
+			}
 		},
 		deleteUser: function(username){
 			this.$store.dispatch("deleteUser", username).then((message) => {
 				this.$store.dispatch("fetchUsersList");
 			});
+		},
+		submitUser: function(user){
+			// Route not fully implemented yet
 		},
 
 		loginUser: function(loginDetails){

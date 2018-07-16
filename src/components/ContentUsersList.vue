@@ -1,7 +1,7 @@
 <template>
 	<article id="users-container">
 		<h1>Users</h1>
-		<button v-on:click.prevent="renderUserForm">New</button>
+		<button v-on:click.prevent="renderUserForm('')">New</button>
 
 		<ul id="users-list">
 			<users-list-item
@@ -35,7 +35,6 @@ export default {
 			this.$emit("renderUser", username);
 		},
 		renderUserForm: function(username){
-			// Implementation pending
 			this.$emit("renderUserForm", username);
 		},
 		deleteUser: function(username){

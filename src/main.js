@@ -192,7 +192,6 @@ var appStore = new Vuex.Store({
 			var request = generateRequest(`users/${username}`);
 
 			return fetch(request).then((res) => res.json()).then((user) => {
-				context.commit("setCurrentViewUser", user);
 				return Promise.resolve(user);
 			});
 		},
@@ -222,6 +221,7 @@ App.data = function(){
 			schemasEdit: "schemas-edit",
 			collectionList: "collection-list",
 			usersList: "users-list",
+			userEdit: "user-edit",
 			userPage: "user-page",
 			modelPage: "model-page",
 			modelEdit: "model-edit"

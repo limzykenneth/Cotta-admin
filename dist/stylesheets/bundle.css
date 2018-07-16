@@ -99,26 +99,6 @@ a:visited {
   padding: 10px;
   overflow: scroll;
 }
-#login-container[data-v-434c3085] {
-  position: relative;
-  top: 40%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  display: block;
-  text-align: center;
-  width: 200px;
-}
-#login-container form[data-v-434c3085] {
-  display: inline-block;
-}
-#login-container form input[data-v-434c3085] {
-  display: inline-block;
-  margin-bottom: 10px;
-}
-#login-container #signup[data-v-434c3085] {
-  text-align: left;
-}
 #signup-container[data-v-7293cd2c] {
   position: relative;
   top: 40%;
@@ -138,6 +118,26 @@ a:visited {
 }
 #signup-container #message[data-v-7293cd2c] {
   color: #f00;
+}
+#login-container[data-v-434c3085] {
+  position: relative;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  display: block;
+  text-align: center;
+  width: 200px;
+}
+#login-container form[data-v-434c3085] {
+  display: inline-block;
+}
+#login-container form input[data-v-434c3085] {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+#login-container #signup[data-v-434c3085] {
+  text-align: left;
 }
 #collection-container #collection-list[data-v-2f4d9b20] {
   list-style: none;

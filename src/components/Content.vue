@@ -23,7 +23,9 @@
 			v-on:deleteSchema="deleteSchema"
 
 			v-on:renderUser="renderUser"
+			v-on:renderUserForm="renderUserForm"
 			v-on:deleteUser="deleteUser"
+			v-on:submitUser="submitUser"
 		></component>
 	</section>
 </template>
@@ -36,7 +38,7 @@ import CollectionList from "./ContentCollectionList.vue";
 import SchemasList from "./ContentSchemasList.vue";
 import SchemasEdit from "./ContentSchemasEdit.vue";
 import UsersList from "./ContentUsersList.vue";
-import UsersEdit from "./ContentUsersEdit.vue";
+import UserEdit from "./ContentUserEdit.vue";
 import UserPage from "./ContentUser.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
@@ -88,7 +90,7 @@ export default {
 		"schemas-list": SchemasList,
 		"schemas-edit": SchemasEdit,
 		"users-list": UsersList,
-		"users-edit": UsersEdit,
+		"user-edit": UserEdit,
 		"user-page": UserPage,
 		"model-page": ModelPage,
 		"model-edit": ModelEdit
@@ -133,8 +135,14 @@ export default {
 		renderUser: function(username){
 			this.$emit("renderUser", username);
 		},
+		renderUserForm: function(username){
+			this.$emit("renderUserForm", username);
+		},
 		deleteUser: function(username){
 			this.$emit("deleteUser", username);
+		},
+		submitUser: function(user){
+			this.$emit("submitUser", user);
 		}
 	}
 };
