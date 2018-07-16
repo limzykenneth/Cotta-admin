@@ -210,6 +210,7 @@ App.data = function(){
 		contentViews: {
 			dashboard: "app-dashboard",
 			loginPage: "login-page",
+			signupPage: "signup-page",
 			schemasList: "schemas-list",
 			schemasEdit: "schemas-edit",
 			collectionList: "collection-list",

@@ -9,6 +9,9 @@
 			:current-view-user="currentViewUser"
 
 			v-on:loginUser="loginUser"
+			v-on:renderLogin="renderLogin"
+			v-on:signupUser="signupUser"
+			v-on:renderSignup="renderSignup"
 
 			v-on:renderModel="renderModel"
 			v-on:renderModelForm="renderModelForm"
@@ -27,6 +30,7 @@
 <script>
 import Dashboard from "./ContentDashboard.vue";
 import LoginPage from "./ContentLogin.vue";
+import SignupPage from "./ContentSignup.vue";
 import CollectionList from "./ContentCollectionList.vue";
 import SchemasList from "./ContentSchemasList.vue";
 import SchemasEdit from "./ContentSchemasEdit.vue";
@@ -78,6 +82,7 @@ export default {
 	components: {
 		"app-dashboard": Dashboard,
 		"login-page": LoginPage,
+		"signup-page": SignupPage,
 		"collection-list": CollectionList,
 		"schemas-list": SchemasList,
 		"schemas-edit": SchemasEdit,
@@ -91,6 +96,16 @@ export default {
 		loginUser: function(loginDetails){
 			this.$emit("loginUser", loginDetails);
 		},
+		renderLogin: function(){
+			this.$emit("renderLogin");
+		},
+		signupUser: function(signupDetails){
+			this.$emit("signupUser", signupDetails);
+		},
+		renderSignup: function(){
+			this.$emit("renderSignup");
+		},
+
 		renderModel: function(collectionSlug, uid){
 			this.$emit("renderModel", collectionSlug, uid);
 		},

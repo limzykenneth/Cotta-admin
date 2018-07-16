@@ -6,6 +6,7 @@
 
 			v-on:renderLogin="renderLogin"
 			v-on:logoutUser="logoutUser"
+			v-on:renderSignup="renderSignup"
 		></app-header>
 
 		<div class="flex-container">
@@ -25,6 +26,10 @@
 				:current-view-user="currentViewUser"
 
 				v-on:loginUser="loginUser"
+				v-on:renderLogin="renderLogin"
+				v-on:signupUser="signupUser"
+				v-on:renderSignup="renderSignup"
+
 				v-on:renderModel="renderModel"
 				v-on:renderModelForm="renderModelForm"
 				v-on:submitModel="submitModel"
@@ -154,6 +159,12 @@ export default {
 			this.$store.commit("updateSchemas", []);
 			this.$store.commit("setLoggedIn", false);
 			this.$store.commit("updateUsersList", []);
+		},
+		signupUser: function(signupDetails){
+			console.log(signupDetails);
+		},
+		renderSignup: function(){
+			this.$store.commit("setContentView", this.contentViews.signupPage);
 		}
 	}
 };
