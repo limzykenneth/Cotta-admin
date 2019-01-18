@@ -1,23 +1,25 @@
-var gulp = require("gulp"),
+const gulp = require("gulp"),
 	browserSync = require("browser-sync").create(),
 	historyApiFallback = require("connect-history-api-fallback");
 
-gulp.task("server", ["default"], function(){
+function server(){
 	browserSync.init({
 		server: "./dist",
 		middleware: [ historyApiFallback() ]
 	});
 
-	gulp.watch("./partials/**/*", ["hbs-watch"]);
-	gulp.watch("./src/**/*", ["vue-watch"]);
-});
+	gulp.watch("./partials/**/*", gulp.series("handlebars", handlebarsWatch));
+	gulp.watch("./src/**/*", gulp.series("build", vueWatch));
+}
 
-gulp.task("vue-watch", ["build"], function(done){
+function vueWatch(done){
 	browserSync.reload();
 	done();
-});
+}
 
-gulp.task("hbs-watch", ["handlebars"], function(done){
+function handlebarsWatch(done){
 	browserSync.reload();
 	done();
-});
+}
+
+module.exports = server;

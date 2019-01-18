@@ -1,14 +1,14 @@
-var gulp = require("gulp"),
-	handlebars = require("gulp-compile-handlebars"),
+const gulp = require("gulp"),
+	compileHandlebars = require("gulp-compile-handlebars"),
 	rename = require("gulp-rename"),
 	plumber = require("gulp-plumber"),
 	changeCase = require("change-case");
 
-var utils = require("./utils.js");
-var pjson = require("../package.json");
+const utils = require("./utils.js");
+const pjson = require("../package.json");
 
-gulp.task("handlebars", function(){
-	var options = {
+function handlebars(){
+	const options = {
 		ignorePartials: true,
 		batch: ["./partials", "./partials/head"],
 		helpers: {
@@ -34,10 +34,12 @@ gulp.task("handlebars", function(){
 		.pipe(plumber({
 			errorHandler: utils.onError
 		}))
-		.pipe(handlebars({
+		.pipe(compileHandlebars({
 			title: changeCase.titleCase(pjson.name),
 			description: pjson.description
 		}, options))
 		.pipe(rename("index.html"))
 		.pipe(gulp.dest("dist"));
-});
+}
+
+module.exports = handlebars;
