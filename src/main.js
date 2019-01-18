@@ -10,7 +10,7 @@ const urlJoin = require("url-join");
 
 //---------------------------------------------------------------
 // App storage (Vuex)
-var appStore = new Vuex.Store({
+const appStore = new Vuex.Store({
 	state: {
 		loggedIn: false,
 		schemas: [],
@@ -70,6 +70,10 @@ var appStore = new Vuex.Store({
 		removeModel: function(state, options){
 			var collectionSlug = options.collectionSlug;
 			var model = options.model;
+
+			if(!model){
+				throw Error("No valid model defined");
+			}
 
 			state.currentCollection = _.filter(state.currentCollection, function(el){
 				return el._uid != model._uid;
@@ -207,7 +211,7 @@ var appStore = new Vuex.Store({
 
 //-----------------------------------------------------------------
 // App initialization
-var App = require("./App.vue");
+const App = require("./App.vue");
 App.data = function(){
 	return {
 		siteTitle: siteTitle,
