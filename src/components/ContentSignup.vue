@@ -29,10 +29,10 @@ export default {
 			var confirmPassword = e.target.querySelector("#confirm-password").value;
 
 			if(password !== confirmPassword){
-				this.$el.querySelector("#message").innerHTML = "Passwords don't match"
+				this.$el.querySelector("#message").innerHTML = "Passwords don't match";
 				return;
 			}else{
-				this.$el.querySelector("#message").innerHTML = ""
+				this.$el.querySelector("#message").innerHTML = "";
 			}
 
 			this.$emit("signupUser", {
@@ -44,7 +44,7 @@ export default {
 			this.$emit("renderLogin");
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>
