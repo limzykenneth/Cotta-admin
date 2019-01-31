@@ -45,6 +45,19 @@ import ModelEdit from "./ContentModelEdit.vue";
 
 export default {
 	name: "AppContent",
+	components: {
+		"app-dashboard": Dashboard,
+		"login-page": LoginPage,
+		"signup-page": SignupPage,
+		"collection-list": CollectionList,
+		"schemas-list": SchemasList,
+		"schemas-edit": SchemasEdit,
+		"users-list": UsersList,
+		"user-edit": UserEdit,
+		"user-page": UserPage,
+		"model-page": ModelPage,
+		"model-edit": ModelEdit
+	},
 	props: {
 		"schemas": {
 			type: Array,
@@ -64,7 +77,10 @@ export default {
 			}
 		},
 		"currentCollectionSchema": {
-			type: Object
+			type: Object,
+			default: function(){
+				return {};
+			}
 		},
 		"currentModel": {
 			type: Object,
@@ -79,21 +95,11 @@ export default {
 			}
 		},
 		"currentViewUser": {
-			type: Object
+			type: Object,
+			default: function(){
+				return {};
+			}
 		}
-	},
-	components: {
-		"app-dashboard": Dashboard,
-		"login-page": LoginPage,
-		"signup-page": SignupPage,
-		"collection-list": CollectionList,
-		"schemas-list": SchemasList,
-		"schemas-edit": SchemasEdit,
-		"users-list": UsersList,
-		"user-edit": UserEdit,
-		"user-page": UserPage,
-		"model-page": ModelPage,
-		"model-edit": ModelEdit
 	},
 	methods: {
 		loginUser: function(loginDetails){

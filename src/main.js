@@ -1,16 +1,27 @@
-// App constants
+//---------------------------------------------//
+//               App constants                 //
+//---------------------------------------------//
 const siteTitle = "Char Admin";
 const url = "http://localhost:3000/api";
 
-// Dependencies
+//---------------------------------------------//
+//               Dependencies                  //
+//---------------------------------------------//
 const Vue = require("vue");
 const Vuex = require("vuex");
 Vue.use(Vuex);
 const urlJoin = require("url-join");
 
-//---------------------------------------------------------------
-// App storage (Vuex)
+//---------------------------------------------//
+//            App storage (Vuex)               //
+//---------------------------------------------//
+/**
+ * Vuex store initialization
+ */
 const appStore = new Vuex.Store({
+	/**
+	 * Vuex store states initialization.
+	 */
 	state: {
 		loggedIn: false,
 		schemas: [],
@@ -22,6 +33,9 @@ const appStore = new Vuex.Store({
 		currentModel: {},
 		currentViewUser: {}
 	},
+	/**
+	 * Vuex store mutations. Used to modify Vuex store states.
+	 */
 	mutations: {
 		updateSchemas: function(state, newSchemas){
 			state.schemas = newSchemas;
@@ -80,6 +94,10 @@ const appStore = new Vuex.Store({
 			});
 		}
 	},
+	/**
+	 * Vuex store actions. Used make asynchronous calls to the server and
+	 * update the Vuex store by calling Vuex mutations.
+	 */
 	actions: {
 		fetchSchemas: function(context){
 			var request = generateRequest("schema");
@@ -118,7 +136,6 @@ const appStore = new Vuex.Store({
 				return Promise.resolve(message);
 			});
 		},
-
 		fetchUsersList: function(context){
 			var request = generateRequest("users");
 			fetch(request).then((res) => {
@@ -209,8 +226,12 @@ const appStore = new Vuex.Store({
 	}
 });
 
-//-----------------------------------------------------------------
-// App initialization
+//---------------------------------------------//
+//            App initialization               //
+//---------------------------------------------//
+/**
+ * Initialize Vue app and register data
+ */
 const App = require("./App.vue");
 App.data = function(){
 	return {
@@ -238,7 +259,9 @@ App.data = function(){
 	};
 };
 
-// Computed properties controlled by Vuex
+/**
+ * Computed properties controlled by Vuex
+ */
 App.computed = {
 	loggedIn: function(){
 		return appStore.state.loggedIn;
@@ -266,7 +289,12 @@ App.computed = {
 	}
 };
 
-// Start the app!
+//---------------------------------------------//
+//              Start the app!                 //
+//---------------------------------------------//
+/**
+ * Starting point of the Vue app
+ */
 new Vue({
 	el: "#page-content",
 	store: appStore,
@@ -277,7 +305,13 @@ new Vue({
 	}
 });
 
-// Utils ------------------------------------------------
+//---------------------------------------------//
+//                  Utils                      //
+//---------------------------------------------//
+/**
+ * Generate `request` object to be passed to `fetch` that is populated with all
+ * the necessary headers. Also automatically stringify payload body.
+ */
 function generateRequest(path, method="GET", payload=null){
 	var finalURL = urlJoin(url, path);
 	var token = store.get("access_token");

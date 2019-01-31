@@ -7,7 +7,7 @@
 <script>
 export default {
 	name: "AppDashboard"
-}
+};
 </script>
 
 <style lang="less" scoped>

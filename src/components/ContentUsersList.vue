@@ -41,7 +41,7 @@ export default {
 			this.$emit("deleteUser", username)
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

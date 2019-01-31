@@ -35,7 +35,10 @@ export default{
 	},
 	props: {
 		"currentCollectionSchema": {
-			type: Object
+			type: Object,
+			default: function(){
+				return {};
+			}
 		}
 	},
 	data: function(){

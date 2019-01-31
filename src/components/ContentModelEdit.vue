@@ -12,6 +12,9 @@ import ModelForm from "./ContentModelForm.vue";
 
 export default{
 	name: "ModelEdit",
+	components: {
+		"model-form": ModelForm
+	},
 	props: {
 		"currentModel": {
 			type: Object,
@@ -23,9 +26,6 @@ export default{
 			type: Object,
 			required: true
 		}
-	},
-	components: {
-		"model-form": ModelForm
 	},
 	methods: {
 		submitModel: function(model, collectionSlug, uid=""){

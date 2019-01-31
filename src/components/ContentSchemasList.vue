@@ -17,14 +17,14 @@ import SchemaListItem from "./ContentSchemasListItem.vue";
 
 export default {
 	name: "SchemasList",
+	components: {
+		"schemas-list-item": SchemaListItem
+	},
 	props: {
 		"schemas": {
 			type: Array,
 			required: true
 		}
-	},
-	components: {
-		"schemas-list-item": SchemaListItem
 	},
 	methods: {
 		renderSchemaForm: function(collectionSlug){
@@ -34,7 +34,7 @@ export default {
 			this.$emit("deleteSchema", collectionSlug);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

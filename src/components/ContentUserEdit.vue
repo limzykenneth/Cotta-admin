@@ -21,7 +21,10 @@ export default{
 	name: "UserEdit",
 	props: {
 		"currentViewUser": {
-			type: Object
+			type: Object,
+			default: function(){
+				return {};
+			}
 		}
 	},
 	methods: {
@@ -52,7 +55,7 @@ export default{
 			return result;
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

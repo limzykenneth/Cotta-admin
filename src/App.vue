@@ -61,6 +61,9 @@ export default {
 		"app-content": Content
 	},
 	methods: {
+		/**
+		 * Render methods. Used to render different pages.
+		 */
 		renderDashboard: function(){
 			this.$store.commit("setContentView", this.contentViews.dashboard);
 		},
@@ -108,6 +111,10 @@ export default {
 				}
 			});
 		},
+
+		/**
+		 * Model related methods. Used to manipulate individual model
+		 */
 		submitModel: function(model, collectionSlug, uid=""){
 			this.$store.dispatch("submitModel", {
 				model,
@@ -130,6 +137,10 @@ export default {
 			});
 		},
 
+		/**
+		 * Schema related methods. Used to render schema form and manipulate
+		 * individual schema
+		 */
 		renderSchemaForm: function(collectionSlug=""){
 			this.$store.commit("setCurrentCollectionSchema", collectionSlug);
 			this.$store.commit("setContentView", this.contentViews.schemasEdit);
@@ -145,6 +156,10 @@ export default {
 			});
 		},
 
+		/**
+		 * User related methods. Used to render user form and manipulate
+		 * individual user's data
+		 */
 		renderUser: function(username){
 			this.$store.dispatch("fetchUser", username).then((user) => {
 				this.$store.commit("setCurrentViewUser", user);
@@ -171,6 +186,9 @@ export default {
 			// Route not fully implemented yet
 		},
 
+		/**
+		 * Login/logout/signup related methods.
+		 */
 		loginUser: function(loginDetails){
 			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
 			fetch(request).then((res) => res.json()).then((token) => {

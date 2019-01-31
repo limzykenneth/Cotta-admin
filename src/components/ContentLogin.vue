@@ -35,7 +35,7 @@ export default {
 			this.$emit("renderSignup");
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

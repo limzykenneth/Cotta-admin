@@ -33,12 +33,14 @@ export default {
 	props: {
 		"schemas": {
 			type: Array,
-			default: []
+			default: function(){
+				return [];
+			}
 		}
 	},
 	methods: {
 		renderDashboard: function(e){
-			this.$emit("renderDashboard")
+			this.$emit("renderDashboard");
 		},
 		renderSchemasList: function(e){
 			this.$emit("renderSchemasList");

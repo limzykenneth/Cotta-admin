@@ -53,7 +53,7 @@ export default{
 			this.$emit("renderModel", collectionSlug, uid);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

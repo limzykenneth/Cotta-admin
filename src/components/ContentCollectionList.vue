@@ -39,7 +39,7 @@ export default {
 			this.$emit("renderModelForm", collectionSlug);
 		}
 	}
-}
+};
 </script>
 
 <style lang="less" scoped>

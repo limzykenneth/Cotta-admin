@@ -16,11 +16,11 @@
 export default {
 	name: "AppHeader",
 	props: {
-		"site-title": {
+		"siteTitle": {
 			type: String,
 			required: true
 		},
-		"logged-in": {
+		"loggedIn": {
 			type: Boolean,
 			default: false
 		}
