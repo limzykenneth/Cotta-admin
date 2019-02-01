@@ -11,6 +11,7 @@ const Vue = require("vue");
 const Vuex = require("vuex");
 Vue.use(Vuex);
 const urlJoin = require("url-join");
+const jwtDecode = require("jwt-decode");
 
 //---------------------------------------------//
 //            App storage (Vuex)               //
@@ -24,6 +25,7 @@ const appStore = new Vuex.Store({
 	 */
 	state: {
 		loggedIn: false,
+		loggedInUser: "",
 		schemas: [],
 		usersList: [],
 
@@ -67,6 +69,9 @@ const appStore = new Vuex.Store({
 		setLoggedIn: function(state, loggedIn){
 			state.loggedIn = loggedIn;
 		},
+		setLoggedInUser: function(state, username){
+			state.loggedInUser = username;
+		},
 		setCurrentCollection: function(state, result){
 			state.currentCollection = result.collection;
 			this.commit("setCurrentCollectionSchema", result.collectionSlug);
@@ -105,6 +110,7 @@ const appStore = new Vuex.Store({
 				if(schemas.errors && schemas.errors.length > 0){
 					context.commit("setLoggedIn", false);
 					context.commit("updateSchemas", []);
+					context.commit("setLoggedInUser", "");
 
 					_.each(schemas.errors, function(error){
 						if(error.title !== "Auth Token Invalid"){
@@ -116,6 +122,7 @@ const appStore = new Vuex.Store({
 				}else{
 					context.commit("updateSchemas", schemas);
 					context.commit("setLoggedIn", true);
+					context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
 				}
 			});
 		},
@@ -249,7 +256,8 @@ App.data = function(){
 			userEdit: "user-edit",
 			userPage: "user-page",
 			modelPage: "model-page",
-			modelEdit: "model-edit"
+			modelEdit: "model-edit",
+			accountPage: "account-page"
 		},
 
 		utils: {
@@ -265,6 +273,9 @@ App.data = function(){
 App.computed = {
 	loggedIn: function(){
 		return appStore.state.loggedIn;
+	},
+	loggedInUser: function(){
+		return appStore.state.loggedInUser;
 	},
 	schemas: function(){
 		return appStore.state.schemas;

@@ -1,6 +1,7 @@
 <template>
 	<section id="page-content">
 		<component v-bind:is="currentView"
+			:logged-in-user="loggedInUser"
 			:schemas="schemas"
 			:current-collection="currentCollection"
 			:current-collection-schema="currentCollectionSchema"
@@ -26,6 +27,8 @@
 			v-on:renderUserForm="renderUserForm"
 			v-on:deleteUser="deleteUser"
 			v-on:submitUser="submitUser"
+
+			v-on:submitChangePassword="submitChangePassword"
 		></component>
 	</section>
 </template>
@@ -42,6 +45,7 @@ import UserEdit from "./ContentUserEdit.vue";
 import UserPage from "./ContentUser.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
+import AccountPage from "./ContentAccount.vue";
 
 export default {
 	name: "AppContent",
@@ -56,9 +60,14 @@ export default {
 		"user-edit": UserEdit,
 		"user-page": UserPage,
 		"model-page": ModelPage,
-		"model-edit": ModelEdit
+		"model-edit": ModelEdit,
+		"account-page": AccountPage
 	},
 	props: {
+		"loggedInUser": {
+			type: String,
+			default: ""
+		},
 		"schemas": {
 			type: Array,
 			default: function(){
@@ -149,6 +158,10 @@ export default {
 		},
 		submitUser: function(user){
 			this.$emit("submitUser", user);
+		},
+
+		submitChangePassword: function(result){
+			this.$emit("submitChangePassword", result);
 		}
 	}
 };

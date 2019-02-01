@@ -7,6 +7,7 @@
 			v-on:renderLogin="renderLogin"
 			v-on:logoutUser="logoutUser"
 			v-on:renderSignup="renderSignup"
+			v-on:renderAccount="renderAccount"
 		></app-header>
 
 		<div class="flex-container">
@@ -17,6 +18,7 @@
 				v-on:renderUsersList="renderUsersList"
 			></app-sidebar>
 			<app-content
+				:logged-in-user="loggedInUser"
 				:schemas="schemas"
 				:current-view="currentContentView"
 				:current-collection="currentCollection"
@@ -43,6 +45,8 @@
 				v-on:renderUserForm="renderUserForm"
 				v-on:deleteUser="deleteUser"
 				v-on:submitUser="submitUser"
+
+				v-on:submitChangePassword="submitChangePassword"
 			></app-content>
 		</div>
 	</div>
@@ -110,6 +114,10 @@ export default {
 					});
 				}
 			});
+		},
+		renderAccount: function(){
+			// this.$store.commit("setCurrentViewUser", user);
+			this.$store.commit("setContentView", this.contentViews.accountPage);
 		},
 
 		/**
@@ -184,6 +192,7 @@ export default {
 		},
 		submitUser: function(user){
 			// Route not fully implemented yet
+			console.log(user);
 		},
 
 		/**
@@ -202,6 +211,7 @@ export default {
 			this.$store.commit("updateSchemas", []);
 			this.$store.commit("setLoggedIn", false);
 			this.$store.commit("updateUsersList", []);
+			this.$store.commit("setLoggedInUser", "");
 		},
 		signupUser: function(signupDetails){
 			// route not implemented yet
@@ -212,6 +222,14 @@ export default {
 		},
 		renderSignup: function(){
 			this.$store.commit("setContentView", this.contentViews.signupPage);
+		},
+
+		submitChangePassword: function(result){
+			var request = this.utils.generateRequest("account/change_password", "POST", result);
+			fetch(request).then((res) => res.json()).then((res) => {
+				console.log(res);
+				this.$store.commit("setContentView", this.contentViews.dashboard);
+			});
 		}
 	}
 };

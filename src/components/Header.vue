@@ -2,7 +2,9 @@
 	<header id="page-header">
 		<span class="header-items left">{{ siteTitle }}</span>
 		<span class="spacer"></span>
-		<span class="header-items right">Account</span>
+		<a href="/account" v-if="loggedIn" v-on:click.prevent="renderAccount">
+			<span class="header-items right">Account</span>
+		</a>
 		<a href="/logout" v-if="loggedIn" v-on:click.prevent="logoutUser">
 			<span class="header-items right">Logout</span>
 		</a>
@@ -32,6 +34,9 @@ export default {
 		logoutUser: function(){
 			this.$emit("logoutUser");
 			this.$emit("renderLogin");
+		},
+		renderAccount: function(){
+			this.$emit("renderAccount");
 		}
 	}
 };

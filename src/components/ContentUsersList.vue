@@ -21,14 +21,14 @@ import UsersListItem from "./ContentUsersListItem.vue";
 
 export default {
 	name: "UsersList",
+	components: {
+		"users-list-item": UsersListItem
+	},
 	props: {
 		"usersList": {
 			type: Array,
 			required: true
 		}
-	},
-	components: {
-		"users-list-item": UsersListItem
 	},
 	methods:{
 		renderUser: function(username){
@@ -38,7 +38,7 @@ export default {
 			this.$emit("renderUserForm", username);
 		},
 		deleteUser: function(username){
-			this.$emit("deleteUser", username)
+			this.$emit("deleteUser", username);
 		}
 	}
 };
