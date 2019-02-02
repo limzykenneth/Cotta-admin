@@ -193,7 +193,11 @@ export default {
 		submitUser: function(user){
 			// Route not fully implemented yet
 			if(user.role && !user.password){
-				// const request = this.utils.generateRequest("");
+				const request = this.utils.generateRequest(`users/${user.username}`, "POST", user);
+				fetch(request).then((res) => res.json()).then((res) => {
+					console.log(res);
+					this.$store.commit("setContentView", this.contentViews.dashboard);
+				});
 			}else if(user.password && !user.role){
 				const request = this.utils.generateRequest("users", "POST", user);
 				fetch(request).then((res) => res.json()).then((res) => {
