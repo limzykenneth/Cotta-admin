@@ -213,8 +213,7 @@ export default {
 			this.$store.commit("setLoggedInUser", "");
 		},
 		signupUser: function(signupDetails){
-			const request = this.utils.generateRequest("signup", "POST", signupDetails);
-			fetch(request).then((res) => res.json()).then((res) => {
+			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.loginPage);
 			});
@@ -224,8 +223,7 @@ export default {
 		},
 
 		submitChangePassword: function(result){
-			const request = this.utils.generateRequest("account/change_password", "POST", result);
-			fetch(request).then((res) => res.json()).then((res) => {
+			this.$store.dispatch("submitChangePassword", result).then((res) => {
 				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.dashboard);
 			});

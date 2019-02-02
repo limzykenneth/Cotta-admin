@@ -255,6 +255,16 @@ const appStore = new Vuex.Store({
 				store.set("access_token", token.access_token);
 				return context.dispatch("fetchInitialData");
 			});
+		},
+		signupUser: function(context, signupDetails){
+			const request = generateRequest("signup", "POST", signupDetails);
+			return fetch(request).then((res) => res.json()).then((res) => {
+				return Promise.resolve(res);
+			});
+		},
+		submitChangePassword: function(context, details){
+			const request = generateRequest("account/change_password", "POST", details);
+			return fetch(request).then((res) => res.json());
 		}
 	}
 });
