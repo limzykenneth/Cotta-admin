@@ -191,32 +191,18 @@ export default {
 			});
 		},
 		submitUser: function(user){
-			if(user.role && !user.password){
-				const request = this.utils.generateRequest(`users/${user.username}`, "POST", user);
-				fetch(request).then((res) => res.json()).then((res) => {
-					console.log(res);
-					this.$store.commit("setContentView", this.contentViews.dashboard);
-				});
-			}else if(user.password && !user.role){
-				const request = this.utils.generateRequest("users", "POST", user);
-				fetch(request).then((res) => res.json()).then((res) => {
-					console.log(res);
-					this.$store.commit("setContentView", this.contentViews.dashboard);
-				});
-			}else{
-				throw new Error("Invalid input");
-			}
+			this.$store.dispatch("submitUser", user).then((res) => {
+				console.log(res);
+				this.$store.commit("setContentView", this.contentViews.dashboard);
+			});
 		},
 
 		/**
 		 * Login/logout/signup related methods.
 		 */
 		loginUser: function(loginDetails){
-			const request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
-			fetch(request).then((res) => res.json()).then((token) => {
-				store.set("access_token", token.access_token);
+			this.$store.dispatch("loginUser", loginDetails).then((res) => {
 				this.$store.commit("setContentView", this.contentViews.dashboard);
-				this.$store.dispatch("fetchInitialData");
 			});
 		},
 		logoutUser: function(){
@@ -227,7 +213,7 @@ export default {
 			this.$store.commit("setLoggedInUser", "");
 		},
 		signupUser: function(signupDetails){
-			var request = this.utils.generateRequest("signup", "POST", signupDetails);
+			const request = this.utils.generateRequest("signup", "POST", signupDetails);
 			fetch(request).then((res) => res.json()).then((res) => {
 				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.loginPage);
@@ -238,7 +224,7 @@ export default {
 		},
 
 		submitChangePassword: function(result){
-			var request = this.utils.generateRequest("account/change_password", "POST", result);
+			const request = this.utils.generateRequest("account/change_password", "POST", result);
 			fetch(request).then((res) => res.json()).then((res) => {
 				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.dashboard);

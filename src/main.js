@@ -43,7 +43,7 @@ const appStore = new Vuex.Store({
 			state.schemas = newSchemas;
 		},
 		addNewEditSchema: function(state, schema){
-			var matchedSchemaIndex = _.findIndex(state.schemas, function(el){
+			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
 				return el.collectionSlug == schema.collectionSlug;
 			});
 			if(matchedSchemaIndex > -1){
@@ -77,7 +77,7 @@ const appStore = new Vuex.Store({
 			this.commit("setCurrentCollectionSchema", result.collectionSlug);
 		},
 		setCurrentCollectionSchema: function(state, collectionSlug){
-			var selectedSchema = _.find(state.schemas, function(el){
+			const selectedSchema = _.find(state.schemas, function(el){
 				return el.collectionSlug == collectionSlug;
 			});
 			state.currentCollectionSchema = selectedSchema;
@@ -87,8 +87,8 @@ const appStore = new Vuex.Store({
 			this.commit("setCurrentCollectionSchema", result.collectionSlug);
 		},
 		removeModel: function(state, options){
-			var collectionSlug = options.collectionSlug;
-			var model = options.model;
+			const collectionSlug = options.collectionSlug;
+			const model = options.model;
 
 			if(!model){
 				throw Error("No valid model defined");
@@ -105,8 +105,8 @@ const appStore = new Vuex.Store({
 	 */
 	actions: {
 		fetchSchemas: function(context){
-			var request = generateRequest("schema");
-			fetch(request).then((res) => res.json()).then(function(schemas){
+			const request = generateRequest("schema");
+			return fetch(request).then((res) => res.json()).then(function(schemas){
 				if(schemas.errors && schemas.errors.length > 0){
 					context.commit("setLoggedIn", false);
 					context.commit("updateSchemas", []);
@@ -123,11 +123,12 @@ const appStore = new Vuex.Store({
 					context.commit("updateSchemas", schemas);
 					context.commit("setLoggedIn", true);
 					context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
+					return Promise.resolve(schemas);
 				}
 			});
 		},
 		submitSchema: function(context, schema){
-			var request = generateRequest("schema", "POST", schema);
+			const request = generateRequest("schema", "POST", schema);
 
 			return fetch(request).then((res) => res.json()).then((schema) => {
 				context.commit("setCurrentCollectionSchema", schema);
@@ -136,7 +137,7 @@ const appStore = new Vuex.Store({
 			});
 		},
 		deleteSchema: function(context, collectionSlug){
-			var request = generateRequest(`schema/${collectionSlug}`, "DELETE");
+			const request = generateRequest(`schema/${collectionSlug}`, "DELETE");
 
 			return fetch(request).then((res) => res.json()).then((message) => {
 				context.commit("removeSchema", collectionSlug);
@@ -144,8 +145,8 @@ const appStore = new Vuex.Store({
 			});
 		},
 		fetchUsersList: function(context){
-			var request = generateRequest("users");
-			fetch(request).then((res) => {
+			const request = generateRequest("users");
+			return fetch(request).then((res) => {
 				if(res.status < 400){
 					return res.json();
 				}else{
@@ -153,6 +154,7 @@ const appStore = new Vuex.Store({
 				}
 			}).then((users) => {
 				context.commit("updateUsersList", users);
+				return Promise.resolve(users);
 			}).catch((err) => {
 				if(err.status == 403){
 					// do nothing
@@ -160,11 +162,13 @@ const appStore = new Vuex.Store({
 			});
 		},
 		fetchInitialData: function(context){
-			context.dispatch("fetchSchemas");
-			context.dispatch("fetchUsersList");
+			return Promise.all([
+				context.dispatch("fetchSchemas"),
+				context.dispatch("fetchUsersList")
+			]);
 		},
 		fetchCollection: function(context, collectionSlug){
-			var request = generateRequest(`collections/${collectionSlug}`);
+			const request = generateRequest(`collections/${collectionSlug}`);
 			return fetch(request).then((res) => res.json()).then((collection) => {
 				context.commit("setCurrentCollection", {
 					collection,
@@ -175,9 +179,9 @@ const appStore = new Vuex.Store({
 			});
 		},
 		fetchModel: function(context, options){
-			var collectionSlug = options.collectionSlug;
-			var uid = options.uid;
-			var request = generateRequest(`collections/${collectionSlug}/${uid}`);
+			const collectionSlug = options.collectionSlug;
+			const uid = options.uid;
+			const request = generateRequest(`collections/${collectionSlug}/${uid}`);
 			return fetch(request).then((res) => res.json()).then((model) => {
 				context.commit("setCurrentModel", {
 					collectionSlug,
@@ -188,11 +192,11 @@ const appStore = new Vuex.Store({
 			});
 		},
 		submitModel: function(context, options){
-			var model = options.model;
-			var collectionSlug = options.collectionSlug;
-			var uid = options.uid;
+			const model = options.model;
+			const collectionSlug = options.collectionSlug;
+			const uid = options.uid;
 
-			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
 
 			return fetch(request).then((res) => res.json()).then((model) => {
 				context.commit("setCurrentModel", {
@@ -203,9 +207,9 @@ const appStore = new Vuex.Store({
 			});
 		},
 		deleteModel: function(context, options){
-			var collectionSlug = options.collectionSlug;
-			var uid = options.uid;
-			var request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
+			const collectionSlug = options.collectionSlug;
+			const uid = options.uid;
+			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
 
 			return fetch(request).then((res) => res.json()).then((model) => {
 				context.commit("removeModel", {
@@ -217,17 +221,39 @@ const appStore = new Vuex.Store({
 		},
 
 		fetchUser: function(context, username){
-			var request = generateRequest(`users/${username}`);
+			const request = generateRequest(`users/${username}`);
 
 			return fetch(request).then((res) => res.json()).then((user) => {
 				return Promise.resolve(user);
 			});
 		},
 		deleteUser: function(context, username){
-			var request = generateRequest(`users/${username}`, "DELETE");
+			const request = generateRequest(`users/${username}`, "DELETE");
 
 			return fetch(request).then((res) => res.json()).then((message) => {
 				return Promise.resolve(message);
+			});
+		},
+		submitUser: function(context, user){
+			if(user.role && !user.password){
+				const request = generateRequest(`users/${user.username}`, "POST", user);
+				return fetch(request).then((res) => res.json());
+			}else if(user.password && !user.role){
+				const request = generateRequest("users", "POST", user);
+				return fetch(request).then((res) => res.json());
+			}else{
+				throw new Error("Invalid input");
+			}
+		},
+
+		/**
+		 * Login/Sign up related actions
+		 */
+		loginUser: function(context, loginDetails){
+			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
+			return fetch(request).then((res) => res.json()).then((token) => {
+				store.set("access_token", token.access_token);
+				return context.dispatch("fetchInitialData");
 			});
 		}
 	}
@@ -324,21 +350,21 @@ new Vue({
  * the necessary headers. Also automatically stringify payload body.
  */
 function generateRequest(path, method="GET", payload=null){
-	var finalURL = urlJoin(url, path);
-	var token = store.get("access_token");
+	const finalURL = urlJoin(url, path);
+	const token = store.get("access_token");
 
-	var header = {};
+	const header = {};
 	header["Content-Type"] = "application/json";
 	if(path !== "token/generate_new_token"){
 		header["Authorization"] = `Bearer ${token}`;
 	}
 
-	var body;
+	let body;
 	if(payload !== null){
 		body = JSON.stringify(payload);
 	}
 
-	var request = new Request(finalURL, {
+	const request = new Request(finalURL, {
 		method: method,
 		body: body,
 		headers: new Headers(header)
