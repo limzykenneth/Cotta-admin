@@ -191,7 +191,6 @@ export default {
 			});
 		},
 		submitUser: function(user){
-			// Route not fully implemented yet
 			if(user.role && !user.password){
 				const request = this.utils.generateRequest(`users/${user.username}`, "POST", user);
 				fetch(request).then((res) => res.json()).then((res) => {
@@ -228,11 +227,11 @@ export default {
 			this.$store.commit("setLoggedInUser", "");
 		},
 		signupUser: function(signupDetails){
-			// route not implemented yet
-			// var request = this.utils.generateRequest("signup", "POST", signupDetails);
-			// fetch(request).then((res) => res.json()).then(() => {
-			// 	this.$store.commit("setContentView", this.contentViews.loginPage);
-			// });
+			var request = this.utils.generateRequest("signup", "POST", signupDetails);
+			fetch(request).then((res) => res.json()).then((res) => {
+				console.log(res);
+				this.$store.commit("setContentView", this.contentViews.loginPage);
+			});
 		},
 		renderSignup: function(){
 			this.$store.commit("setContentView", this.contentViews.signupPage);

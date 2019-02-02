@@ -5,9 +5,9 @@
 		<div id="message"></div>
 
 		<form v-on:submit.prevent="signupUser">
-			<input id="username" type="text" name="username" placeholder="Username">
-			<input id="password" type="password" name="password" placeholder="Password">
-			<input id="confirm-password" type="password" name="confirm-password" placeholder="Confirm Password">
+			<input id="username" type="text" name="username" placeholder="Username" required>
+			<input id="password" type="password" name="password" placeholder="Password" required>
+			<input id="confirm-password" type="password" name="confirm-password" placeholder="Confirm Password" required>
 			<input type="submit" name="submit" value="Submit">
 		</form>
 
