@@ -192,14 +192,24 @@ export default {
 		},
 		submitUser: function(user){
 			// Route not fully implemented yet
-			console.log(user);
+			if(user.role && !user.password){
+				// const request = this.utils.generateRequest("");
+			}else if(user.password && !user.role){
+				const request = this.utils.generateRequest("users", "POST", user);
+				fetch(request).then((res) => res.json()).then((res) => {
+					console.log(res);
+					this.$store.commit("setContentView", this.contentViews.dashboard);
+				});
+			}else{
+				throw new Error("Invalid input");
+			}
 		},
 
 		/**
 		 * Login/logout/signup related methods.
 		 */
 		loginUser: function(loginDetails){
-			var request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
+			const request = this.utils.generateRequest("tokens/generate_new_token", "POST", loginDetails);
 			fetch(request).then((res) => res.json()).then((token) => {
 				store.set("access_token", token.access_token);
 				this.$store.commit("setContentView", this.contentViews.dashboard);

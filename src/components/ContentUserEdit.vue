@@ -1,14 +1,26 @@
 <template>
 	<article id="user-form-container">
-		<h1>User</h1>
+		<h1 v-if="currentViewUser.role">User</h1>
+		<h1 v-if="currentViewUser.role == undefined">New User</h1>
 
 		<form id="user-form" v-on:submit.prevent="submitUser">
 			<div>
 				<label>Username:</label>
-				<input type="text" name="username" :value="currentViewUser.username">
+				<input type="text" name="username" required
+					:value="currentViewUser.username"
+				>
 				<br>
-				<label>Role:</label>
-				<input type="text" name="role" :value="currentViewUser.role">
+
+				<label v-if="currentViewUser.role">Role:</label>
+				<input v-if="currentViewUser.role"
+					type="text" name="role" required
+					:value="currentViewUser.role"
+				>
+
+				<label v-if="currentViewUser.role == undefined">Password:</label>
+				<input v-if="currentViewUser.role == undefined"
+					type="password" name="password" required
+				>
 			</div>
 
 			<input id="submit" type="submit" name="submit" value="Submit">
