@@ -57,14 +57,6 @@ a:visited {
   width: 1rem;
   margin-right: 15px;
 }
-#page-content[data-v-a08230f2] {
-  -webkit-box-flex: 2;
-      -ms-flex-positive: 2;
-          flex-grow: 2;
-  margin: 10px;
-  padding: 10px;
-  overflow: scroll;
-}
 #page-header[data-v-19202aef] {
   font-size: 20px;
   font-weight: bold;
@@ -98,6 +90,14 @@ a:visited {
 }
 .right[data-v-19202aef] {
   float: right;
+}
+#page-content[data-v-a08230f2] {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  margin: 10px;
+  padding: 10px;
+  overflow: scroll;
 }
 #login-container[data-v-3e156dd2] {
   position: relative;

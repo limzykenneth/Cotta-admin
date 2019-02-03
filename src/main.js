@@ -105,27 +105,30 @@ const appStore = new Vuex.Store({
 	 */
 	actions: {
 		fetchSchemas: function(context){
-			const request = generateRequest("schema");
-			return fetch(request).then((res) => res.json()).then(function(schemas){
-				if(schemas.errors && schemas.errors.length > 0){
-					context.commit("setLoggedIn", false);
-					context.commit("updateSchemas", []);
-					context.commit("setLoggedInUser", "");
+			const token = store.get("access_token");
+			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
+				const request = generateRequest("schema");
+				return fetch(request).then((res) => res.json()).then(function(schemas){
+					if(schemas.errors && schemas.errors.length > 0){
+						context.commit("setLoggedIn", false);
+						context.commit("updateSchemas", []);
+						context.commit("setLoggedInUser", "");
 
-					_.each(schemas.errors, function(error){
-						if(error.title !== "Auth Token Invalid"){
-							throw new Error(error);
-						}else{
-							context.commit("setContentView", "login-page");
-						}
-					});
-				}else{
-					context.commit("updateSchemas", schemas);
-					context.commit("setLoggedIn", true);
-					context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
-					return Promise.resolve(schemas);
-				}
-			});
+						_.each(schemas.errors, function(error){
+							if(error.title !== "Auth Token Invalid"){
+								throw new Error(error);
+							}else{
+								context.commit("setContentView", "login-page");
+							}
+						});
+					}else{
+						context.commit("updateSchemas", schemas);
+						context.commit("setLoggedIn", true);
+						context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
+						return Promise.resolve(schemas);
+					}
+				});
+			}
 		},
 		submitSchema: function(context, schema){
 			const request = generateRequest("schema", "POST", schema);
@@ -145,21 +148,24 @@ const appStore = new Vuex.Store({
 			});
 		},
 		fetchUsersList: function(context){
-			const request = generateRequest("users");
-			return fetch(request).then((res) => {
-				if(res.status < 400){
-					return res.json();
-				}else{
-					throw new Error(res);
-				}
-			}).then((users) => {
-				context.commit("updateUsersList", users);
-				return Promise.resolve(users);
-			}).catch((err) => {
-				if(err.status == 403){
-					// do nothing
-				}
-			});
+			const token = store.get("access_token");
+			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
+				const request = generateRequest("users");
+				return fetch(request).then((res) => {
+					if(res.status < 400){
+						return res.json();
+					}else{
+						throw new Error(res);
+					}
+				}).then((users) => {
+					context.commit("updateUsersList", users);
+					return Promise.resolve(users);
+				}).catch((err) => {
+					if(err.status == 403){
+						// do nothing
+					}
+				});
+			}
 		},
 		fetchInitialData: function(context){
 			return Promise.all([
@@ -251,9 +257,26 @@ const appStore = new Vuex.Store({
 		 */
 		loginUser: function(context, loginDetails){
 			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
-			return fetch(request).then((res) => res.json()).then((token) => {
-				store.set("access_token", token.access_token);
-				return context.dispatch("fetchInitialData");
+			return fetch(request).then((res) => res.json()).then((response) => {
+				// console.log(token);
+				if(response.errors && response.errors.length > 0){
+					let isFailedLogin = true;
+					let unexpectedError;
+					_.each(response.errors, function(error){
+						if(error.title !== "Authentication Failed"){
+							isFailedLogin = false;
+							unexpectedError = error;
+						}
+					});
+					if(isFailedLogin){
+						return Promise.reject(new Error("Authentication Failed"));
+					}else{
+						return Promise.reject(unexpectedError);
+					}
+				}else{
+					store.set("access_token", response.access_token);
+					return context.dispatch("fetchInitialData");
+				}
 			});
 		},
 		signupUser: function(context, signupDetails){
@@ -345,10 +368,14 @@ App.computed = {
 new Vue({
 	el: "#page-content",
 	store: appStore,
-	render: function(h){
-		appStore.dispatch("fetchUsersList");
-		appStore.dispatch("fetchSchemas");
-		return h(App);
+	render: function(createElement){
+		if(appTokenValid()){
+			appStore.dispatch("fetchUsersList");
+			appStore.dispatch("fetchSchemas");
+		}else{
+			appStore.commit("setContentView", "login-page");
+		}
+		return createElement(App);
 	}
 });
 
@@ -381,4 +408,19 @@ function generateRequest(path, method="GET", payload=null){
 	});
 
 	return request;
+}
+
+/**
+ * Returns true if access_token exist and has not expired
+ */
+function appTokenValid(){
+	const token = store.get("access_token");
+	if(token){
+		const tokenContent = jwtDecode(token);
+		if(tokenContent.exp > Math.floor(Date.now()/1000)){
+			return true;
+		}
+	}
+
+	return false;
 }

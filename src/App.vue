@@ -116,7 +116,6 @@ export default {
 			});
 		},
 		renderAccount: function(){
-			// this.$store.commit("setCurrentViewUser", user);
 			this.$store.commit("setContentView", this.contentViews.accountPage);
 		},
 
@@ -203,6 +202,12 @@ export default {
 		loginUser: function(loginDetails){
 			this.$store.dispatch("loginUser", loginDetails).then((res) => {
 				this.$store.commit("setContentView", this.contentViews.dashboard);
+			}).catch((err) => {
+				if(err.message === "Authentication Failed"){
+					this.$store.commit("setContentView", this.contentViews.loginPage);
+				}else{
+					console.error(err);
+				}
 			});
 		},
 		logoutUser: function(){
