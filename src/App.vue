@@ -10,6 +10,10 @@
 			v-on:renderAccount="renderAccount"
 		></app-header>
 
+		<app-toast
+			:toast-message="toastMessage"
+		></app-toast>
+
 		<div class="flex-container">
 			<app-sidebar :schemas="schemas"
 				v-on:renderSchemasList="renderSchemasList"
@@ -19,7 +23,6 @@
 			></app-sidebar>
 			<app-content
 				:logged-in-user="loggedInUser"
-				:login-message="loginMessage"
 				:schemas="schemas"
 				:current-view="currentContentView"
 				:current-collection="currentCollection"
@@ -56,6 +59,7 @@
 <script>
 import Sidebar from "./components/Sidebar.vue";
 import Header from "./components/Header.vue";
+import Toast from "./components/Toast.vue";
 import Content from "./components/Content.vue";
 
 export default {
@@ -63,6 +67,7 @@ export default {
 	components: {
 		"app-header": Header,
 		"app-sidebar": Sidebar,
+		"app-toast": Toast,
 		"app-content": Content
 	},
 	methods: {
@@ -209,7 +214,7 @@ export default {
 				}else{
 					console.error(err);
 				}
-				this.$store.commit("setLoginMessage", err.detail);
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		logoutUser: function(){
@@ -222,7 +227,7 @@ export default {
 		signupUser: function(signupDetails){
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				this.$store.commit("setContentView", this.contentViews.loginPage);
-				this.$store.commit("setLoginMessage", "You have sucessfully signed up!");
+				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
 			});
 		},
 		renderSignup: function(){

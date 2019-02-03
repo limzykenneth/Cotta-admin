@@ -2,8 +2,6 @@
 	<article id="login-container">
 		<h1>Login</h1>
 
-		<div id="message">{{ loginMessage }}</div>
-
 		<form v-on:submit.prevent="loginUser">
 			<input id="username" type="text" name="username" placeholder="Username" required>
 			<input id="password" type="password" name="password" placeholder="Password" required>
@@ -24,10 +22,6 @@
 export default {
 	name: "LoginPage",
 	props: {
-		"loginMessage":{
-			type: String,
-			default: ""
-		}
 	},
 	methods: {
 		loginUser: function(e){
@@ -69,10 +63,6 @@ export default {
 
 	#signup{
 		text-align: left;
-	}
-
-	#message{
-		color: #f00;
 	}
 }
 </style>

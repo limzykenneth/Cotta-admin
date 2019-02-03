@@ -2,7 +2,6 @@
 	<section id="page-content">
 		<component v-bind:is="currentView"
 			:logged-in-user="loggedInUser"
-			:login-message="loginMessage"
 			:schemas="schemas"
 			:current-collection="currentCollection"
 			:current-collection-schema="currentCollectionSchema"
@@ -66,10 +65,6 @@ export default {
 	},
 	props: {
 		"loggedInUser": {
-			type: String,
-			default: ""
-		},
-		"loginMessage": {
 			type: String,
 			default: ""
 		},

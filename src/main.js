@@ -24,8 +24,9 @@ const appStore = new Vuex.Store({
 	 * Vuex store states initialization.
 	 */
 	state: {
+		toastMessage: "",
+
 		loggedIn: false,
-		loginMessage: "",
 		loggedInUser: "",
 		schemas: [],
 		usersList: [],
@@ -40,6 +41,16 @@ const appStore = new Vuex.Store({
 	 * Vuex store mutations. Used to modify Vuex store states.
 	 */
 	mutations: {
+		setToastMessage: function(state, message){
+			if(message === state.toastMessage && message.trim() !== ""){
+				state.toastMessage = "";
+				_.defer(() => {
+					state.toastMessage = message;
+				});
+			}else{
+				state.toastMessage = message;
+			}
+		},
 		updateSchemas: function(state, newSchemas){
 			state.schemas = newSchemas;
 		},
@@ -69,9 +80,6 @@ const appStore = new Vuex.Store({
 		},
 		setLoggedIn: function(state, loggedIn){
 			state.loggedIn = loggedIn;
-		},
-		setLoginMessage: function(state, message){
-			state.loginMessage = message;
 		},
 		setLoggedInUser: function(state, username){
 			state.loggedInUser = username;
@@ -337,11 +345,11 @@ App.data = function(){
  * Computed properties controlled by Vuex
  */
 App.computed = {
+	toastMessage: function(){
+		return appStore.state.toastMessage;
+	},
 	loggedIn: function(){
 		return appStore.state.loggedIn;
-	},
-	loginMessage: function(){
-		return appStore.state.loginMessage;
 	},
 	loggedInUser: function(){
 		return appStore.state.loggedInUser;
