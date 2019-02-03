@@ -19,6 +19,7 @@
 			></app-sidebar>
 			<app-content
 				:logged-in-user="loggedInUser"
+				:login-message="loginMessage"
 				:schemas="schemas"
 				:current-view="currentContentView"
 				:current-collection="currentCollection"
@@ -203,11 +204,12 @@ export default {
 			this.$store.dispatch("loginUser", loginDetails).then((res) => {
 				this.$store.commit("setContentView", this.contentViews.dashboard);
 			}).catch((err) => {
-				if(err.message === "Authentication Failed"){
+				if(err.title === "Authentication Failed"){
 					this.$store.commit("setContentView", this.contentViews.loginPage);
 				}else{
 					console.error(err);
 				}
+				this.$store.commit("setLoginMessage", err.detail);
 			});
 		},
 		logoutUser: function(){
@@ -219,8 +221,8 @@ export default {
 		},
 		signupUser: function(signupDetails){
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
-				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.loginPage);
+				this.$store.commit("setLoginMessage", "You have sucessfully signed up!");
 			});
 		},
 		renderSignup: function(){

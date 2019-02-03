@@ -25,6 +25,7 @@ const appStore = new Vuex.Store({
 	 */
 	state: {
 		loggedIn: false,
+		loginMessage: "",
 		loggedInUser: "",
 		schemas: [],
 		usersList: [],
@@ -68,6 +69,9 @@ const appStore = new Vuex.Store({
 		},
 		setLoggedIn: function(state, loggedIn){
 			state.loggedIn = loggedIn;
+		},
+		setLoginMessage: function(state, message){
+			state.loginMessage = message;
 		},
 		setLoggedInUser: function(state, username){
 			state.loggedInUser = username;
@@ -262,14 +266,17 @@ const appStore = new Vuex.Store({
 				if(response.errors && response.errors.length > 0){
 					let isFailedLogin = true;
 					let unexpectedError;
+					let loginError;
 					_.each(response.errors, function(error){
 						if(error.title !== "Authentication Failed"){
 							isFailedLogin = false;
 							unexpectedError = error;
+						}else{
+							loginError = error;
 						}
 					});
 					if(isFailedLogin){
-						return Promise.reject(new Error("Authentication Failed"));
+						return Promise.reject(loginError);
 					}else{
 						return Promise.reject(unexpectedError);
 					}
@@ -332,6 +339,9 @@ App.data = function(){
 App.computed = {
 	loggedIn: function(){
 		return appStore.state.loggedIn;
+	},
+	loginMessage: function(){
+		return appStore.state.loginMessage;
 	},
 	loggedInUser: function(){
 		return appStore.state.loggedInUser;

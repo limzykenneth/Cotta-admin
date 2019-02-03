@@ -119,6 +119,9 @@ a:visited {
 #login-container #signup[data-v-3e156dd2] {
   text-align: left;
 }
+#login-container #message[data-v-3e156dd2] {
+  color: #f00;
+}
 #signup-container[data-v-5e1b8d02] {
   position: relative;
   top: 40%;
