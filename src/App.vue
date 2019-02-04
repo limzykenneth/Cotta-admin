@@ -16,6 +16,8 @@
 
 		<div class="flex-container">
 			<app-sidebar :schemas="schemas"
+				:logged-in="loggedIn"
+
 				v-on:renderSchemasList="renderSchemasList"
 				v-on:renderDashboard="renderDashboard"
 				v-on:renderCollection="renderCollection"

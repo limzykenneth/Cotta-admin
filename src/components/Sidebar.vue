@@ -1,5 +1,5 @@
 <template>
-	<section id="page-sidebar">
+	<section id="page-sidebar" v-if="loggedIn">
 		<ul class="lists admin-list">
 			<a href="/" v-on:click.prevent="renderDashboard"><li>
 				<i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard
@@ -36,6 +36,10 @@ export default {
 			default: function(){
 				return [];
 			}
+		},
+		"loggedIn": {
+			type: Boolean,
+			default: false
 		}
 	},
 	methods: {
