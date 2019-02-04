@@ -1,6 +1,6 @@
 {
   "name": "char-admin",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Admin panel for Char",
   "author": "limzykenneth <limzy.kenneth@gmail.com>",
   "private": true,
