@@ -5,7 +5,6 @@ const gulp = require("gulp"),
 
 const browserify = require("browserify"),
 	vueify = require("vueify"),
-	babelify = require("babelify"),
 	source = require("vinyl-source-stream"),
 	buffer = require("vinyl-buffer"),
 	uglify = require("uglify-es"),
