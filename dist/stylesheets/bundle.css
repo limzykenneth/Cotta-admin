@@ -24,39 +24,6 @@ a:hover {
 a:visited {
   color: inherit;
 }
-#page-sidebar[data-v-a314d62c] {
-  background: #8888ff;
-  width: 200px;
-  height: 100%;
-  padding-top: 10px;
-  overflow-y: scroll;
-}
-#page-sidebar .lists[data-v-a314d62c] {
-  font-size: 18px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-#page-sidebar .lists .list-section-title[data-v-a314d62c] {
-  margin: 10px 0;
-  padding: 0 20px;
-  color: rgba(0, 0, 0, 0.5);
-}
-#page-sidebar .lists li[data-v-a314d62c] {
-  width: 100%;
-  padding: 10px 20px;
-}
-#page-sidebar .lists li[data-v-a314d62c]:hover {
-  background-color: #bbbbff;
-}
-#page-sidebar .lists li.spacer[data-v-a314d62c]:hover {
-  background-color: initial;
-}
-#page-sidebar .lists li .fa[data-v-a314d62c] {
-  text-align: center;
-  width: 1rem;
-  margin-right: 15px;
-}
 #page-header[data-v-19202aef] {
   font-size: 20px;
   font-weight: bold;
@@ -91,6 +58,47 @@ a:visited {
 .right[data-v-19202aef] {
   float: right;
 }
+#page-sidebar[data-v-a314d62c] {
+  background: #8888ff;
+  width: 200px;
+  height: 100%;
+  padding-top: 10px;
+  overflow-y: scroll;
+}
+#page-sidebar .lists[data-v-a314d62c] {
+  font-size: 18px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#page-sidebar .lists .list-section-title[data-v-a314d62c] {
+  margin: 10px 0;
+  padding: 0 20px;
+  color: rgba(0, 0, 0, 0.5);
+}
+#page-sidebar .lists li[data-v-a314d62c] {
+  width: 100%;
+  padding: 10px 20px;
+}
+#page-sidebar .lists li[data-v-a314d62c]:hover {
+  background-color: #bbbbff;
+}
+#page-sidebar .lists li.spacer[data-v-a314d62c]:hover {
+  background-color: initial;
+}
+#page-sidebar .lists li .fa[data-v-a314d62c] {
+  text-align: center;
+  width: 1rem;
+  margin-right: 15px;
+}
+#page-content[data-v-a08230f2] {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  margin: 10px;
+  padding: 10px;
+  overflow: scroll;
+}
 #page-toast[data-v-0c9a87b5] {
   position: fixed;
   bottom: 0rem;
@@ -103,14 +111,6 @@ a:visited {
   opacity: 0;
   -webkit-transition: opacity 0.5s ease;
   transition: opacity 0.5s ease;
-}
-#page-content[data-v-a08230f2] {
-  -webkit-box-flex: 2;
-      -ms-flex-positive: 2;
-          flex-grow: 2;
-  margin: 10px;
-  padding: 10px;
-  overflow: scroll;
 }
 #login-container[data-v-3e156dd2] {
   position: relative;

@@ -90,6 +90,8 @@ export default {
 		renderUsersList: function(){
 			this.$store.dispatch("fetchUsersList").then(() => {
 				this.$store.commit("setContentView", this.contentViews.usersList);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderLogin: function(){
@@ -211,7 +213,9 @@ export default {
 		deleteUser: function(username){
 			this.$store.dispatch("deleteUser", username).then((res) => {
 				this.$store.commit("setToastMessage", res.message);
-				this.$store.dispatch("fetchUsersList");
+				this.$store.dispatch("fetchUsersList").catch((err) => {
+					this.$store.commit("setToastMessage", err.detail);
+				});
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});

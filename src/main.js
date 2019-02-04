@@ -162,18 +162,12 @@ const appStore = new Vuex.Store({
 			const token = store.get("access_token");
 			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
 				const request = generateRequest("users");
-				return fetch(request).then((res) => {
-					if(res.status < 400){
-						return res.json();
+				return sendRequest(request, (requestSuccess, users) => {
+					if(requestSuccess){
+						context.commit("updateUsersList", users);
+						return Promise.resolve(users);
 					}else{
-						throw new Error(res);
-					}
-				}).then((users) => {
-					context.commit("updateUsersList", users);
-					return Promise.resolve(users);
-				}).catch((err) => {
-					if(err.status == 403){
-						// do nothing
+						return Promise.reject(users);
 					}
 				});
 			}
