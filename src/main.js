@@ -137,19 +137,25 @@ const appStore = new Vuex.Store({
 		},
 		submitSchema: function(context, schema){
 			const request = generateRequest("schema", "POST", schema);
-
-			return fetch(request).then((res) => res.json()).then((schema) => {
-				context.commit("setCurrentCollectionSchema", schema);
-				context.commit("addNewEditSchema", schema);
-				return Promise.resolve(schema);
+			return sendRequest(request, (requestSuccess, schemas) => {
+				if(requestSuccess){
+					context.commit("setCurrentCollectionSchema", schema);
+					context.commit("addNewEditSchema", schema);
+					return Promise.resolve(schema);
+				}else{
+					return Promise.reject(schema);
+				}
 			});
 		},
 		deleteSchema: function(context, collectionSlug){
 			const request = generateRequest(`schema/${collectionSlug}`, "DELETE");
-
-			return fetch(request).then((res) => res.json()).then((message) => {
-				context.commit("removeSchema", collectionSlug);
-				return Promise.resolve(message);
+			return sendRequest(request, (requestSuccess, schemas) => {
+				if(requestSuccess){
+					context.commit("removeSchema", collectionSlug);
+					return Promise.resolve(schemas);
+				}else{
+					return Promise.reject(schema);
+				}
 			});
 		},
 		fetchUsersList: function(context){
@@ -180,41 +186,52 @@ const appStore = new Vuex.Store({
 		},
 		fetchCollection: function(context, collectionSlug){
 			const request = generateRequest(`collections/${collectionSlug}`);
-			return fetch(request).then((res) => res.json()).then((collection) => {
-				context.commit("setCurrentCollection", {
-					collection,
-					collectionSlug
-				});
+			return sendRequest(request, (requestSuccess, collection) => {
+				if(requestSuccess){
+					context.commit("setCurrentCollection", {
+						collection,
+						collectionSlug
+					});
 
-				return Promise.resolve();
+					return Promise.resolve(collection);
+				}else{
+					return Promise.reject(collection);
+				}
 			});
 		},
 		fetchModel: function(context, options){
 			const collectionSlug = options.collectionSlug;
 			const uid = options.uid;
 			const request = generateRequest(`collections/${collectionSlug}/${uid}`);
-			return fetch(request).then((res) => res.json()).then((model) => {
-				context.commit("setCurrentModel", {
-					collectionSlug,
-					model
-				});
+			return sendRequest(request, (requestSuccess, model) => {
+				if(requestSuccess){
+					context.commit("setCurrentModel", {
+						collectionSlug,
+						model
+					});
 
-				return Promise.resolve();
+					return Promise.resolve(model);
+				}else{
+					return Promise.reject(model);
+				}
 			});
 		},
 		submitModel: function(context, options){
 			const model = options.model;
 			const collectionSlug = options.collectionSlug;
 			const uid = options.uid;
-
 			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
 
-			return fetch(request).then((res) => res.json()).then((model) => {
-				context.commit("setCurrentModel", {
-					collectionSlug,
-					model
-				});
-				return Promise.resolve(model);
+			return sendRequest(request, (requestSuccess, model) => {
+				if(requestSuccess){
+					context.commit("setCurrentModel", {
+						collectionSlug,
+						model
+					});
+					return Promise.resolve(model);
+				}else{
+					return Promise.reject(model);
+				}
 			});
 		},
 		deleteModel: function(context, options){
@@ -222,12 +239,16 @@ const appStore = new Vuex.Store({
 			const uid = options.uid;
 			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
 
-			return fetch(request).then((res) => res.json()).then((model) => {
-				context.commit("removeModel", {
-					collectionSlug,
-					model
-				});
-				return Promise.resolve(model);
+			return sendRequest(request, (requestSuccess, model) => {
+				if(requestSuccess){
+					context.commit("removeModel", {
+						collectionSlug,
+						model
+					});
+					return Promise.resolve(model);
+				}else{
+					return Promise.reject(model);
+				}
 			});
 		},
 
@@ -458,6 +479,9 @@ function sendRequest(request, responseHandler){
 			requestSuccess = true;
 		}else if(res.status >= 400){
 			requestSuccess = false;
+		}else{
+			// PANIC
+			throw new Error(request);
 		}
 		return res.json();
 	}).then((response) => {

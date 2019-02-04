@@ -88,7 +88,7 @@ export default {
 		"currentCollectionSchema": {
 			type: Object,
 			default: function(){
-				return {};
+				return null;
 			}
 		},
 		"currentModel": {

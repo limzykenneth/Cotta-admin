@@ -83,6 +83,8 @@ export default {
 		renderCollection: function(collectionSlug){
 			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
 				this.$store.commit("setContentView", this.contentViews.collectionList);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderUsersList: function(){
@@ -97,12 +99,14 @@ export default {
 			this.$store.dispatch("fetchModel", {
 				collectionSlug,
 				uid
-			}).then(() => {
+			}).then((model) => {
 				this.$store.commit("setContentView", this.contentViews.modelPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderModelForm: function(collectionSlug, uid){
-			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
+			this.$store.dispatch("fetchCollection", collectionSlug).then((collection) => {
 				if(!uid){
 					// If not uid is defined, render blank form
 					this.$store.commit("setCurrentModel", {
@@ -115,10 +119,14 @@ export default {
 					this.$store.dispatch("fetchModel", {
 						collectionSlug,
 						uid
-					}).then(() => {
+					}).then((model) => {
 						this.$store.commit("setContentView", this.contentViews.modelEdit);
+					}).catch((err) => {
+						this.$store.commit("setToastMessage", err.detail);
 					});
 				}
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderAccount: function(){
@@ -139,6 +147,9 @@ export default {
 					collectionSlug
 				});
 				this.$store.commit("setContentView", this.contentViews.modelPage);
+				this.$store.commit("setToastMessage", "Created new model");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		deleteModel: function(collectionSlug, uid){
@@ -147,6 +158,9 @@ export default {
 				uid
 			}).then((model) => {
 				this.$store.commit("setContentView", this.contentViews.collectionList);
+				this.$store.commit("setToastMessage", "Deleted model");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 
@@ -161,11 +175,13 @@ export default {
 		submitSchema: function(schema){
 			this.$store.dispatch("submitSchema", schema).then((schema) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
+				this.$store.commit("setToastMessage", `Created schema "${schema.collectionName}".`);
 			});
 		},
 		deleteSchema: function(collectionSlug){
-			this.$store.dispatch("deleteSchema", collectionSlug).then((message) => {
+			this.$store.dispatch("deleteSchema", collectionSlug).then((response) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
+				this.$store.commit("setToastMessage", response.message);
 			});
 		},
 
