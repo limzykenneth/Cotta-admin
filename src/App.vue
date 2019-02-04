@@ -177,6 +177,8 @@ export default {
 			this.$store.dispatch("fetchUser", username).then((user) => {
 				this.$store.commit("setCurrentViewUser", user);
 				this.$store.commit("setContentView", this.contentViews.userPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderUserForm: function(username){
@@ -191,14 +193,19 @@ export default {
 			}
 		},
 		deleteUser: function(username){
-			this.$store.dispatch("deleteUser", username).then((message) => {
+			this.$store.dispatch("deleteUser", username).then((res) => {
+				this.$store.commit("setToastMessage", res.message);
 				this.$store.dispatch("fetchUsersList");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		submitUser: function(user){
 			this.$store.dispatch("submitUser", user).then((res) => {
-				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.dashboard);
+				this.$store.commit("setToastMessage", res.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 
@@ -228,6 +235,8 @@ export default {
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				this.$store.commit("setContentView", this.contentViews.loginPage);
 				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderSignup: function(){
@@ -236,8 +245,10 @@ export default {
 
 		submitChangePassword: function(result){
 			this.$store.dispatch("submitChangePassword", result).then((res) => {
-				console.log(res);
 				this.$store.commit("setContentView", this.contentViews.dashboard);
+				this.$store.commit("setToastMessage", res.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		}
 	}

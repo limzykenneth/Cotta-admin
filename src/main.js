@@ -120,24 +120,17 @@ const appStore = new Vuex.Store({
 			const token = store.get("access_token");
 			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
 				const request = generateRequest("schema");
-				return fetch(request).then((res) => res.json()).then(function(schemas){
-					if(schemas.errors && schemas.errors.length > 0){
-						context.commit("setLoggedIn", false);
-						context.commit("updateSchemas", []);
-						context.commit("setLoggedInUser", "");
-
-						_.each(schemas.errors, function(error){
-							if(error.title !== "Auth Token Invalid"){
-								throw new Error(error);
-							}else{
-								context.commit("setContentView", "login-page");
-							}
-						});
-					}else{
+				return sendRequest(request, (requestSuccess, schemas) => {
+					if(requestSuccess){
 						context.commit("updateSchemas", schemas);
 						context.commit("setLoggedIn", true);
 						context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
 						return Promise.resolve(schemas);
+					}else{
+						context.commit("setLoggedIn", false);
+						context.commit("updateSchemas", []);
+						context.commit("setLoggedInUser", "");
+						context.commit("setContentView", "login-page");
 					}
 				});
 			}
@@ -240,27 +233,43 @@ const appStore = new Vuex.Store({
 
 		fetchUser: function(context, username){
 			const request = generateRequest(`users/${username}`);
-
-			return fetch(request).then((res) => res.json()).then((user) => {
-				return Promise.resolve(user);
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
 			});
 		},
 		deleteUser: function(context, username){
 			const request = generateRequest(`users/${username}`, "DELETE");
-
-			return fetch(request).then((res) => res.json()).then((message) => {
-				return Promise.resolve(message);
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
 			});
 		},
 		submitUser: function(context, user){
 			if(user.role && !user.password){
 				const request = generateRequest(`users/${user.username}`, "POST", user);
-				return fetch(request).then((res) => res.json());
+				return sendRequest(request, (requestSuccess, response) => {
+					if(requestSuccess){
+						return Promise.resolve(response);
+					}else{
+						return Promise.reject(response);
+					}
+				});
 			}else if(user.password && !user.role){
 				const request = generateRequest("users", "POST", user);
-				return fetch(request).then((res) => res.json());
-			}else{
-				throw new Error("Invalid input");
+				return sendRequest(request, (requestSuccess, response) => {
+					if(requestSuccess){
+						return Promise.resolve(response);
+					}else{
+						return Promise.reject(response);
+					}
+				});
 			}
 		},
 
@@ -269,40 +278,34 @@ const appStore = new Vuex.Store({
 		 */
 		loginUser: function(context, loginDetails){
 			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
-			return fetch(request).then((res) => res.json()).then((response) => {
-				// console.log(token);
-				if(response.errors && response.errors.length > 0){
-					let isFailedLogin = true;
-					let unexpectedError;
-					let loginError;
-					_.each(response.errors, function(error){
-						if(error.title !== "Authentication Failed"){
-							isFailedLogin = false;
-							unexpectedError = error;
-						}else{
-							loginError = error;
-						}
-					});
-					if(isFailedLogin){
-						return Promise.reject(loginError);
-					}else{
-						return Promise.reject(unexpectedError);
-					}
-				}else{
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
 					store.set("access_token", response.access_token);
 					return context.dispatch("fetchInitialData");
+				}else{
+					return Promise.reject(response);
 				}
 			});
 		},
 		signupUser: function(context, signupDetails){
 			const request = generateRequest("signup", "POST", signupDetails);
-			return fetch(request).then((res) => res.json()).then((res) => {
-				return Promise.resolve(res);
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
 			});
 		},
 		submitChangePassword: function(context, details){
 			const request = generateRequest("account/change_password", "POST", details);
-			return fetch(request).then((res) => res.json());
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
+			});
 		}
 	}
 });
@@ -336,7 +339,8 @@ App.data = function(){
 
 		utils: {
 			generateRequest: generateRequest,
-			urlJoin: urlJoin
+			urlJoin: urlJoin,
+			appTokenValid: appTokenValid
 		}
 	};
 };
@@ -441,4 +445,22 @@ function appTokenValid(){
 	}
 
 	return false;
+}
+
+/**
+ * Utility function to send fetch request and deal with errors.
+ * `responseHandler` callback should return promise resolution
+ */
+function sendRequest(request, responseHandler){
+	let requestSuccess;
+	return fetch(request).then((res) => {
+		if(res.status >= 200 && res.status < 300){
+			requestSuccess = true;
+		}else if(res.status >= 400){
+			requestSuccess = false;
+		}
+		return res.json();
+	}).then((response) => {
+		return responseHandler(requestSuccess, response);
+	});
 }
