@@ -224,14 +224,17 @@ const appStore = new Vuex.Store({
 			}, {});
 
 			if(_.size(files) > 0){
+				// There are at least one upload field
+				// Remove the binary file entry from the model
 				_.each(model, (el) => {
 					if(el.file){
 						delete el.file;
 					}
-
 				});
-				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
 
+				// Create the request for submitting the model
+				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+				// Submit the model
 				return sendRequest(request, (requestSuccess, model) => {
 					if(requestSuccess){
 						return Promise.resolve(model);
@@ -239,8 +242,10 @@ const appStore = new Vuex.Store({
 						return Promise.reject(model);
 					}
 				}).then((model) => {
-					// Send the images
+					// Model submission successful
 					const promises = [];
+
+					// Send individual images according to the link provided in the response
 					_.each(model, (el, key) => {
 						if(el.permalink){
 							const file = _.find(files, (f, k) => {
@@ -253,6 +258,7 @@ const appStore = new Vuex.Store({
 								file,
 								file.type
 							);
+
 							promises.push(sendRequest(req, (success, res) => {
 								if(success) {
 									return Promise.resolve(res);
@@ -262,11 +268,14 @@ const appStore = new Vuex.Store({
 							}));
 						}
 					});
+
+					// All images successfully uploaded, resolve promise to model
 					return Promise.all(promises).then(() => {
 						return Promise.resolve(model);
 					});
 				});
 			}else{
+				// There are no upload fields
 				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
 
 				return sendRequest(request, (requestSuccess, model) => {
