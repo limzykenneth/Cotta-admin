@@ -52,9 +52,9 @@ export default{
 	},
 	methods: {
 		submitModel: function(e){
-			var result = this.$_formToJSON(e.target);
-			var slug = this.currentCollectionSchema.collectionSlug;
-			var uid = this.currentModel._uid || "";
+			const result = this.$_formToJSON(e.target);
+			const slug = this.currentCollectionSchema.collectionSlug;
+			const uid = this.currentModel._uid || "";
 
 			if(this.validateModel(result)){
 				this.$emit("submitModel", result, slug, uid);
@@ -64,7 +64,7 @@ export default{
 		},
 
 		validateModel: function(model){
-			var fields = this.currentCollectionSchema.fields;
+			const fields = this.currentCollectionSchema.fields;
 			for(let i=0; i<fields.length; i++){
 				if(typeof model[fields[i].slug] == "undefined"){
 					if(fields[i].type == "checkbox"){
@@ -88,11 +88,12 @@ export default{
 
 		// Private functions
 		$_formToJSON: function(formElement){
-			var result = {};
+			const result = {};
 
-			var data = new FormData(formElement);
+			const data = new FormData(formElement);
 			for(const entry of data){
 				if(result[entry[0]]){
+					// Handling multiple choice form
 					result[entry[0]] = Array(result[entry[0]]).concat([entry[1]]);
 					// Flatten 2D array
 					result[entry[0]] = result[entry[0]].reduce(
@@ -102,7 +103,18 @@ export default{
 						[]
 					);
 				}else{
-					result[entry[0]] = entry[1];
+					if(entry[1] instanceof File){
+						// File upload
+						result[entry[0]] = {
+							"content-type": entry[1].type,
+							file_name: entry[1].name,
+							file_description: "",
+							file: entry[1]
+						};
+					}else{
+						// All other elements
+						result[entry[0]] = entry[1];
+					}
 				}
 			}
 			return result;

@@ -214,19 +214,73 @@ const appStore = new Vuex.Store({
 			const model = options.model;
 			const collectionSlug = options.collectionSlug;
 			const uid = options.uid;
-			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
 
-			return sendRequest(request, (requestSuccess, model) => {
-				if(requestSuccess){
-					context.commit("setCurrentModel", {
-						collectionSlug,
-						model
-					});
-					return Promise.resolve(model);
-				}else{
-					return Promise.reject(model);
+			// Check if there's upload field
+			const files = _.reduce(model, (acc, el, key) => {
+				if(el.file) {
+					acc[key] = el.file;
 				}
-			});
+				return acc;
+			}, {});
+
+			if(_.size(files) > 0){
+				_.each(model, (el) => {
+					if(el.file){
+						delete el.file;
+					}
+
+				});
+				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+
+				return sendRequest(request, (requestSuccess, model) => {
+					if(requestSuccess){
+						return Promise.resolve(model);
+					}else{
+						return Promise.reject(model);
+					}
+				}).then((model) => {
+					// Send the images
+					const promises = [];
+					_.each(model, (el, key) => {
+						if(el.permalink){
+							const file = _.find(files, (f, k) => {
+								return k === key;
+							});
+
+							const req = generateRequest(
+								`upload/${model[key].uid}`,
+								"POST",
+								file,
+								file.type
+							);
+							promises.push(sendRequest(req, (success, res) => {
+								if(success) {
+									return Promise.resolve(res);
+								}else{
+									return Promise.reject(res);
+								}
+							}));
+						}
+					});
+					return Promise.all(promises).then(() => {
+						return Promise.resolve(model);
+					});
+				});
+			}else{
+				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+
+				return sendRequest(request, (requestSuccess, model) => {
+					if(requestSuccess){
+						context.commit("setCurrentModel", {
+							collectionSlug,
+							model
+						});
+						return Promise.resolve(model);
+					}else{
+						return Promise.reject(model);
+					}
+				});
+			}
 		},
 		deleteModel: function(context, options){
 			const collectionSlug = options.collectionSlug;
@@ -423,19 +477,23 @@ new Vue({
  * Generate `request` object to be passed to `fetch` that is populated with all
  * the necessary headers. Also automatically stringify payload body.
  */
-function generateRequest(path, method="GET", payload=null){
+function generateRequest(path, method="GET", payload=null, contentType="application/json"){
 	const finalURL = urlJoin(url, path);
 	const token = store.get("access_token");
 
 	const header = {};
-	header["Content-Type"] = "application/json";
+	header["Content-Type"] = contentType;
 	if(path !== "token/generate_new_token"){
 		header["Authorization"] = `Bearer ${token}`;
 	}
 
 	let body;
 	if(payload !== null){
-		body = JSON.stringify(payload);
+		if(contentType === "application/json"){
+			body = JSON.stringify(payload);
+		}else{
+			body = payload;
+		}
 	}
 
 	const request = new Request(finalURL, {
