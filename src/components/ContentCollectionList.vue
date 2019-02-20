@@ -2,7 +2,7 @@
 	<article id="collection-container">
 		<h1>{{ currentCollectionSchema.collectionName }}</h1>
 
-		<button v-on:click.prevent="renderModelForm(currentCollectionSchema.collectionSlug)">New</button>
+		<button id="new-button" v-on:click.prevent="renderModelForm(currentCollectionSchema.collectionSlug)">New</button>
 
 		<ul id="collection-list">
 			<a class="list-items"
@@ -46,6 +46,10 @@ export default {
 	@import "../mixins.less";
 
 	#collection-container{
+		#new-button{
+			margin-bottom: 0.5rem;
+		}
+
 		#collection-list{
 			.unstyled-list();
 

@@ -4,7 +4,7 @@
 		<h1 v-if="currentViewUser.role == undefined">New User</h1>
 
 		<form id="user-form" v-on:submit.prevent="submitUser">
-			<div>
+			<div class="form-items">
 				<label>Username:</label>
 				<input type="text" name="username" required
 					:value="currentViewUser.username"
@@ -72,4 +72,10 @@ export default{
 
 <style lang="less" scoped>
 @import "../mixins.less";
+
+#user-form-container{
+	#user-form{
+		.simple-form-styles();
+	}
+}
 </style>

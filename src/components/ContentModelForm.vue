@@ -3,9 +3,9 @@
 		<div class="field-container"
 			v-for="field in currentCollectionSchema.fields" :key="field.slug"
 		>
-			<span class="field-name">
+			<label class="field-name" :for="field.slug">
 				{{ field.name }}
-			</span>
+			</label>
 
 			<span class="field" v-if="field.type == 'checkbox' || field.type == 'radio'">
 				<span class="v-for-container"
@@ -21,8 +21,9 @@
 					<label :for="choice">{{ key }}</label>
 				</span>
 			</span>
+
 			<span class="field" v-else>
-				<input
+				<input required
 					:type="field.type"
 					:name="field.slug"
 					:value="currentModel[field.slug]"
@@ -126,7 +127,29 @@ export default{
 <style lang="less" scoped>
 @import "../mixins.less";
 
-#form {
+#form{
+	.field-container{
+		margin-bottom: 1rem;
+		display: flex;
+		flex-direction: row;
+		min-height: 1.5rem;
 
+		.field-name{
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			min-width: 170px;
+		}
+
+		.field{
+			display: inline-block;
+			width: 500px;
+
+			.v-for-container{
+				display: block;
+				margin: 0.5rem 0;
+			}
+		}
+	}
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-	<article>
+	<article id="schema-list-container">
 		<h1>Schemas</h1>
-		<button v-on:click.prevent="renderSchemaForm">New</button>
+		<button id="new-button" v-on:click.prevent="renderSchemaForm">New</button>
 		<schemas-list-item
 			v-for="schema in schemas" :key="schema.collectionSlug"
 			:schema="schema"
@@ -39,4 +39,10 @@ export default {
 
 <style lang="less" scoped>
 	@import "../mixins.less";
+
+	#schema-list-container{
+		#new-button{
+			margin-bottom: 0.5rem;
+		}
+	}
 </style>

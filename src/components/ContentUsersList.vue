@@ -1,7 +1,7 @@
 <template>
 	<article id="users-container">
 		<h1>Users</h1>
-		<button v-on:click.prevent="renderUserForm('')">New</button>
+		<button id="new-button" v-on:click.prevent="renderUserForm('')">New</button>
 
 		<ul id="users-list">
 			<users-list-item
@@ -48,6 +48,10 @@ export default {
 @import "../mixins.less";
 
 #users-container{
+	#new-button{
+		margin-bottom: 0.5rem;
+	}
+
 	#users-list{
 		.unstyled-list();
 

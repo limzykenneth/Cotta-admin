@@ -4,7 +4,7 @@
 
 		<h2>Change password</h2>
 		<form id="change-password-form" v-on:submit.prevent="submitChangePassword">
-			<div>
+			<div class="form-items">
 				<label>Password:</label>
 				<input type="password" name="password">
 				<br>
@@ -62,6 +62,8 @@ export default{
 	@import "../mixins.less";
 
 	#account-container{
-
+		#change-password-form{
+			.simple-form-styles();
+		}
 	}
 </style>

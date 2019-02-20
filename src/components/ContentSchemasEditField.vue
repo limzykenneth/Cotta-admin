@@ -1,7 +1,9 @@
 <template>
-	<div>
-		<input type="text" name="field" v-on:input="nameChanged" :value="fieldName">
-		<select v-on:input="selectionChanged" :value="value">
+	<div class="schema-field">
+		<input type="text" name="field" required
+			v-on:input="nameChanged" :value="fieldName"
+		>
+		<select v-on:input="selectionChanged" :value="value" required>
 			<option disabled selected value> -- select an option -- </option>
 			<option value="wysiwyg">wysiwyg</option>
 			<option value="text">text</option>
@@ -51,4 +53,16 @@ export default {
 
 <style lang="less">
 @import "../mixins.less";
+
+.schema-field{
+	margin-bottom: 0.5rem;
+
+	input{
+		width: 300px;
+	}
+
+	select{
+		width: 300px;
+	}
+}
 </style>
