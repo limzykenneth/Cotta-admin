@@ -27,7 +27,26 @@ a:visited {
 button,
 input[type="submit"] {
   height: 1.9rem;
-  padding: 0.4rem;
+  padding: 0.45rem 1.2rem;
+  min-width: 90px;
+  border-radius: 25px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border: none;
+  background-color: #ddd;
+}
+button:hover,
+input[type="submit"]:hover {
+  background-color: #aaaaaa;
+}
+button.delete-button,
+input[type="submit"].delete-button {
+  color: #fff;
+  background-color: #d00;
+}
+button.delete-button:hover,
+input[type="submit"].delete-button:hover {
+  background-color: #aa0000;
 }
 #page-sidebar[data-v-a314d62c] {
   background: #8888ff;
@@ -173,6 +192,9 @@ input[type="submit"] {
 #collection-container #collection-list .list-items:first-child li[data-v-0c88c87a] {
   border-top: 1px solid black;
 }
+#schema-list-container #new-button[data-v-08f21cd9] {
+  margin-bottom: 0.5rem;
+}
 #schema-edit-container #form #collection-name[data-v-183a4445] {
   margin-bottom: 1rem;
 }
@@ -207,9 +229,6 @@ input[type="submit"] {
   display: inline-block;
   width: 300px;
   text-align: center;
-}
-#schema-list-container #new-button[data-v-08f21cd9] {
-  margin-bottom: 0.5rem;
 }
 #users-container #new-button[data-v-f64733a2] {
   margin-bottom: 0.5rem;
@@ -276,6 +295,26 @@ input[type="submit"] {
   display: inline-block;
   width: 500px;
 }
+.schema-container[data-v-46a3320c] {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.schema-container .collection-name[data-v-46a3320c] {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+}
+.schema-container button[data-v-46a3320c] {
+  margin-left: 0.5rem;
+}
 .schema-field {
   margin-bottom: 0.5rem;
 }
@@ -285,17 +324,25 @@ input[type="submit"] {
 .schema-field select {
   width: 300px;
 }
-.schema-container[data-v-46a3320c] {
-  border: 1px solid black;
-  padding: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
 .user-container[data-v-72063f3c] {
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.user-container .collection-name[data-v-72063f3c] {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+}
+.user-container button[data-v-72063f3c] {
+  margin-left: 0.5rem;
 }
 #form .field-container[data-v-98f40914] {
   margin-bottom: 1rem;

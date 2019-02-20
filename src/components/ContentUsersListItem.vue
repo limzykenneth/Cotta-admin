@@ -2,9 +2,9 @@
 	<li class="user-container"
 		v-on:click.prevent="renderUser(user.username)"
 	>
-		{{ user.username }}
-		<button v-on:click.prevent.stop="renderUserForm">Edit</button>
-		<button v-on:click.prevent.stop="deleteUser">Delete</button>
+		<span class="collection-name">{{ user.username }}</span>
+		<button class="edit-button" v-on:click.prevent.stop="renderUserForm">Edit</button>
+		<button class="delete-button" v-on:click.prevent.stop="deleteUser">Delete</button>
 	</li>
 </template>
 
@@ -35,9 +35,6 @@ export default {
 	@import "../mixins.less";
 
 	.user-container{
-		border: 1px solid black;
-		padding: 10px;
-		margin-bottom: 10px;
-		cursor: pointer;
+		.list-item();
 	}
 </style>

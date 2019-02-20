@@ -1,8 +1,8 @@
 <template>
 	<div class="schema-container">
-		{{ schema.collectionName }}
-		<button v-on:click.prevent="renderSchemaForm">Edit</button>
-		<button v-on:click.prevent="deleteSchema">Delete</button>
+		<span class="collection-name">{{ schema.collectionName }}</span>
+		<button class="edit-button" v-on:click.prevent="renderSchemaForm">Edit</button>
+		<button class="delete-button" v-on:click.prevent="deleteSchema">Delete</button>
 	</div>
 </template>
 
@@ -30,9 +30,6 @@ export default {
 	@import "../mixins.less";
 
 	.schema-container{
-		border: 1px solid black;
-		padding: 10px;
-		margin-bottom: 10px;
-		cursor: pointer;
+		.list-item();
 	}
 </style>

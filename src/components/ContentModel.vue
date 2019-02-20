@@ -7,7 +7,7 @@
 			Edit
 		</button>
 
-		<button
+		<button class="delete-button"
 			v-on:click.prevent="deleteModel"
 		>
 			Delete
