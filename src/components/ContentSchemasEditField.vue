@@ -8,6 +8,7 @@
 			<option value="email">email</option>
 			<option value="checkbox">checkbox</option>
 			<option value="radio">radio</option>
+			<option value="file">file</option>
 		</select>
 
 		<button v-on:click.prevent="removeField(selfIndex)">Remove</button>
