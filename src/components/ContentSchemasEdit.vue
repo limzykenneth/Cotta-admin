@@ -20,10 +20,12 @@
 
 					:fieldName="field.name"
 					:selfIndex="index"
+					:choices="field.properties.choices"
 					v-model="field.type"
 
 					v-on:nameChanged="nameChanged"
 					v-on:removeField="removeField"
+					v-on:choiceChanged="choiceChanged"
 				></schemas-edit-field>
 			</div>
 
@@ -52,8 +54,8 @@ export default{
 		}
 	},
 	data: function(){
-		var fields = [];
-		var collectionName = "";
+		let fields = [];
+		let collectionName = "";
 
 		if(this.currentCollectionSchema){
 			fields = this.currentCollectionSchema.fields.slice(0);
@@ -90,12 +92,12 @@ export default{
 			this.fields[i].slug = snakeCase(newName);
 		},
 		submitSchema: function(){
-			var schema = {
+			const schema = {
 				collectionName: this.collectionName,
 				collectionSlug: this.collectionSlug,
 				fields: this.fields
 			};
-			// Handles new schemas only, edit not yet implemented in server
+
 			this.$emit("submitSchema", schema);
 		},
 		validateInput: function(collectionName, fields){
@@ -104,7 +106,7 @@ export default{
 			}
 		},
 		addField: function(){
-			var newField = {
+			const newField = {
 				properties: {},
 				name: "",
 				slug: "",
@@ -114,6 +116,9 @@ export default{
 		},
 		removeField: function(index){
 			this.fields.splice(index, 1);
+		},
+		choiceChanged: function(data){
+			this.$set(this.fields[data.index].properties, "choices", data.choices);
 		}
 	}
 };
