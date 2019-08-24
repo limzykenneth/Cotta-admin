@@ -29,7 +29,7 @@
     "babel-preset-stage-2": "^6.0.0",
     "babel-runtime": "^6.0.0",
     "babelify": "^7.2.0",
-    "browser-sync": "^2.26.3",
+    "browser-sync": "^2.26.7",
     "browserify": "^16.2.3",
     "change-case": "^3.0.1",
     "connect-history-api-fallback": "^1.5.0",
