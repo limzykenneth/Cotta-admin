@@ -9,7 +9,7 @@ function server(){
 	});
 
 	gulp.watch("./partials/**/*", gulp.series("handlebars", handlebarsWatch));
-	gulp.watch("./src/**/*", gulp.series("build", vueWatch));
+	gulp.watch("./src/**/*", gulp.series(vueWatch));
 }
 
 function vueWatch(done){

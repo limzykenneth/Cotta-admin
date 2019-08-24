@@ -65,7 +65,7 @@ import Toast from "./components/Toast.vue";
 import Content from "./components/Content.vue";
 
 export default {
-	name: "app",
+	name: "App",
 	components: {
 		"app-header": Header,
 		"app-sidebar": Sidebar,

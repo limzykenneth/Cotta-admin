@@ -7,11 +7,11 @@ const url = "http://localhost:3000/api";
 //---------------------------------------------//
 //               Dependencies                  //
 //---------------------------------------------//
-const Vue = require("vue");
-const Vuex = require("vuex");
+import Vue from "vue/dist/vue.esm.browser";
+import Vuex from "vuex/dist/vuex.js";
 Vue.use(Vuex);
-const urlJoin = require("url-join");
-const jwtDecode = require("jwt-decode");
+import urlJoin from "url-join";
+import jwtDecode from "jwt-decode";
 
 //---------------------------------------------//
 //            App storage (Vuex)               //
@@ -394,7 +394,7 @@ const appStore = new Vuex.Store({
 /**
  * Initialize Vue app and register data
  */
-const App = require("./App.vue");
+import App from "./App.vue";
 App.data = function(){
 	return {
 		siteTitle: siteTitle,
