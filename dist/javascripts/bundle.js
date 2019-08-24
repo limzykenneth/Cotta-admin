@@ -13160,8 +13160,8 @@
   		renderSchemasList: function(e){
   			this.$emit("renderSchemasList");
   		},
-  		renderCollection: function(collectionSlug){
-  			this.$emit("renderCollection", collectionSlug);
+  		renderCollection: function(tableSlug){
+  			this.$emit("renderCollection", tableSlug);
   		},
   		renderUsersList: function(){
   			this.$emit("renderUsersList");
@@ -13338,12 +13338,12 @@
                 return _c(
                   "a",
                   {
-                    key: schema.collectionSlug,
-                    attrs: { href: schema.collectionSlug },
+                    key: schema.tableSlug,
+                    attrs: { href: schema.tableSlug },
                     on: {
                       click: function($event) {
                         $event.preventDefault();
-                        return _vm.renderCollection(schema.collectionSlug)
+                        return _vm.renderCollection(schema.tableSlug)
                       }
                     }
                   },
@@ -13353,7 +13353,7 @@
                         staticClass: "fa fa-file",
                         attrs: { "aria-hidden": "true" }
                       }),
-                      _vm._v(_vm._s(schema.collectionName))
+                      _vm._v(_vm._s(schema.tableName))
                     ])
                   ]
                 )
@@ -13410,7 +13410,7 @@
     /* style */
     const __vue_inject_styles__ = undefined;
     /* scoped */
-    const __vue_scope_id__ = "data-v-79297cb9";
+    const __vue_scope_id__ = "data-v-3b486a0e";
     /* module identifier */
     const __vue_module_identifier__ = undefined;
     /* functional template */
@@ -14039,11 +14039,11 @@
   		}
   	},
   	methods: {
-  		renderModel: function(collectionSlug, uid){
-  			this.$emit("renderModel", collectionSlug, uid);
+  		renderModel: function(tableSlug, uid){
+  			this.$emit("renderModel", tableSlug, uid);
   		},
-  		renderModelForm: function(collectionSlug){
-  			this.$emit("renderModelForm", collectionSlug);
+  		renderModelForm: function(tableSlug){
+  			this.$emit("renderModelForm", tableSlug);
   		}
   	}
   };
@@ -14056,7 +14056,7 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c("article", { attrs: { id: "collection-container" } }, [
-      _c("h1", [_vm._v(_vm._s(_vm.currentCollectionSchema.collectionName))]),
+      _c("h1", [_vm._v(_vm._s(_vm.currentCollectionSchema.tableName))]),
       _vm._v(" "),
       _c(
         "button",
@@ -14065,9 +14065,7 @@
           on: {
             click: function($event) {
               $event.preventDefault();
-              return _vm.renderModelForm(
-                _vm.currentCollectionSchema.collectionSlug
-              )
+              return _vm.renderModelForm(_vm.currentCollectionSchema.tableSlug)
             }
           }
         },
@@ -14086,7 +14084,7 @@
               attrs: {
                 href:
                   "collections/" +
-                  _vm.currentCollectionSchema.collectionSlug +
+                  _vm.currentCollectionSchema.tableSlug +
                   "/" +
                   model._uid
               },
@@ -14094,7 +14092,7 @@
                 click: function($event) {
                   $event.preventDefault();
                   return _vm.renderModel(
-                    _vm.currentCollectionSchema.collectionSlug,
+                    _vm.currentCollectionSchema.tableSlug,
                     model._uid
                   )
                 }
@@ -14113,7 +14111,7 @@
     /* style */
     const __vue_inject_styles__$6 = undefined;
     /* scoped */
-    const __vue_scope_id__$6 = "data-v-78c7c064";
+    const __vue_scope_id__$6 = "data-v-ef6371c8";
     /* module identifier */
     const __vue_module_identifier__$6 = undefined;
     /* functional template */
@@ -14154,10 +14152,10 @@
   	},
   	methods: {
   		renderSchemaForm: function(){
-  			this.$emit("renderSchemaForm", this.schema.collectionSlug);
+  			this.$emit("renderSchemaForm", this.schema.tableSlug);
   		},
   		deleteSchema: function(){
-  			this.$emit("deleteSchema", this.schema.collectionSlug);
+  			this.$emit("deleteSchema", this.schema.tableSlug);
   		}
   	}
   };
@@ -14171,7 +14169,7 @@
     var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "schema-container" }, [
       _c("span", { staticClass: "collection-name" }, [
-        _vm._v(_vm._s(_vm.schema.collectionName))
+        _vm._v(_vm._s(_vm.schema.tableName))
       ]),
       _vm._v(" "),
       _c(
@@ -14209,7 +14207,7 @@
     /* style */
     const __vue_inject_styles__$7 = undefined;
     /* scoped */
-    const __vue_scope_id__$7 = "data-v-ed4b1b02";
+    const __vue_scope_id__$7 = "data-v-16775951";
     /* module identifier */
     const __vue_module_identifier__$7 = undefined;
     /* functional template */
@@ -14245,11 +14243,11 @@
   		}
   	},
   	methods: {
-  		renderSchemaForm: function(collectionSlug){
-  			this.$emit("renderSchemaForm", collectionSlug);
+  		renderSchemaForm: function(tableSlug){
+  			this.$emit("renderSchemaForm", tableSlug);
   		},
-  		deleteSchema: function(collectionSlug){
-  			this.$emit("deleteSchema", collectionSlug);
+  		deleteSchema: function(tableSlug){
+  			this.$emit("deleteSchema", tableSlug);
   		}
   	}
   };
@@ -14283,7 +14281,7 @@
         _vm._v(" "),
         _vm._l(_vm.schemas, function(schema) {
           return _c("schemas-list-item", {
-            key: schema.collectionSlug,
+            key: schema.tableSlug,
             attrs: { schema: schema },
             on: {
               renderSchemaForm: _vm.renderSchemaForm,
@@ -14301,7 +14299,7 @@
     /* style */
     const __vue_inject_styles__$8 = undefined;
     /* scoped */
-    const __vue_scope_id__$8 = "data-v-86e584e4";
+    const __vue_scope_id__$8 = "data-v-35ce507c";
     /* module identifier */
     const __vue_module_identifier__$8 = undefined;
     /* functional template */
@@ -14811,11 +14809,11 @@
   	},
   	data: function(){
   		let fields = [];
-  		let collectionName = "";
+  		let tableName = "";
 
   		if(this.currentCollectionSchema){
   			fields = this.currentCollectionSchema.fields.slice(0);
-  			collectionName = this.currentCollectionSchema.collectionName;
+  			tableName = this.currentCollectionSchema.tableName;
   		}else{
   			fields = [{
   				properties: {},
@@ -14826,13 +14824,13 @@
   		}
 
   		return {
-  			collectionName,
+  			tableName,
   			fields
   		};
   	},
   	computed: {
-  		collectionSlug: function(){
-  			return snakeCase(this.collectionName);
+  		tableSlug: function(){
+  			return snakeCase(this.tableName);
   		},
   		editName: function(){
   			if(this.currentCollectionSchema){
@@ -14849,15 +14847,15 @@
   		},
   		submitSchema: function(){
   			const schema = {
-  				collectionName: this.collectionName,
-  				collectionSlug: this.collectionSlug,
+  				tableSlug: this.tableSlug,
+  				tableName: this.tableName,
   				fields: this.fields
   			};
 
   			this.$emit("submitSchema", schema);
   		},
-  		validateInput: function(collectionName, fields){
-  			if(!collectionName){
+  		validateInput: function(tableName, fields){
+  			if(!tableName){
   				return false;
   			}
   		},
@@ -14900,7 +14898,7 @@
         },
         [
           _c("div", { attrs: { id: "collection-name" } }, [
-            _c("label", { attrs: { for: "collectionName" } }, [
+            _c("label", { attrs: { for: "tableName" } }, [
               _vm._v("Collection Name: ")
             ]),
             _vm._v(" "),
@@ -14909,23 +14907,23 @@
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.collectionName,
-                  expression: "collectionName"
+                  value: _vm.tableName,
+                  expression: "tableName"
                 }
               ],
               attrs: {
                 type: "text",
-                name: "collectionName",
+                name: "tableName",
                 required: "",
                 disabled: _vm.editName
               },
-              domProps: { value: _vm.collectionName },
+              domProps: { value: _vm.tableName },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.collectionName = $event.target.value;
+                  _vm.tableName = $event.target.value;
                 }
               }
             })
@@ -15000,7 +14998,7 @@
     /* style */
     const __vue_inject_styles__$b = undefined;
     /* scoped */
-    const __vue_scope_id__$b = "data-v-6bbaa766";
+    const __vue_scope_id__$b = "data-v-6dd3e050";
     /* module identifier */
     const __vue_module_identifier__$b = undefined;
     /* functional template */
@@ -15437,11 +15435,11 @@
   			let models = [];
   			_.each(this.currentViewUser.models, (model, i) => {
   				let modelPaths = model.split(".");
-  				let collectionSlug = modelPaths[0];
+  				let tableSlug = modelPaths[0];
   				let modelID = modelPaths[1];
-  				let link = `collections/${collectionSlug}/${modelID}`;
+  				let link = `collections/${tableSlug}/${modelID}`;
   				models.push({
-  					collectionSlug,
+  					tableSlug,
   					modelID,
   					link
   				});
@@ -15451,8 +15449,8 @@
   		}
   	},
   	methods: {
-  		renderModel: function(collectionSlug, uid){
-  			this.$emit("renderModel", collectionSlug, uid);
+  		renderModel: function(tableSlug, uid){
+  			this.$emit("renderModel", tableSlug, uid);
   		}
   	}
   };
@@ -15485,7 +15483,7 @@
                   click: function($event) {
                     $event.preventDefault();
                     return _vm.renderModel(
-                      _vm.userModelLinks[index].collectionSlug,
+                      _vm.userModelLinks[index].tableSlug,
                       _vm.userModelLinks[index].modelID
                     )
                   }
@@ -15505,7 +15503,7 @@
     /* style */
     const __vue_inject_styles__$f = undefined;
     /* scoped */
-    const __vue_scope_id__$f = "data-v-0fb9892d";
+    const __vue_scope_id__$f = "data-v-8db3b5b6";
     /* module identifier */
     const __vue_module_identifier__$f = undefined;
     /* functional template */
@@ -15576,13 +15574,13 @@
   	methods: {
   		renderModelForm: function(){
   			this.$emit("renderModelForm",
-  				this.currentCollectionSchema.collectionSlug,
+  				this.currentCollectionSchema.tableSlug,
   				this.currentModel._uid
   			);
   		},
   		deleteModel: function(){
   			this.$emit("deleteModel",
-  				this.currentCollectionSchema.collectionSlug,
+  				this.currentCollectionSchema.tableSlug,
   				this.currentModel._uid
   			);
   		}
@@ -15599,7 +15597,7 @@
     return _c("article", { attrs: { id: "model-container" } }, [
       _c("h1", [
         _vm._v(
-          _vm._s(_vm.currentCollectionSchema.collectionName) +
+          _vm._s(_vm.currentCollectionSchema.tableName) +
             " - " +
             _vm._s(_vm.currentModel._uid)
         )
@@ -15679,7 +15677,7 @@
     /* style */
     const __vue_inject_styles__$g = undefined;
     /* scoped */
-    const __vue_scope_id__$g = "data-v-b9adf344";
+    const __vue_scope_id__$g = "data-v-353a3ef8";
     /* module identifier */
     const __vue_module_identifier__$g = undefined;
     /* functional template */
@@ -15757,7 +15755,7 @@
   	methods: {
   		submitModel: function(e){
   			const result = this.$_formToJSON(e.target);
-  			const slug = this.currentCollectionSchema.collectionSlug;
+  			const slug = this.currentCollectionSchema.tableSlug;
   			const uid = this.currentModel._uid || "";
 
   			if(this.validateModel(result)){
@@ -15894,7 +15892,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-33ff75c2";
+    const __vue_scope_id__$h = "data-v-7e48c35c";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */
@@ -15936,8 +15934,8 @@
   		}
   	},
   	methods: {
-  		submitModel: function(model, collectionSlug, uid=""){
-  			this.$emit("submitModel", model, collectionSlug, uid);
+  		submitModel: function(model, tableSlug, uid=""){
+  			this.$emit("submitModel", model, tableSlug, uid);
   		}
   	}
   };
@@ -15963,7 +15961,7 @@
     /* style */
     const __vue_inject_styles__$i = undefined;
     /* scoped */
-    const __vue_scope_id__$i = "data-v-854e00aa";
+    const __vue_scope_id__$i = "data-v-389d15da";
     /* module identifier */
     const __vue_module_identifier__$i = undefined;
     /* functional template */
@@ -16206,27 +16204,27 @@
   			this.$emit("renderSignup");
   		},
 
-  		renderModel: function(collectionSlug, uid){
-  			this.$emit("renderModel", collectionSlug, uid);
+  		renderModel: function(tableSlug, uid){
+  			this.$emit("renderModel", tableSlug, uid);
   		},
-  		renderModelForm: function(collectionSlug, uid){
-  			this.$emit("renderModelForm", collectionSlug, uid);
+  		renderModelForm: function(tableSlug, uid){
+  			this.$emit("renderModelForm", tableSlug, uid);
   		},
-  		submitModel: function(model, collectionSlug, uid=""){
-  			this.$emit("submitModel", model, collectionSlug, uid);
+  		submitModel: function(model, tableSlug, uid=""){
+  			this.$emit("submitModel", model, tableSlug, uid);
   		},
-  		deleteModel: function(collectionSlug, uid){
-  			this.$emit("deleteModel", collectionSlug, uid);
+  		deleteModel: function(tableSlug, uid){
+  			this.$emit("deleteModel", tableSlug, uid);
   		},
 
-  		renderSchemaForm: function(collectionSlug){
-  			this.$emit("renderSchemaForm", collectionSlug);
+  		renderSchemaForm: function(tableSlug){
+  			this.$emit("renderSchemaForm", tableSlug);
   		},
   		submitSchema: function(schema){
   			this.$emit("submitSchema", schema);
   		},
-  		deleteSchema: function(collectionSlug){
-  			this.$emit("deleteSchema", collectionSlug);
+  		deleteSchema: function(tableSlug){
+  			this.$emit("deleteSchema", tableSlug);
   		},
 
   		renderUser: function(username){
@@ -16299,7 +16297,7 @@
     /* style */
     const __vue_inject_styles__$k = undefined;
     /* scoped */
-    const __vue_scope_id__$k = "data-v-471e5e91";
+    const __vue_scope_id__$k = "data-v-23f2c399";
     /* module identifier */
     const __vue_module_identifier__$k = undefined;
     /* functional template */
@@ -16341,8 +16339,8 @@
   		renderSchemasList: function(){
   			this.$store.commit("setContentView", this.contentViews.schemasList);
   		},
-  		renderCollection: function(collectionSlug){
-  			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
+  		renderCollection: function(tableSlug){
+  			this.$store.dispatch("fetchCollection", tableSlug).then(() => {
   				this.$store.commit("setContentView", this.contentViews.collectionList);
   			}).catch((err) => {
   				this.$store.commit("setToastMessage", err.detail);
@@ -16358,9 +16356,9 @@
   		renderLogin: function(){
   			this.$store.commit("setContentView", this.contentViews.loginPage);
   		},
-  		renderModel: function(collectionSlug, uid){
+  		renderModel: function(tableSlug, uid){
   			this.$store.dispatch("fetchModel", {
-  				collectionSlug,
+  				tableSlug,
   				uid
   			}).then((model) => {
   				this.$store.commit("setContentView", this.contentViews.modelPage);
@@ -16368,19 +16366,19 @@
   				this.$store.commit("setToastMessage", err.detail);
   			});
   		},
-  		renderModelForm: function(collectionSlug, uid){
-  			this.$store.dispatch("fetchCollection", collectionSlug).then((collection) => {
+  		renderModelForm: function(tableSlug, uid){
+  			this.$store.dispatch("fetchCollection", tableSlug).then((collection) => {
   				if(!uid){
   					// If not uid is defined, render blank form
   					this.$store.commit("setCurrentModel", {
   						model: {},
-  						collectionSlug
+  						tableSlug
   					});
   					this.$store.commit("setContentView", this.contentViews.modelEdit);
   				}else{
   					// If uid is defined, fetch model then render populated form
   					this.$store.dispatch("fetchModel", {
-  						collectionSlug,
+  						tableSlug,
   						uid
   					}).then((model) => {
   						this.$store.commit("setContentView", this.contentViews.modelEdit);
@@ -16399,15 +16397,15 @@
   		/**
   		 * Model related methods. Used to manipulate individual model
   		 */
-  		submitModel: function(model, collectionSlug, uid=""){
+  		submitModel: function(model, tableSlug, uid=""){
   			this.$store.dispatch("submitModel", {
   				model,
-  				collectionSlug,
+  				tableSlug,
   				uid
   			}).then((model) => {
   				this.$store.commit("setCurrentModel", {
   					model,
-  					collectionSlug
+  					tableSlug
   				});
   				this.$store.commit("setContentView", this.contentViews.modelPage);
   				this.$store.commit("setToastMessage", "Created new model");
@@ -16415,9 +16413,9 @@
   				this.$store.commit("setToastMessage", err.detail);
   			});
   		},
-  		deleteModel: function(collectionSlug, uid){
+  		deleteModel: function(tableSlug, uid){
   			this.$store.dispatch("deleteModel", {
-  				collectionSlug,
+  				tableSlug,
   				uid
   			}).then((model) => {
   				this.$store.commit("setContentView", this.contentViews.collectionList);
@@ -16431,18 +16429,18 @@
   		 * Schema related methods. Used to render schema form and manipulate
   		 * individual schema
   		 */
-  		renderSchemaForm: function(collectionSlug=""){
-  			this.$store.commit("setCurrentCollectionSchema", collectionSlug);
+  		renderSchemaForm: function(tableSlug=""){
+  			this.$store.commit("setCurrentCollectionSchema", tableSlug);
   			this.$store.commit("setContentView", this.contentViews.schemasEdit);
   		},
   		submitSchema: function(schema){
   			this.$store.dispatch("submitSchema", schema).then((schema) => {
   				this.$store.commit("setContentView", this.contentViews.schemasList);
-  				this.$store.commit("setToastMessage", `Created schema "${schema.collectionName}".`);
+  				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
   			});
   		},
-  		deleteSchema: function(collectionSlug){
-  			this.$store.dispatch("deleteSchema", collectionSlug).then((response) => {
+  		deleteSchema: function(tableSlug){
+  			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
   				this.$store.commit("setContentView", this.contentViews.schemasList);
   				this.$store.commit("setToastMessage", response.message);
   			});
@@ -16615,7 +16613,7 @@
     /* style */
     const __vue_inject_styles__$l = undefined;
     /* scoped */
-    const __vue_scope_id__$l = "data-v-24e5cd35";
+    const __vue_scope_id__$l = "data-v-6d012a4d";
     /* module identifier */
     const __vue_module_identifier__$l = undefined;
     /* functional template */
@@ -16687,7 +16685,7 @@
   		},
   		addNewEditSchema: function(state, schema){
   			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
-  				return el.collectionSlug == schema.collectionSlug;
+  				return el.tableSlug == schema.tableSlug;
   			});
   			if(matchedSchemaIndex > -1){
   				state.schemas[matchedSchemaIndex] = schema;
@@ -16695,9 +16693,9 @@
   				state.schemas.push(schema);
   			}
   		},
-  		removeSchema: function(state, collectionSlug){
+  		removeSchema: function(state, tableSlug){
   			state.schemas = _.filter(state.schemas, function(el){
-  				return el.collectionSlug != collectionSlug;
+  				return el.tableSlug != tableSlug;
   			});
   		},
   		updateUsersList: function(state, newUsersList){
@@ -16717,20 +16715,20 @@
   		},
   		setCurrentCollection: function(state, result){
   			state.currentCollection = result.collection;
-  			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+  			this.commit("setCurrentCollectionSchema", result.tableSlug);
   		},
-  		setCurrentCollectionSchema: function(state, collectionSlug){
+  		setCurrentCollectionSchema: function(state, tableSlug){
   			const selectedSchema = _.find(state.schemas, function(el){
-  				return el.collectionSlug == collectionSlug;
+  				return el.tableSlug == tableSlug;
   			});
   			state.currentCollectionSchema = selectedSchema;
   		},
   		setCurrentModel: function(state, result){
   			state.currentModel = result.model;
-  			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+  			this.commit("setCurrentCollectionSchema", result.tableSlug);
   		},
   		removeModel: function(state, options){
-  			const collectionSlug = options.collectionSlug;
+  			const tableSlug = options.tableSlug;
   			const model = options.model;
 
   			if(!model){
@@ -16778,11 +16776,11 @@
   				}
   			});
   		},
-  		deleteSchema: function(context, collectionSlug){
-  			const request = generateRequest(`schema/${collectionSlug}`, "DELETE");
+  		deleteSchema: function(context, tableSlug){
+  			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
   			return sendRequest(request, (requestSuccess, schemas) => {
   				if(requestSuccess){
-  					context.commit("removeSchema", collectionSlug);
+  					context.commit("removeSchema", tableSlug);
   					return Promise.resolve(schemas);
   				}else{
   					return Promise.reject(schema);
@@ -16809,13 +16807,13 @@
   				context.dispatch("fetchUsersList")
   			]);
   		},
-  		fetchCollection: function(context, collectionSlug){
-  			const request = generateRequest(`collections/${collectionSlug}`);
+  		fetchCollection: function(context, tableSlug){
+  			const request = generateRequest(`collections/${tableSlug}`);
   			return sendRequest(request, (requestSuccess, collection) => {
   				if(requestSuccess){
   					context.commit("setCurrentCollection", {
   						collection,
-  						collectionSlug
+  						tableSlug
   					});
 
   					return Promise.resolve(collection);
@@ -16825,13 +16823,13 @@
   			});
   		},
   		fetchModel: function(context, options){
-  			const collectionSlug = options.collectionSlug;
+  			const tableSlug = options.tableSlug;
   			const uid = options.uid;
-  			const request = generateRequest(`collections/${collectionSlug}/${uid}`);
+  			const request = generateRequest(`collections/${tableSlug}/${uid}`);
   			return sendRequest(request, (requestSuccess, model) => {
   				if(requestSuccess){
   					context.commit("setCurrentModel", {
-  						collectionSlug,
+  						tableSlug,
   						model
   					});
 
@@ -16843,7 +16841,7 @@
   		},
   		submitModel: function(context, options){
   			const model = options.model;
-  			const collectionSlug = options.collectionSlug;
+  			const tableSlug = options.tableSlug;
   			const uid = options.uid;
 
   			// Check if there's upload field
@@ -16864,7 +16862,7 @@
   				});
 
   				// Create the request for submitting the model
-  				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+  				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
   				// Submit the model
   				return sendRequest(request, (requestSuccess, model) => {
   					if(requestSuccess){
@@ -16907,12 +16905,12 @@
   				});
   			}else{
   				// There are no upload fields
-  				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+  				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
 
   				return sendRequest(request, (requestSuccess, model) => {
   					if(requestSuccess){
   						context.commit("setCurrentModel", {
-  							collectionSlug,
+  							tableName,
   							model
   						});
   						return Promise.resolve(model);
@@ -16923,14 +16921,14 @@
   			}
   		},
   		deleteModel: function(context, options){
-  			const collectionSlug = options.collectionSlug;
+  			const tableSlug = options.tableSlug;
   			const uid = options.uid;
-  			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
+  			const request = generateRequest(`collections/${tableSlug}/${uid}`, "DELETE");
 
   			return sendRequest(request, (requestSuccess, model) => {
   				if(requestSuccess){
   					context.commit("removeModel", {
-  						collectionSlug,
+  						tableSlug,
   						model
   					});
   					return Promise.resolve(model);
@@ -17174,3 +17172,4 @@
   }
 
 }));
+//# sourceMappingURL=bundle.js.map

@@ -124,27 +124,27 @@ export default {
 			this.$emit("renderSignup");
 		},
 
-		renderModel: function(collectionSlug, uid){
-			this.$emit("renderModel", collectionSlug, uid);
+		renderModel: function(tableSlug, uid){
+			this.$emit("renderModel", tableSlug, uid);
 		},
-		renderModelForm: function(collectionSlug, uid){
-			this.$emit("renderModelForm", collectionSlug, uid);
+		renderModelForm: function(tableSlug, uid){
+			this.$emit("renderModelForm", tableSlug, uid);
 		},
-		submitModel: function(model, collectionSlug, uid=""){
-			this.$emit("submitModel", model, collectionSlug, uid);
+		submitModel: function(model, tableSlug, uid=""){
+			this.$emit("submitModel", model, tableSlug, uid);
 		},
-		deleteModel: function(collectionSlug, uid){
-			this.$emit("deleteModel", collectionSlug, uid);
+		deleteModel: function(tableSlug, uid){
+			this.$emit("deleteModel", tableSlug, uid);
 		},
 
-		renderSchemaForm: function(collectionSlug){
-			this.$emit("renderSchemaForm", collectionSlug);
+		renderSchemaForm: function(tableSlug){
+			this.$emit("renderSchemaForm", tableSlug);
 		},
 		submitSchema: function(schema){
 			this.$emit("submitSchema", schema);
 		},
-		deleteSchema: function(collectionSlug){
-			this.$emit("deleteSchema", collectionSlug);
+		deleteSchema: function(tableSlug){
+			this.$emit("deleteSchema", tableSlug);
 		},
 
 		renderUser: function(username){

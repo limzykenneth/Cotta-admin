@@ -10,7 +10,7 @@
 				<a class="list-items"
 					v-for="(model, index) in currentViewUser.models" :key="index"
 					:href="userModelLinks[index].link"
-					v-on:click.prevent="renderModel(userModelLinks[index].collectionSlug, userModelLinks[index].modelID)"
+					v-on:click.prevent="renderModel(userModelLinks[index].tableSlug, userModelLinks[index].modelID)"
 				>
 					<li >
 						{{ model }}
@@ -35,11 +35,11 @@ export default{
 			let models = [];
 			_.each(this.currentViewUser.models, (model, i) => {
 				let modelPaths = model.split(".");
-				let collectionSlug = modelPaths[0];
+				let tableSlug = modelPaths[0];
 				let modelID = modelPaths[1];
-				let link = `collections/${collectionSlug}/${modelID}`;
+				let link = `collections/${tableSlug}/${modelID}`;
 				models.push({
-					collectionSlug,
+					tableSlug,
 					modelID,
 					link
 				});
@@ -49,8 +49,8 @@ export default{
 		}
 	},
 	methods: {
-		renderModel: function(collectionSlug, uid){
-			this.$emit("renderModel", collectionSlug, uid);
+		renderModel: function(tableSlug, uid){
+			this.$emit("renderModel", tableSlug, uid);
 		}
 	}
 };

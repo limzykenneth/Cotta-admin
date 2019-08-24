@@ -54,7 +54,7 @@ export default{
 	methods: {
 		submitModel: function(e){
 			const result = this.$_formToJSON(e.target);
-			const slug = this.currentCollectionSchema.collectionSlug;
+			const slug = this.currentCollectionSchema.tableSlug;
 			const uid = this.currentModel._uid || "";
 
 			if(this.validateModel(result)){

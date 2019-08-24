@@ -31,7 +31,8 @@ function build(){
 	}).then((bundle) => {
 		return bundle.write({
 			format: "umd",
-			file: "dist/javascripts/bundle.js"
+			file: "dist/javascripts/bundle.js",
+			sourcemap: true
 		});
 	});
 }

@@ -17,11 +17,11 @@
 		</ul>
 		<ul class="lists schema-list">
 			<h4 class="list-section-title">Collections</h4>
-			<a v-for="schema in schemas" :key="schema.collectionSlug"
-				v-bind:href="schema.collectionSlug"
-				v-on:click.prevent="renderCollection(schema.collectionSlug)"
+			<a v-for="schema in schemas" :key="schema.tableSlug"
+				v-bind:href="schema.tableSlug"
+				v-on:click.prevent="renderCollection(schema.tableSlug)"
 			>
-				<li><i class="fa fa-file" aria-hidden="true"></i>{{ schema.collectionName }}</li>
+				<li><i class="fa fa-file" aria-hidden="true"></i>{{ schema.tableName }}</li>
 			</a>
 		</ul>
 	</section>
@@ -49,8 +49,8 @@ export default {
 		renderSchemasList: function(e){
 			this.$emit("renderSchemasList");
 		},
-		renderCollection: function(collectionSlug){
-			this.$emit("renderCollection", collectionSlug);
+		renderCollection: function(tableSlug){
+			this.$emit("renderCollection", tableSlug);
 		},
 		renderUsersList: function(){
 			this.$emit("renderUsersList");

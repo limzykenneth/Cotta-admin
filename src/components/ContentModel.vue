@@ -1,6 +1,6 @@
 <template>
 	<article id="model-container">
-		<h1>{{currentCollectionSchema.collectionName}} - {{ currentModel._uid }}</h1>
+		<h1>{{currentCollectionSchema.tableName}} - {{ currentModel._uid }}</h1>
 
 		<button
 			v-on:click.prevent="renderModelForm">
@@ -47,13 +47,13 @@ export default {
 	methods: {
 		renderModelForm: function(){
 			this.$emit("renderModelForm",
-				this.currentCollectionSchema.collectionSlug,
+				this.currentCollectionSchema.tableSlug,
 				this.currentModel._uid
 			);
 		},
 		deleteModel: function(){
 			this.$emit("deleteModel",
-				this.currentCollectionSchema.collectionSlug,
+				this.currentCollectionSchema.tableSlug,
 				this.currentModel._uid
 			);
 		}

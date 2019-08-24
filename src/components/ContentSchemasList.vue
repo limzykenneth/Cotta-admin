@@ -3,7 +3,7 @@
 		<h1>Schemas</h1>
 		<button id="new-button" v-on:click.prevent="renderSchemaForm">New</button>
 		<schemas-list-item
-			v-for="schema in schemas" :key="schema.collectionSlug"
+			v-for="schema in schemas" :key="schema.tableSlug"
 			:schema="schema"
 
 			v-on:renderSchemaForm="renderSchemaForm"
@@ -27,11 +27,11 @@ export default {
 		}
 	},
 	methods: {
-		renderSchemaForm: function(collectionSlug){
-			this.$emit("renderSchemaForm", collectionSlug);
+		renderSchemaForm: function(tableSlug){
+			this.$emit("renderSchemaForm", tableSlug);
 		},
-		deleteSchema: function(collectionSlug){
-			this.$emit("deleteSchema", collectionSlug);
+		deleteSchema: function(tableSlug){
+			this.$emit("deleteSchema", tableSlug);
 		}
 	}
 };

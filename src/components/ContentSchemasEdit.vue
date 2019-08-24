@@ -2,10 +2,10 @@
 	<article id="schema-edit-container">
 		<form id="form" v-on:submit.prevent="submitSchema">
 			<div id="collection-name">
-				<label for="collectionName">Collection Name: </label>
-				<input type="text" name="collectionName" required
+				<label for="tableName">Collection Name: </label>
+				<input type="text" name="tableName" required
 					:disabled="editName"
-					v-model="collectionName"
+					v-model="tableName"
 				>
 			</div>
 
@@ -55,11 +55,11 @@ export default{
 	},
 	data: function(){
 		let fields = [];
-		let collectionName = "";
+		let tableName = "";
 
 		if(this.currentCollectionSchema){
 			fields = this.currentCollectionSchema.fields.slice(0);
-			collectionName = this.currentCollectionSchema.collectionName;
+			tableName = this.currentCollectionSchema.tableName;
 		}else{
 			fields = [{
 				properties: {},
@@ -70,13 +70,13 @@ export default{
 		}
 
 		return {
-			collectionName,
+			tableName,
 			fields
 		};
 	},
 	computed: {
-		collectionSlug: function(){
-			return snakeCase(this.collectionName);
+		tableSlug: function(){
+			return snakeCase(this.tableName);
 		},
 		editName: function(){
 			if(this.currentCollectionSchema){
@@ -93,15 +93,15 @@ export default{
 		},
 		submitSchema: function(){
 			const schema = {
-				collectionName: this.collectionName,
-				collectionSlug: this.collectionSlug,
+				tableSlug: this.tableSlug,
+				tableName: this.tableName,
 				fields: this.fields
 			};
 
 			this.$emit("submitSchema", schema);
 		},
-		validateInput: function(collectionName, fields){
-			if(!collectionName){
+		validateInput: function(tableName, fields){
+			if(!tableName){
 				return false;
 			}
 		},

@@ -56,7 +56,7 @@ const appStore = new Vuex.Store({
 		},
 		addNewEditSchema: function(state, schema){
 			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
-				return el.collectionSlug == schema.collectionSlug;
+				return el.tableSlug == schema.tableSlug;
 			});
 			if(matchedSchemaIndex > -1){
 				state.schemas[matchedSchemaIndex] = schema;
@@ -64,9 +64,9 @@ const appStore = new Vuex.Store({
 				state.schemas.push(schema);
 			}
 		},
-		removeSchema: function(state, collectionSlug){
+		removeSchema: function(state, tableSlug){
 			state.schemas = _.filter(state.schemas, function(el){
-				return el.collectionSlug != collectionSlug;
+				return el.tableSlug != tableSlug;
 			});
 		},
 		updateUsersList: function(state, newUsersList){
@@ -86,20 +86,20 @@ const appStore = new Vuex.Store({
 		},
 		setCurrentCollection: function(state, result){
 			state.currentCollection = result.collection;
-			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+			this.commit("setCurrentCollectionSchema", result.tableSlug);
 		},
-		setCurrentCollectionSchema: function(state, collectionSlug){
+		setCurrentCollectionSchema: function(state, tableSlug){
 			const selectedSchema = _.find(state.schemas, function(el){
-				return el.collectionSlug == collectionSlug;
+				return el.tableSlug == tableSlug;
 			});
 			state.currentCollectionSchema = selectedSchema;
 		},
 		setCurrentModel: function(state, result){
 			state.currentModel = result.model;
-			this.commit("setCurrentCollectionSchema", result.collectionSlug);
+			this.commit("setCurrentCollectionSchema", result.tableSlug);
 		},
 		removeModel: function(state, options){
-			const collectionSlug = options.collectionSlug;
+			const tableSlug = options.tableSlug;
 			const model = options.model;
 
 			if(!model){
@@ -147,11 +147,11 @@ const appStore = new Vuex.Store({
 				}
 			});
 		},
-		deleteSchema: function(context, collectionSlug){
-			const request = generateRequest(`schema/${collectionSlug}`, "DELETE");
+		deleteSchema: function(context, tableSlug){
+			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
 			return sendRequest(request, (requestSuccess, schemas) => {
 				if(requestSuccess){
-					context.commit("removeSchema", collectionSlug);
+					context.commit("removeSchema", tableSlug);
 					return Promise.resolve(schemas);
 				}else{
 					return Promise.reject(schema);
@@ -178,13 +178,13 @@ const appStore = new Vuex.Store({
 				context.dispatch("fetchUsersList")
 			]);
 		},
-		fetchCollection: function(context, collectionSlug){
-			const request = generateRequest(`collections/${collectionSlug}`);
+		fetchCollection: function(context, tableSlug){
+			const request = generateRequest(`collections/${tableSlug}`);
 			return sendRequest(request, (requestSuccess, collection) => {
 				if(requestSuccess){
 					context.commit("setCurrentCollection", {
 						collection,
-						collectionSlug
+						tableSlug
 					});
 
 					return Promise.resolve(collection);
@@ -194,13 +194,13 @@ const appStore = new Vuex.Store({
 			});
 		},
 		fetchModel: function(context, options){
-			const collectionSlug = options.collectionSlug;
+			const tableSlug = options.tableSlug;
 			const uid = options.uid;
-			const request = generateRequest(`collections/${collectionSlug}/${uid}`);
+			const request = generateRequest(`collections/${tableSlug}/${uid}`);
 			return sendRequest(request, (requestSuccess, model) => {
 				if(requestSuccess){
 					context.commit("setCurrentModel", {
-						collectionSlug,
+						tableSlug,
 						model
 					});
 
@@ -212,7 +212,7 @@ const appStore = new Vuex.Store({
 		},
 		submitModel: function(context, options){
 			const model = options.model;
-			const collectionSlug = options.collectionSlug;
+			const tableSlug = options.tableSlug;
 			const uid = options.uid;
 
 			// Check if there's upload field
@@ -233,7 +233,7 @@ const appStore = new Vuex.Store({
 				});
 
 				// Create the request for submitting the model
-				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
 				// Submit the model
 				return sendRequest(request, (requestSuccess, model) => {
 					if(requestSuccess){
@@ -276,12 +276,12 @@ const appStore = new Vuex.Store({
 				});
 			}else{
 				// There are no upload fields
-				const request = generateRequest(`collections/${collectionSlug}/${uid}`, "POST", model);
+				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
 
 				return sendRequest(request, (requestSuccess, model) => {
 					if(requestSuccess){
 						context.commit("setCurrentModel", {
-							collectionSlug,
+							tableName,
 							model
 						});
 						return Promise.resolve(model);
@@ -292,14 +292,14 @@ const appStore = new Vuex.Store({
 			}
 		},
 		deleteModel: function(context, options){
-			const collectionSlug = options.collectionSlug;
+			const tableSlug = options.tableSlug;
 			const uid = options.uid;
-			const request = generateRequest(`collections/${collectionSlug}/${uid}`, "DELETE");
+			const request = generateRequest(`collections/${tableSlug}/${uid}`, "DELETE");
 
 			return sendRequest(request, (requestSuccess, model) => {
 				if(requestSuccess){
 					context.commit("removeModel", {
-						collectionSlug,
+						tableSlug,
 						model
 					});
 					return Promise.resolve(model);

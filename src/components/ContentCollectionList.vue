@@ -1,13 +1,13 @@
 <template>
 	<article id="collection-container">
-		<h1>{{ currentCollectionSchema.collectionName }}</h1>
+		<h1>{{ currentCollectionSchema.tableName }}</h1>
 
-		<button id="new-button" v-on:click.prevent="renderModelForm(currentCollectionSchema.collectionSlug)">New</button>
+		<button id="new-button" v-on:click.prevent="renderModelForm(currentCollectionSchema.tableSlug)">New</button>
 
 		<ul id="collection-list">
 			<a class="list-items"
-				:href="'collections/' + currentCollectionSchema.collectionSlug + '/' + model._uid"
-				v-on:click.prevent="renderModel(currentCollectionSchema.collectionSlug, model._uid)"
+				:href="'collections/' + currentCollectionSchema.tableSlug + '/' + model._uid"
+				v-on:click.prevent="renderModel(currentCollectionSchema.tableSlug, model._uid)"
 				v-for="model in currentCollection" :key="model._uid"
 			>
 				<li>
@@ -32,11 +32,11 @@ export default {
 		}
 	},
 	methods: {
-		renderModel: function(collectionSlug, uid){
-			this.$emit("renderModel", collectionSlug, uid);
+		renderModel: function(tableSlug, uid){
+			this.$emit("renderModel", tableSlug, uid);
 		},
-		renderModelForm: function(collectionSlug){
-			this.$emit("renderModelForm", collectionSlug);
+		renderModelForm: function(tableSlug){
+			this.$emit("renderModelForm", tableSlug);
 		}
 	}
 };

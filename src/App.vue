@@ -82,8 +82,8 @@ export default {
 		renderSchemasList: function(){
 			this.$store.commit("setContentView", this.contentViews.schemasList);
 		},
-		renderCollection: function(collectionSlug){
-			this.$store.dispatch("fetchCollection", collectionSlug).then(() => {
+		renderCollection: function(tableSlug){
+			this.$store.dispatch("fetchCollection", tableSlug).then(() => {
 				this.$store.commit("setContentView", this.contentViews.collectionList);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
@@ -99,9 +99,9 @@ export default {
 		renderLogin: function(){
 			this.$store.commit("setContentView", this.contentViews.loginPage);
 		},
-		renderModel: function(collectionSlug, uid){
+		renderModel: function(tableSlug, uid){
 			this.$store.dispatch("fetchModel", {
-				collectionSlug,
+				tableSlug,
 				uid
 			}).then((model) => {
 				this.$store.commit("setContentView", this.contentViews.modelPage);
@@ -109,19 +109,19 @@ export default {
 				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
-		renderModelForm: function(collectionSlug, uid){
-			this.$store.dispatch("fetchCollection", collectionSlug).then((collection) => {
+		renderModelForm: function(tableSlug, uid){
+			this.$store.dispatch("fetchCollection", tableSlug).then((collection) => {
 				if(!uid){
 					// If not uid is defined, render blank form
 					this.$store.commit("setCurrentModel", {
 						model: {},
-						collectionSlug
+						tableSlug
 					});
 					this.$store.commit("setContentView", this.contentViews.modelEdit);
 				}else{
 					// If uid is defined, fetch model then render populated form
 					this.$store.dispatch("fetchModel", {
-						collectionSlug,
+						tableSlug,
 						uid
 					}).then((model) => {
 						this.$store.commit("setContentView", this.contentViews.modelEdit);
@@ -140,15 +140,15 @@ export default {
 		/**
 		 * Model related methods. Used to manipulate individual model
 		 */
-		submitModel: function(model, collectionSlug, uid=""){
+		submitModel: function(model, tableSlug, uid=""){
 			this.$store.dispatch("submitModel", {
 				model,
-				collectionSlug,
+				tableSlug,
 				uid
 			}).then((model) => {
 				this.$store.commit("setCurrentModel", {
 					model,
-					collectionSlug
+					tableSlug
 				});
 				this.$store.commit("setContentView", this.contentViews.modelPage);
 				this.$store.commit("setToastMessage", "Created new model");
@@ -156,9 +156,9 @@ export default {
 				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
-		deleteModel: function(collectionSlug, uid){
+		deleteModel: function(tableSlug, uid){
 			this.$store.dispatch("deleteModel", {
-				collectionSlug,
+				tableSlug,
 				uid
 			}).then((model) => {
 				this.$store.commit("setContentView", this.contentViews.collectionList);
@@ -172,18 +172,18 @@ export default {
 		 * Schema related methods. Used to render schema form and manipulate
 		 * individual schema
 		 */
-		renderSchemaForm: function(collectionSlug=""){
-			this.$store.commit("setCurrentCollectionSchema", collectionSlug);
+		renderSchemaForm: function(tableSlug=""){
+			this.$store.commit("setCurrentCollectionSchema", tableSlug);
 			this.$store.commit("setContentView", this.contentViews.schemasEdit);
 		},
 		submitSchema: function(schema){
 			this.$store.dispatch("submitSchema", schema).then((schema) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
-				this.$store.commit("setToastMessage", `Created schema "${schema.collectionName}".`);
+				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
 			});
 		},
-		deleteSchema: function(collectionSlug){
-			this.$store.dispatch("deleteSchema", collectionSlug).then((response) => {
+		deleteSchema: function(tableSlug){
+			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
 				this.$store.commit("setToastMessage", response.message);
 			});
