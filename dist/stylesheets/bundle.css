@@ -179,9 +179,6 @@ input[type="submit"].delete-button:hover {
 #signup-container #message[data-v-fac4a3a6] {
   color: #f00;
 }
-#schema-list-container #new-button[data-v-35ce507c] {
-  margin-bottom: 0.5rem;
-}
 #collection-container #new-button[data-v-ef6371c8] {
   margin-bottom: 0.5rem;
 }
@@ -197,6 +194,9 @@ input[type="submit"].delete-button:hover {
 }
 #collection-container #collection-list .list-items:first-child li[data-v-ef6371c8] {
   border-top: 1px solid black;
+}
+#schema-list-container #new-button[data-v-35ce507c] {
+  margin-bottom: 0.5rem;
 }
 #schema-edit-container #form #collection-name[data-v-207eb64c] {
   margin-bottom: 1rem;
@@ -273,18 +273,18 @@ input[type="submit"].delete-button:hover {
 #user-container #user-models-list .list-items:first-child li[data-v-8db3b5b6] {
   border-top: 1px solid black;
 }
-#model-container[data-v-353a3ef8] {
+#model-container[data-v-e815128a] {
   max-width: calc(100vw - 220px);
 }
-#model-container #model-list[data-v-353a3ef8] {
+#model-container #model-list[data-v-e815128a] {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#model-container #model-list li[data-v-353a3ef8] {
+#model-container #model-list li[data-v-e815128a] {
   margin-bottom: 1rem;
 }
-#model-container #model-list li .field ul[data-v-353a3ef8] {
+#model-container #model-list li .field ul[data-v-e815128a] {
   padding-left: 20px;
 }
 #account-container #change-password-form .form-items[data-v-4ddbdea3] {
@@ -347,7 +347,7 @@ input[type="submit"].delete-button:hover {
 .user-container button[data-v-7b0c4811] {
   margin-left: 0.5rem;
 }
-#form .field-container[data-v-7e48c35c] {
+#form .field-container[data-v-258e7cc6] {
   margin-bottom: 1rem;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -358,7 +358,7 @@ input[type="submit"].delete-button:hover {
           flex-direction: row;
   min-height: 1.5rem;
 }
-#form .field-container .field-name[data-v-7e48c35c] {
+#form .field-container .field-name[data-v-258e7cc6] {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -371,11 +371,11 @@ input[type="submit"].delete-button:hover {
           flex-direction: column;
   min-width: 170px;
 }
-#form .field-container .field[data-v-7e48c35c] {
+#form .field-container .field[data-v-258e7cc6] {
   display: inline-block;
   width: 500px;
 }
-#form .field-container .field .v-for-container[data-v-7e48c35c] {
+#form .field-container .field .v-for-container[data-v-258e7cc6] {
   display: block;
   margin: 0.5rem 0;
 }

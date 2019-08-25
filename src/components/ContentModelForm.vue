@@ -1,32 +1,32 @@
 <template>
 	<form id="form" v-on:submit.prevent="submitModel">
 		<div class="field-container"
-			v-for="field in currentCollectionSchema.fields" :key="field.slug"
+			v-for="(field, key, index) in currentCollectionSchema.definition" :key="key"
 		>
-			<label class="field-name" :for="field.slug">
-				{{ field.name }}
+			<label class="field-name" :for="key">
+				{{ field.app_title }}
 			</label>
 
-			<span class="field" v-if="field.type == 'checkbox' || field.type == 'radio'">
+			<span class="field" v-if="field.app_type == 'checkbox' || field.app_type == 'radio'">
 				<span class="v-for-container"
-					v-for="(choice, key) in field.properties.choices"
+					v-for="(choice, label) in field.app_values" :key="label"
 				>
 					<input
-						:type="field.type"
-						:name="field.slug"
+						:type="field.app_type"
+						:name="key"
 						:value="choice"
 						:id="choice"
-						:checked="checkboxChecked(choice, field.slug)"
+						:checked="checkboxChecked(choice, key)"
 					>
-					<label :for="choice">{{ key }}</label>
+					<label :for="choice">{{ label }}</label>
 				</span>
 			</span>
 
 			<span class="field" v-else>
 				<input required
-					:type="field.type"
-					:name="field.slug"
-					:value="currentModel[field.slug]"
+					:type="field.app_type"
+					:name="key"
+					:value="currentModel[key]"
 				>
 			</span>
 
@@ -52,6 +52,7 @@ export default{
 		}
 	},
 	methods: {
+		// NOTE: untested
 		submitModel: function(e){
 			const result = this.$_formToJSON(e.target);
 			const slug = this.currentCollectionSchema.tableSlug;

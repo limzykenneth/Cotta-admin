@@ -33185,36 +33185,40 @@
       _c(
         "ul",
         { attrs: { id: "model-list" } },
-        _vm._l(_vm.currentCollectionSchema.fields, function(field) {
-          return _c("li", { key: field.slug }, [
-            _c("h4", [_vm._v(_vm._s(field.name))]),
+        _vm._l(_vm.currentCollectionSchema.definition, function(
+          field,
+          key,
+          index
+        ) {
+          return _c("li", { key: key }, [
+            _c("h4", [_vm._v(_vm._s(field.app_title))]),
             _vm._v(" "),
-            field.type == "wysiwyg"
+            field.app_type == "wysiwyg"
               ? _c("div", {
                   staticClass: "field",
-                  domProps: { innerHTML: _vm._s(_vm.currentModel[field.slug]) }
+                  domProps: { innerHTML: _vm._s(_vm.currentModel[key]) }
                 })
-              : field.type == "text"
+              : field.app_type == "text"
               ? _c("div", { staticClass: "field" }, [
-                  _vm._v(_vm._s(_vm.currentModel[field.slug]))
+                  _vm._v(_vm._s(_vm.currentModel[key]))
                 ])
-              : field.type == "email"
+              : field.app_type == "email"
               ? _c("div", { staticClass: "field" }, [
-                  _vm._v(_vm._s(_vm.currentModel[field.slug]))
+                  _vm._v(_vm._s(_vm.currentModel[key]))
                 ])
-              : field.type == "checkbox"
+              : field.app_type == "checkbox"
               ? _c("div", { staticClass: "field" }, [
                   _c(
                     "ul",
-                    _vm._l(_vm.currentModel[field.slug], function(option) {
+                    _vm._l(_vm.currentModel[key], function(option) {
                       return _c("li", [_vm._v(_vm._s(option))])
                     }),
                     0
                   )
                 ])
-              : field.type == "radio"
+              : field.app_type == "radio"
               ? _c("div", { staticClass: "field" }, [
-                  _vm._v(_vm._s(_vm.currentModel[field.slug]))
+                  _vm._v(_vm._s(_vm.currentModel[key]))
                 ])
               : _vm._e()
           ])
@@ -33229,7 +33233,7 @@
     /* style */
     const __vue_inject_styles__$g = undefined;
     /* scoped */
-    const __vue_scope_id__$g = "data-v-353a3ef8";
+    const __vue_scope_id__$g = "data-v-e815128a";
     /* module identifier */
     const __vue_module_identifier__$g = undefined;
     /* functional template */
@@ -33305,6 +33309,7 @@
   		}
   	},
   	methods: {
+  		// NOTE: untested
   		submitModel: function(e){
   			const result = this.$_formToJSON(e.target);
   			const slug = this.currentCollectionSchema.tableSlug;
@@ -33393,39 +33398,45 @@
         }
       },
       [
-        _vm._l(_vm.currentCollectionSchema.fields, function(field) {
-          return _c("div", { key: field.slug, staticClass: "field-container" }, [
-            _c(
-              "label",
-              { staticClass: "field-name", attrs: { for: field.slug } },
-              [_vm._v("\n\t\t\t" + _vm._s(field.name) + "\n\t\t")]
-            ),
+        _vm._l(_vm.currentCollectionSchema.definition, function(
+          field,
+          key,
+          index
+        ) {
+          return _c("div", { key: key, staticClass: "field-container" }, [
+            _c("label", { staticClass: "field-name", attrs: { for: key } }, [
+              _vm._v("\n\t\t\t" + _vm._s(field.app_title) + "\n\t\t")
+            ]),
             _vm._v(" "),
-            field.type == "checkbox" || field.type == "radio"
+            field.app_type == "checkbox" || field.app_type == "radio"
               ? _c(
                   "span",
                   { staticClass: "field" },
-                  _vm._l(field.properties.choices, function(choice, key) {
-                    return _c("span", { staticClass: "v-for-container" }, [
-                      _c("input", {
-                        attrs: { type: field.type, name: field.slug, id: choice },
-                        domProps: {
-                          value: choice,
-                          checked: _vm.checkboxChecked(choice, field.slug)
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: choice } }, [
-                        _vm._v(_vm._s(key))
-                      ])
-                    ])
+                  _vm._l(field.app_values, function(choice, label) {
+                    return _c(
+                      "span",
+                      { key: label, staticClass: "v-for-container" },
+                      [
+                        _c("input", {
+                          attrs: { type: field.app_type, name: key, id: choice },
+                          domProps: {
+                            value: choice,
+                            checked: _vm.checkboxChecked(choice, key)
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: choice } }, [
+                          _vm._v(_vm._s(label))
+                        ])
+                      ]
+                    )
                   }),
                   0
                 )
               : _c("span", { staticClass: "field" }, [
                   _c("input", {
-                    attrs: { required: "", type: field.type, name: field.slug },
-                    domProps: { value: _vm.currentModel[field.slug] }
+                    attrs: { required: "", type: field.app_type, name: key },
+                    domProps: { value: _vm.currentModel[key] }
                   })
                 ])
           ])
@@ -33444,7 +33455,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-7e48c35c";
+    const __vue_scope_id__$h = "data-v-258e7cc6";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */

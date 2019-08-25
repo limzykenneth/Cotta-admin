@@ -14,18 +14,18 @@
 		</button>
 
 		<ul id="model-list">
-			<li v-for="field in currentCollectionSchema.fields" :key="field.slug">
-				<h4>{{ field.name }}</h4>
+			<li v-for="(field, key, index) in currentCollectionSchema.definition" :key="key">
+				<h4>{{ field.app_title }}</h4>
 
-				<div class="field" v-if="field.type == 'wysiwyg'" v-html="currentModel[field.slug]"></div>
-				<div class="field" v-else-if="field.type == 'text'">{{ currentModel[field.slug] }}</div>
-				<div class="field" v-else-if="field.type == 'email'">{{ currentModel[field.slug] }}</div>
-				<div class="field" v-else-if="field.type == 'checkbox'">
+				<div class="field" v-if="field.app_type == 'wysiwyg'" v-html="currentModel[key]"></div>
+				<div class="field" v-else-if="field.app_type == 'text'">{{ currentModel[key] }}</div>
+				<div class="field" v-else-if="field.app_type == 'email'">{{ currentModel[key] }}</div>
+				<div class="field" v-else-if="field.app_type == 'checkbox'">
 					<ul>
-						<li v-for="option in currentModel[field.slug]">{{ option }}</li>
+						<li v-for="option in currentModel[key]">{{ option }}</li>
 					</ul>
 				</div>
-				<div class="field" v-else-if="field.type == 'radio'">{{ currentModel[field.slug] }}</div>
+				<div class="field" v-else-if="field.app_type == 'radio'">{{ currentModel[key] }}</div>
 			</li>
 		</ul>
 	</article>
