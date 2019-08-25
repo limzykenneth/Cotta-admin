@@ -12003,6 +12003,251 @@
   	return module = { exports: {} }, fn(module, module.exports), module.exports;
   }
 
+  var urlJoin = createCommonjsModule(function (module) {
+  (function (name, context, definition) {
+    if ( module.exports) module.exports = definition();
+    else context[name] = definition();
+  })('urljoin', commonjsGlobal, function () {
+
+    function normalize (strArray, options) {
+      var resultArray = [];
+      
+      // If the first part is a plain protocol, we combine it with the next part.
+      if (strArray[0].match(/^[^/:]+:\/*$/) && strArray.length > 1) {
+        var first = strArray.shift();
+        strArray[0] = first + strArray[0];
+      }
+
+      // There must be two or three slashes in the file protocol, two slashes in anything else.
+      if (strArray[0].match(/^file:\/\/\//)) {
+        strArray[0] = strArray[0].replace(/^([^/:]+):\/*/, '$1:///');
+      } else {
+        strArray[0] = strArray[0].replace(/^([^/:]+):\/*/, '$1://');
+      }
+      
+      for (var i = 0; i < strArray.length; i++) {
+        
+        var component = strArray[i];
+
+        if (typeof component !== 'string') {
+          component = component && component.toString() || '';
+        }
+
+        if (i > 0) {
+          // Removing the starting slashes for each component but the first.
+          component = component.replace(/^[\/]+/, '');
+        }
+        if (i < strArray.length - 1) {
+          // Removing the ending slashes for each component but the last.
+          component = component.replace(/[\/]+$/, '');
+        } else {
+          // For the last component we will combine multiple slashes to a single one.
+          component = component.replace(/[\/]+$/, '/');
+        }
+        
+        resultArray.push(component);
+        
+      }
+
+      var str = resultArray.join('/');
+      // Each input component is now separated by a single slash except the possible first plain protocol part.
+
+      // remove trailing slash before parameters or hash
+      str = str.replace(/\/(\?|&|#[^!])/g, '$1');
+
+      // replace ? in parameters with &
+      var parts = str.split('?');
+      str = parts.shift() + (parts.length > 0 ? '?': '') + parts.join('&');
+
+      return str;
+    }
+
+    return function () {
+      var input = arguments;
+
+      if (typeof arguments[0] === 'object') {
+        // new syntax with array and options
+        input = arguments[0];
+      }
+      
+      return normalize([].slice.call(input));
+    };
+
+  });
+  });
+
+  /**
+   * The code was extracted from:
+   * https://github.com/davidchambers/Base64.js
+   */
+
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+  function InvalidCharacterError(message) {
+    this.message = message;
+  }
+
+  InvalidCharacterError.prototype = new Error();
+  InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+  function polyfill (input) {
+    var str = String(input).replace(/=+$/, '');
+    if (str.length % 4 == 1) {
+      throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+    }
+    for (
+      // initialize result and counters
+      var bc = 0, bs, buffer, idx = 0, output = '';
+      // get next character
+      buffer = str.charAt(idx++);
+      // character found in table? initialize bit storage and add its ascii value;
+      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+        // and if not first of each 4 characters,
+        // convert the first 8 bits to one ascii character
+        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+    ) {
+      // try to find character in table (0-63, not found => -1)
+      buffer = chars.indexOf(buffer);
+    }
+    return output;
+  }
+
+
+  var atob = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;
+
+  function b64DecodeUnicode(str) {
+    return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+      var code = p.charCodeAt(0).toString(16).toUpperCase();
+      if (code.length < 2) {
+        code = '0' + code;
+      }
+      return '%' + code;
+    }));
+  }
+
+  var base64_url_decode = function(str) {
+    var output = str.replace(/-/g, "+").replace(/_/g, "/");
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += "==";
+        break;
+      case 3:
+        output += "=";
+        break;
+      default:
+        throw "Illegal base64url string!";
+    }
+
+    try{
+      return b64DecodeUnicode(output);
+    } catch (err) {
+      return atob(output);
+    }
+  };
+
+  function InvalidTokenError(message) {
+    this.message = message;
+  }
+
+  InvalidTokenError.prototype = new Error();
+  InvalidTokenError.prototype.name = 'InvalidTokenError';
+
+  var lib = function (token,options) {
+    if (typeof token !== 'string') {
+      throw new InvalidTokenError('Invalid token specified');
+    }
+
+    options = options || {};
+    var pos = options.header === true ? 0 : 1;
+    try {
+      return JSON.parse(base64_url_decode(token.split('.')[pos]));
+    } catch (e) {
+      throw new InvalidTokenError('Invalid token specified: ' + e.message);
+    }
+  };
+
+  var InvalidTokenError_1 = InvalidTokenError;
+  lib.InvalidTokenError = InvalidTokenError_1;
+
+  //---------------------------------------------//
+  //               App constants                 //
+  //---------------------------------------------//
+  const siteTitle = "Char Admin";
+  const url = "http://localhost:3000/api";
+
+  //---------------------------------------------//
+  //                  Utils                      //
+  //---------------------------------------------//
+  /**
+   * Generate `request` object to be passed to `fetch` that is populated with all
+   * the necessary headers. Also automatically stringify payload body.
+   */
+  function generateRequest(path, method="GET", payload=null, contentType="application/json"){
+  	const finalURL = urlJoin(url, path);
+  	const token = store.get("access_token");
+
+  	const header = {};
+  	header["Content-Type"] = contentType;
+  	if(path !== "token/generate_new_token"){
+  		header["Authorization"] = `Bearer ${token}`;
+  	}
+
+  	let body;
+  	if(payload !== null){
+  		if(contentType === "application/json"){
+  			body = JSON.stringify(payload);
+  		}else{
+  			body = payload;
+  		}
+  	}
+
+  	const request = new Request(finalURL, {
+  		method: method,
+  		body: body,
+  		headers: new Headers(header)
+  	});
+
+  	return request;
+  }
+
+  /**
+   * Returns true if access_token exist and has not expired
+   */
+  function appTokenValid(){
+  	const token = store.get("access_token");
+  	if(token){
+  		const tokenContent = lib(token);
+  		if(tokenContent.exp > Math.floor(Date.now()/1000)){
+  			return true;
+  		}
+  	}
+
+  	return false;
+  }
+
+  /**
+   * Utility function to send fetch request and deal with errors.
+   * `responseHandler` callback should return promise resolution
+   */
+  function sendRequest(request, responseHandler){
+  	let requestSuccess;
+  	return fetch(request).then((res) => {
+  		if(res.status >= 200 && res.status < 300){
+  			requestSuccess = true;
+  		}else if(res.status >= 400){
+  			requestSuccess = false;
+  		}else{
+  			// PANIC
+  			throw new Error(request);
+  		}
+  		return res.json();
+  	}).then((response) => {
+  		return responseHandler(requestSuccess, response);
+  	});
+  }
+
   var vuex = createCommonjsModule(function (module, exports) {
   /**
    * vuex v3.0.1
@@ -12941,173 +13186,379 @@
   })));
   });
 
-  var urlJoin = createCommonjsModule(function (module) {
-  (function (name, context, definition) {
-    if ( module.exports) module.exports = definition();
-    else context[name] = definition();
-  })('urljoin', commonjsGlobal, function () {
-
-    function normalize (strArray, options) {
-      var resultArray = [];
-      
-      // If the first part is a plain protocol, we combine it with the next part.
-      if (strArray[0].match(/^[^/:]+:\/*$/) && strArray.length > 1) {
-        var first = strArray.shift();
-        strArray[0] = first + strArray[0];
-      }
-
-      // There must be two or three slashes in the file protocol, two slashes in anything else.
-      if (strArray[0].match(/^file:\/\/\//)) {
-        strArray[0] = strArray[0].replace(/^([^/:]+):\/*/, '$1:///');
-      } else {
-        strArray[0] = strArray[0].replace(/^([^/:]+):\/*/, '$1://');
-      }
-      
-      for (var i = 0; i < strArray.length; i++) {
-        
-        var component = strArray[i];
-
-        if (typeof component !== 'string') {
-          component = component && component.toString() || '';
-        }
-
-        if (i > 0) {
-          // Removing the starting slashes for each component but the first.
-          component = component.replace(/^[\/]+/, '');
-        }
-        if (i < strArray.length - 1) {
-          // Removing the ending slashes for each component but the last.
-          component = component.replace(/[\/]+$/, '');
-        } else {
-          // For the last component we will combine multiple slashes to a single one.
-          component = component.replace(/[\/]+$/, '/');
-        }
-        
-        resultArray.push(component);
-        
-      }
-
-      var str = resultArray.join('/');
-      // Each input component is now separated by a single slash except the possible first plain protocol part.
-
-      // remove trailing slash before parameters or hash
-      str = str.replace(/\/(\?|&|#[^!])/g, '$1');
-
-      // replace ? in parameters with &
-      var parts = str.split('?');
-      str = parts.shift() + (parts.length > 0 ? '?': '') + parts.join('&');
-
-      return str;
-    }
-
-    return function () {
-      var input = arguments;
-
-      if (typeof arguments[0] === 'object') {
-        // new syntax with array and options
-        input = arguments[0];
-      }
-      
-      return normalize([].slice.call(input));
-    };
-
-  });
-  });
+  Vue.use(vuex);
 
   /**
-   * The code was extracted from:
-   * https://github.com/davidchambers/Base64.js
+   * Vuex store initialization
    */
+  var appStore = new vuex.Store({
+  	/**
+  	 * Vuex store states initialization.
+  	 */
+  	state: {
+  		toastMessage: "",
 
-  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  		loggedIn: false,
+  		loggedInUser: "",
+  		schemas: [],
+  		usersList: [],
 
-  function InvalidCharacterError(message) {
-    this.message = message;
-  }
+  		currentContentView: "app-dashboard",
+  		currentCollection: [],
+  		currentCollectionSchema: {},
+  		currentModel: {},
+  		currentViewUser: {}
+  	},
+  	/**
+  	 * Vuex store mutations. Used to modify Vuex store states.
+  	 */
+  	mutations: {
+  		setToastMessage: function(state, message){
+  			if(message === state.toastMessage && message.trim() !== ""){
+  				state.toastMessage = "";
+  				_.defer(() => {
+  					state.toastMessage = message;
+  				});
+  			}else{
+  				state.toastMessage = message;
+  			}
+  		},
+  		updateSchemas: function(state, newSchemas){
+  			state.schemas = newSchemas;
+  		},
+  		addNewEditSchema: function(state, schema){
+  			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
+  				return el.tableSlug == schema.tableSlug;
+  			});
+  			if(matchedSchemaIndex > -1){
+  				state.schemas[matchedSchemaIndex] = schema;
+  			}else{
+  				state.schemas.push(schema);
+  			}
+  		},
+  		removeSchema: function(state, tableSlug){
+  			state.schemas = _.filter(state.schemas, function(el){
+  				return el.tableSlug != tableSlug;
+  			});
+  		},
+  		updateUsersList: function(state, newUsersList){
+  			state.usersList = newUsersList;
+  		},
+  		setCurrentViewUser: function(state, currentViewUser){
+  			state.currentViewUser = currentViewUser;
+  		},
+  		setContentView: function(state, view){
+  			state.currentContentView = view;
+  		},
+  		setLoggedIn: function(state, loggedIn){
+  			state.loggedIn = loggedIn;
+  		},
+  		setLoggedInUser: function(state, username){
+  			state.loggedInUser = username;
+  		},
+  		setCurrentCollection: function(state, result){
+  			state.currentCollection = result.collection;
+  			this.commit("setCurrentCollectionSchema", result.tableSlug);
+  		},
+  		setCurrentCollectionSchema: function(state, tableSlug){
+  			const selectedSchema = _.find(state.schemas, function(el){
+  				return el.tableSlug == tableSlug;
+  			});
+  			state.currentCollectionSchema = selectedSchema;
+  		},
+  		setCurrentModel: function(state, result){
+  			state.currentModel = result.model;
+  			this.commit("setCurrentCollectionSchema", result.tableSlug);
+  		},
+  		removeModel: function(state, options){
+  			const tableSlug = options.tableSlug;
+  			const model = options.model;
 
-  InvalidCharacterError.prototype = new Error();
-  InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+  			if(!model){
+  				throw Error("No valid model defined");
+  			}
 
-  function polyfill (input) {
-    var str = String(input).replace(/=+$/, '');
-    if (str.length % 4 == 1) {
-      throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
-    }
-    for (
-      // initialize result and counters
-      var bc = 0, bs, buffer, idx = 0, output = '';
-      // get next character
-      buffer = str.charAt(idx++);
-      // character found in table? initialize bit storage and add its ascii value;
-      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
-        // and if not first of each 4 characters,
-        // convert the first 8 bits to one ascii character
-        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
-    ) {
-      // try to find character in table (0-63, not found => -1)
-      buffer = chars.indexOf(buffer);
-    }
-    return output;
-  }
+  			state.currentCollection = _.filter(state.currentCollection, function(el){
+  				return el._uid != model._uid;
+  			});
+  		}
+  	},
+  	/**
+  	 * Vuex store actions. Used make asynchronous calls to the server and
+  	 * update the Vuex store by calling Vuex mutations.
+  	 */
+  	actions: {
+  		fetchSchemas: function(context){
+  			const token = store.get("access_token");
+  			if(token && Math.floor(Date.now()/1000) < lib(token).exp){
+  				const request = generateRequest("schema");
+  				return sendRequest(request, (requestSuccess, schemas) => {
+  					if(requestSuccess){
+  						context.commit("updateSchemas", schemas);
+  						context.commit("setLoggedIn", true);
+  						context.commit("setLoggedInUser", lib(store.get("access_token")).username);
+  						return Promise.resolve(schemas);
+  					}else{
+  						context.commit("setLoggedIn", false);
+  						context.commit("updateSchemas", []);
+  						context.commit("setLoggedInUser", "");
+  						context.commit("setContentView", "login-page");
+  					}
+  				});
+  			}
+  		},
+  		submitSchema: function(context, schema){
+  			const request = generateRequest("schema", "POST", schema);
+  			return sendRequest(request, (requestSuccess, schemas) => {
+  				if(requestSuccess){
+  					context.commit("setCurrentCollectionSchema", schema);
+  					context.commit("addNewEditSchema", schema);
+  					return Promise.resolve(schema);
+  				}else{
+  					return Promise.reject(schema);
+  				}
+  			});
+  		},
+  		deleteSchema: function(context, tableSlug){
+  			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
+  			return sendRequest(request, (requestSuccess, schemas) => {
+  				if(requestSuccess){
+  					context.commit("removeSchema", tableSlug);
+  					return Promise.resolve(schemas);
+  				}else{
+  					return Promise.reject(schema);
+  				}
+  			});
+  		},
+  		fetchUsersList: function(context){
+  			const token = store.get("access_token");
+  			if(token && Math.floor(Date.now()/1000) < lib(token).exp){
+  				const request = generateRequest("users");
+  				return sendRequest(request, (requestSuccess, users) => {
+  					if(requestSuccess){
+  						context.commit("updateUsersList", users);
+  						return Promise.resolve(users);
+  					}else{
+  						return Promise.reject(users);
+  					}
+  				});
+  			}
+  		},
+  		fetchInitialData: function(context){
+  			return Promise.all([
+  				context.dispatch("fetchSchemas"),
+  				context.dispatch("fetchUsersList")
+  			]);
+  		},
+  		fetchCollection: function(context, tableSlug){
+  			const request = generateRequest(`collections/${tableSlug}`);
+  			return sendRequest(request, (requestSuccess, collection) => {
+  				if(requestSuccess){
+  					context.commit("setCurrentCollection", {
+  						collection,
+  						tableSlug
+  					});
 
+  					return Promise.resolve(collection);
+  				}else{
+  					return Promise.reject(collection);
+  				}
+  			});
+  		},
+  		fetchModel: function(context, options){
+  			const tableSlug = options.tableSlug;
+  			const uid = options.uid;
+  			const request = generateRequest(`collections/${tableSlug}/${uid}`);
+  			return sendRequest(request, (requestSuccess, model) => {
+  				if(requestSuccess){
+  					context.commit("setCurrentModel", {
+  						tableSlug,
+  						model
+  					});
 
-  var atob = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;
+  					return Promise.resolve(model);
+  				}else{
+  					return Promise.reject(model);
+  				}
+  			});
+  		},
+  		submitModel: function(context, options){
+  			const model = options.model;
+  			const tableSlug = options.tableSlug;
+  			const uid = options.uid;
 
-  function b64DecodeUnicode(str) {
-    return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
-      var code = p.charCodeAt(0).toString(16).toUpperCase();
-      if (code.length < 2) {
-        code = '0' + code;
-      }
-      return '%' + code;
-    }));
-  }
+  			// Check if there's upload field
+  			const files = _.reduce(model, (acc, el, key) => {
+  				if(el.file) {
+  					acc[key] = el.file;
+  				}
+  				return acc;
+  			}, {});
 
-  var base64_url_decode = function(str) {
-    var output = str.replace(/-/g, "+").replace(/_/g, "/");
-    switch (output.length % 4) {
-      case 0:
-        break;
-      case 2:
-        output += "==";
-        break;
-      case 3:
-        output += "=";
-        break;
-      default:
-        throw "Illegal base64url string!";
-    }
+  			if(_.size(files) > 0){
+  				// There are at least one upload field
+  				// Remove the binary file entry from the model
+  				_.each(model, (el) => {
+  					if(el.file){
+  						delete el.file;
+  					}
+  				});
 
-    try{
-      return b64DecodeUnicode(output);
-    } catch (err) {
-      return atob(output);
-    }
-  };
+  				// Create the request for submitting the model
+  				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
+  				// Submit the model
+  				return sendRequest(request, (requestSuccess, model) => {
+  					if(requestSuccess){
+  						return Promise.resolve(model);
+  					}else{
+  						return Promise.reject(model);
+  					}
+  				}).then((model) => {
+  					// Model submission successful
+  					const promises = [];
 
-  function InvalidTokenError(message) {
-    this.message = message;
-  }
+  					// Send individual images according to the link provided in the response
+  					_.each(model, (el, key) => {
+  						if(el.permalink){
+  							const file = _.find(files, (f, k) => {
+  								return k === key;
+  							});
 
-  InvalidTokenError.prototype = new Error();
-  InvalidTokenError.prototype.name = 'InvalidTokenError';
+  							const req = generateRequest(
+  								`upload/${model[key].uid}`,
+  								"POST",
+  								file,
+  								file.type
+  							);
 
-  var lib = function (token,options) {
-    if (typeof token !== 'string') {
-      throw new InvalidTokenError('Invalid token specified');
-    }
+  							promises.push(sendRequest(req, (success, res) => {
+  								if(success) {
+  									return Promise.resolve(res);
+  								}else{
+  									return Promise.reject(res);
+  								}
+  							}));
+  						}
+  					});
 
-    options = options || {};
-    var pos = options.header === true ? 0 : 1;
-    try {
-      return JSON.parse(base64_url_decode(token.split('.')[pos]));
-    } catch (e) {
-      throw new InvalidTokenError('Invalid token specified: ' + e.message);
-    }
-  };
+  					// All images successfully uploaded, resolve promise to model
+  					return Promise.all(promises).then(() => {
+  						return Promise.resolve(model);
+  					});
+  				});
+  			}else{
+  				// There are no upload fields
+  				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
 
-  var InvalidTokenError_1 = InvalidTokenError;
-  lib.InvalidTokenError = InvalidTokenError_1;
+  				return sendRequest(request, (requestSuccess, model) => {
+  					if(requestSuccess){
+  						context.commit("setCurrentModel", {
+  							tableName,
+  							model
+  						});
+  						return Promise.resolve(model);
+  					}else{
+  						return Promise.reject(model);
+  					}
+  				});
+  			}
+  		},
+  		deleteModel: function(context, options){
+  			const tableSlug = options.tableSlug;
+  			const uid = options.uid;
+  			const request = generateRequest(`collections/${tableSlug}/${uid}`, "DELETE");
+
+  			return sendRequest(request, (requestSuccess, model) => {
+  				if(requestSuccess){
+  					context.commit("removeModel", {
+  						tableSlug,
+  						model
+  					});
+  					return Promise.resolve(model);
+  				}else{
+  					return Promise.reject(model);
+  				}
+  			});
+  		},
+
+  		fetchUser: function(context, username){
+  			const request = generateRequest(`users/${username}`);
+  			return sendRequest(request, (requestSuccess, response) => {
+  				if(requestSuccess){
+  					return Promise.resolve(response);
+  				}else{
+  					return Promise.reject(response);
+  				}
+  			});
+  		},
+  		deleteUser: function(context, username){
+  			const request = generateRequest(`users/${username}`, "DELETE");
+  			return sendRequest(request, (requestSuccess, response) => {
+  				if(requestSuccess){
+  					return Promise.resolve(response);
+  				}else{
+  					return Promise.reject(response);
+  				}
+  			});
+  		},
+  		submitUser: function(context, user){
+  			if(user.role && !user.password){
+  				const request = generateRequest(`users/${user.username}`, "POST", user);
+  				return sendRequest(request, (requestSuccess, response) => {
+  					if(requestSuccess){
+  						return Promise.resolve(response);
+  					}else{
+  						return Promise.reject(response);
+  					}
+  				});
+  			}else if(user.password && !user.role){
+  				const request = generateRequest("users", "POST", user);
+  				return sendRequest(request, (requestSuccess, response) => {
+  					if(requestSuccess){
+  						return Promise.resolve(response);
+  					}else{
+  						return Promise.reject(response);
+  					}
+  				});
+  			}
+  		},
+
+  		/**
+  		 * Login/Sign up related actions
+  		 */
+  		loginUser: function(context, loginDetails){
+  			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
+  			return sendRequest(request, (requestSuccess, response) => {
+  				if(requestSuccess){
+  					store.set("access_token", response.access_token);
+  					return context.dispatch("fetchInitialData");
+  				}else{
+  					return Promise.reject(response);
+  				}
+  			});
+  		},
+  		signupUser: function(context, signupDetails){
+  			const request = generateRequest("signup", "POST", signupDetails);
+  			return sendRequest(request, (requestSuccess, response) => {
+  				if(requestSuccess){
+  					return Promise.resolve(response);
+  				}else{
+  					return Promise.reject(response);
+  				}
+  			});
+  		},
+  		submitChangePassword: function(context, details){
+  			const request = generateRequest("account/change_password", "POST", details);
+  			return sendRequest(request, (requestSuccess, response) => {
+  				if(requestSuccess){
+  					return Promise.resolve(response);
+  				}else{
+  					return Promise.reject(response);
+  				}
+  			});
+  		}
+  	}
+  });
 
   //
   //
@@ -16636,386 +17087,6 @@
     );
 
   //---------------------------------------------//
-  //               App constants                 //
-  //---------------------------------------------//
-  const siteTitle = "Char Admin";
-  const url = "http://localhost:3000/api";
-  Vue.use(vuex);
-
-  //---------------------------------------------//
-  //            App storage (Vuex)               //
-  //---------------------------------------------//
-  /**
-   * Vuex store initialization
-   */
-  const appStore = new vuex.Store({
-  	/**
-  	 * Vuex store states initialization.
-  	 */
-  	state: {
-  		toastMessage: "",
-
-  		loggedIn: false,
-  		loggedInUser: "",
-  		schemas: [],
-  		usersList: [],
-
-  		currentContentView: "app-dashboard",
-  		currentCollection: [],
-  		currentCollectionSchema: {},
-  		currentModel: {},
-  		currentViewUser: {}
-  	},
-  	/**
-  	 * Vuex store mutations. Used to modify Vuex store states.
-  	 */
-  	mutations: {
-  		setToastMessage: function(state, message){
-  			if(message === state.toastMessage && message.trim() !== ""){
-  				state.toastMessage = "";
-  				_.defer(() => {
-  					state.toastMessage = message;
-  				});
-  			}else{
-  				state.toastMessage = message;
-  			}
-  		},
-  		updateSchemas: function(state, newSchemas){
-  			state.schemas = newSchemas;
-  		},
-  		addNewEditSchema: function(state, schema){
-  			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
-  				return el.tableSlug == schema.tableSlug;
-  			});
-  			if(matchedSchemaIndex > -1){
-  				state.schemas[matchedSchemaIndex] = schema;
-  			}else{
-  				state.schemas.push(schema);
-  			}
-  		},
-  		removeSchema: function(state, tableSlug){
-  			state.schemas = _.filter(state.schemas, function(el){
-  				return el.tableSlug != tableSlug;
-  			});
-  		},
-  		updateUsersList: function(state, newUsersList){
-  			state.usersList = newUsersList;
-  		},
-  		setCurrentViewUser: function(state, currentViewUser){
-  			state.currentViewUser = currentViewUser;
-  		},
-  		setContentView: function(state, view){
-  			state.currentContentView = view;
-  		},
-  		setLoggedIn: function(state, loggedIn){
-  			state.loggedIn = loggedIn;
-  		},
-  		setLoggedInUser: function(state, username){
-  			state.loggedInUser = username;
-  		},
-  		setCurrentCollection: function(state, result){
-  			state.currentCollection = result.collection;
-  			this.commit("setCurrentCollectionSchema", result.tableSlug);
-  		},
-  		setCurrentCollectionSchema: function(state, tableSlug){
-  			const selectedSchema = _.find(state.schemas, function(el){
-  				return el.tableSlug == tableSlug;
-  			});
-  			state.currentCollectionSchema = selectedSchema;
-  		},
-  		setCurrentModel: function(state, result){
-  			state.currentModel = result.model;
-  			this.commit("setCurrentCollectionSchema", result.tableSlug);
-  		},
-  		removeModel: function(state, options){
-  			const tableSlug = options.tableSlug;
-  			const model = options.model;
-
-  			if(!model){
-  				throw Error("No valid model defined");
-  			}
-
-  			state.currentCollection = _.filter(state.currentCollection, function(el){
-  				return el._uid != model._uid;
-  			});
-  		}
-  	},
-  	/**
-  	 * Vuex store actions. Used make asynchronous calls to the server and
-  	 * update the Vuex store by calling Vuex mutations.
-  	 */
-  	actions: {
-  		fetchSchemas: function(context){
-  			const token = store.get("access_token");
-  			if(token && Math.floor(Date.now()/1000) < lib(token).exp){
-  				const request = generateRequest("schema");
-  				return sendRequest(request, (requestSuccess, schemas) => {
-  					if(requestSuccess){
-  						context.commit("updateSchemas", schemas);
-  						context.commit("setLoggedIn", true);
-  						context.commit("setLoggedInUser", lib(store.get("access_token")).username);
-  						return Promise.resolve(schemas);
-  					}else{
-  						context.commit("setLoggedIn", false);
-  						context.commit("updateSchemas", []);
-  						context.commit("setLoggedInUser", "");
-  						context.commit("setContentView", "login-page");
-  					}
-  				});
-  			}
-  		},
-  		submitSchema: function(context, schema){
-  			const request = generateRequest("schema", "POST", schema);
-  			return sendRequest(request, (requestSuccess, schemas) => {
-  				if(requestSuccess){
-  					context.commit("setCurrentCollectionSchema", schema);
-  					context.commit("addNewEditSchema", schema);
-  					return Promise.resolve(schema);
-  				}else{
-  					return Promise.reject(schema);
-  				}
-  			});
-  		},
-  		deleteSchema: function(context, tableSlug){
-  			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
-  			return sendRequest(request, (requestSuccess, schemas) => {
-  				if(requestSuccess){
-  					context.commit("removeSchema", tableSlug);
-  					return Promise.resolve(schemas);
-  				}else{
-  					return Promise.reject(schema);
-  				}
-  			});
-  		},
-  		fetchUsersList: function(context){
-  			const token = store.get("access_token");
-  			if(token && Math.floor(Date.now()/1000) < lib(token).exp){
-  				const request = generateRequest("users");
-  				return sendRequest(request, (requestSuccess, users) => {
-  					if(requestSuccess){
-  						context.commit("updateUsersList", users);
-  						return Promise.resolve(users);
-  					}else{
-  						return Promise.reject(users);
-  					}
-  				});
-  			}
-  		},
-  		fetchInitialData: function(context){
-  			return Promise.all([
-  				context.dispatch("fetchSchemas"),
-  				context.dispatch("fetchUsersList")
-  			]);
-  		},
-  		fetchCollection: function(context, tableSlug){
-  			const request = generateRequest(`collections/${tableSlug}`);
-  			return sendRequest(request, (requestSuccess, collection) => {
-  				if(requestSuccess){
-  					context.commit("setCurrentCollection", {
-  						collection,
-  						tableSlug
-  					});
-
-  					return Promise.resolve(collection);
-  				}else{
-  					return Promise.reject(collection);
-  				}
-  			});
-  		},
-  		fetchModel: function(context, options){
-  			const tableSlug = options.tableSlug;
-  			const uid = options.uid;
-  			const request = generateRequest(`collections/${tableSlug}/${uid}`);
-  			return sendRequest(request, (requestSuccess, model) => {
-  				if(requestSuccess){
-  					context.commit("setCurrentModel", {
-  						tableSlug,
-  						model
-  					});
-
-  					return Promise.resolve(model);
-  				}else{
-  					return Promise.reject(model);
-  				}
-  			});
-  		},
-  		submitModel: function(context, options){
-  			const model = options.model;
-  			const tableSlug = options.tableSlug;
-  			const uid = options.uid;
-
-  			// Check if there's upload field
-  			const files = _.reduce(model, (acc, el, key) => {
-  				if(el.file) {
-  					acc[key] = el.file;
-  				}
-  				return acc;
-  			}, {});
-
-  			if(_.size(files) > 0){
-  				// There are at least one upload field
-  				// Remove the binary file entry from the model
-  				_.each(model, (el) => {
-  					if(el.file){
-  						delete el.file;
-  					}
-  				});
-
-  				// Create the request for submitting the model
-  				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
-  				// Submit the model
-  				return sendRequest(request, (requestSuccess, model) => {
-  					if(requestSuccess){
-  						return Promise.resolve(model);
-  					}else{
-  						return Promise.reject(model);
-  					}
-  				}).then((model) => {
-  					// Model submission successful
-  					const promises = [];
-
-  					// Send individual images according to the link provided in the response
-  					_.each(model, (el, key) => {
-  						if(el.permalink){
-  							const file = _.find(files, (f, k) => {
-  								return k === key;
-  							});
-
-  							const req = generateRequest(
-  								`upload/${model[key].uid}`,
-  								"POST",
-  								file,
-  								file.type
-  							);
-
-  							promises.push(sendRequest(req, (success, res) => {
-  								if(success) {
-  									return Promise.resolve(res);
-  								}else{
-  									return Promise.reject(res);
-  								}
-  							}));
-  						}
-  					});
-
-  					// All images successfully uploaded, resolve promise to model
-  					return Promise.all(promises).then(() => {
-  						return Promise.resolve(model);
-  					});
-  				});
-  			}else{
-  				// There are no upload fields
-  				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
-
-  				return sendRequest(request, (requestSuccess, model) => {
-  					if(requestSuccess){
-  						context.commit("setCurrentModel", {
-  							tableName,
-  							model
-  						});
-  						return Promise.resolve(model);
-  					}else{
-  						return Promise.reject(model);
-  					}
-  				});
-  			}
-  		},
-  		deleteModel: function(context, options){
-  			const tableSlug = options.tableSlug;
-  			const uid = options.uid;
-  			const request = generateRequest(`collections/${tableSlug}/${uid}`, "DELETE");
-
-  			return sendRequest(request, (requestSuccess, model) => {
-  				if(requestSuccess){
-  					context.commit("removeModel", {
-  						tableSlug,
-  						model
-  					});
-  					return Promise.resolve(model);
-  				}else{
-  					return Promise.reject(model);
-  				}
-  			});
-  		},
-
-  		fetchUser: function(context, username){
-  			const request = generateRequest(`users/${username}`);
-  			return sendRequest(request, (requestSuccess, response) => {
-  				if(requestSuccess){
-  					return Promise.resolve(response);
-  				}else{
-  					return Promise.reject(response);
-  				}
-  			});
-  		},
-  		deleteUser: function(context, username){
-  			const request = generateRequest(`users/${username}`, "DELETE");
-  			return sendRequest(request, (requestSuccess, response) => {
-  				if(requestSuccess){
-  					return Promise.resolve(response);
-  				}else{
-  					return Promise.reject(response);
-  				}
-  			});
-  		},
-  		submitUser: function(context, user){
-  			if(user.role && !user.password){
-  				const request = generateRequest(`users/${user.username}`, "POST", user);
-  				return sendRequest(request, (requestSuccess, response) => {
-  					if(requestSuccess){
-  						return Promise.resolve(response);
-  					}else{
-  						return Promise.reject(response);
-  					}
-  				});
-  			}else if(user.password && !user.role){
-  				const request = generateRequest("users", "POST", user);
-  				return sendRequest(request, (requestSuccess, response) => {
-  					if(requestSuccess){
-  						return Promise.resolve(response);
-  					}else{
-  						return Promise.reject(response);
-  					}
-  				});
-  			}
-  		},
-
-  		/**
-  		 * Login/Sign up related actions
-  		 */
-  		loginUser: function(context, loginDetails){
-  			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
-  			return sendRequest(request, (requestSuccess, response) => {
-  				if(requestSuccess){
-  					store.set("access_token", response.access_token);
-  					return context.dispatch("fetchInitialData");
-  				}else{
-  					return Promise.reject(response);
-  				}
-  			});
-  		},
-  		signupUser: function(context, signupDetails){
-  			const request = generateRequest("signup", "POST", signupDetails);
-  			return sendRequest(request, (requestSuccess, response) => {
-  				if(requestSuccess){
-  					return Promise.resolve(response);
-  				}else{
-  					return Promise.reject(response);
-  				}
-  			});
-  		},
-  		submitChangePassword: function(context, details){
-  			const request = generateRequest("account/change_password", "POST", details);
-  			return sendRequest(request, (requestSuccess, response) => {
-  				if(requestSuccess){
-  					return Promise.resolve(response);
-  				}else{
-  					return Promise.reject(response);
-  				}
-  			});
-  		}
-  	}
-  });
   App.data = function(){
   	return {
   		siteTitle: siteTitle,
@@ -17099,77 +17170,6 @@
   		return createElement(App);
   	}
   });
-
-  //---------------------------------------------//
-  //                  Utils                      //
-  //---------------------------------------------//
-  /**
-   * Generate `request` object to be passed to `fetch` that is populated with all
-   * the necessary headers. Also automatically stringify payload body.
-   */
-  function generateRequest(path, method="GET", payload=null, contentType="application/json"){
-  	const finalURL = urlJoin(url, path);
-  	const token = store.get("access_token");
-
-  	const header = {};
-  	header["Content-Type"] = contentType;
-  	if(path !== "token/generate_new_token"){
-  		header["Authorization"] = `Bearer ${token}`;
-  	}
-
-  	let body;
-  	if(payload !== null){
-  		if(contentType === "application/json"){
-  			body = JSON.stringify(payload);
-  		}else{
-  			body = payload;
-  		}
-  	}
-
-  	const request = new Request(finalURL, {
-  		method: method,
-  		body: body,
-  		headers: new Headers(header)
-  	});
-
-  	return request;
-  }
-
-  /**
-   * Returns true if access_token exist and has not expired
-   */
-  function appTokenValid(){
-  	const token = store.get("access_token");
-  	if(token){
-  		const tokenContent = lib(token);
-  		if(tokenContent.exp > Math.floor(Date.now()/1000)){
-  			return true;
-  		}
-  	}
-
-  	return false;
-  }
-
-  /**
-   * Utility function to send fetch request and deal with errors.
-   * `responseHandler` callback should return promise resolution
-   */
-  function sendRequest(request, responseHandler){
-  	let requestSuccess;
-  	return fetch(request).then((res) => {
-  		if(res.status >= 200 && res.status < 300){
-  			requestSuccess = true;
-  		}else if(res.status >= 400){
-  			requestSuccess = false;
-  		}else{
-  			// PANIC
-  			throw new Error(request);
-  		}
-  		return res.json();
-  	}).then((response) => {
-  		return responseHandler(requestSuccess, response);
-  	});
-  }
 
 }));
 //# sourceMappingURL=bundle.js.map
