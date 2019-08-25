@@ -16,12 +16,13 @@
 				</div>
 
 				<schemas-edit-field
-					v-for="(field, index) in fields" :key="index"
+					v-for="(field, key, index) in definition" :key="key"
 
-					:fieldName="field.name"
+					:fieldName="field.app_title"
 					:selfIndex="index"
-					:choices="field.properties.choices"
-					v-model="field.type"
+					:selfKey="key"
+					:choices="field.app_values"
+					v-model="field.app_type"
 
 					v-on:nameChanged="nameChanged"
 					v-on:removeField="removeField"
@@ -37,6 +38,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import snakeCase from "snake-case";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
@@ -54,24 +56,19 @@ export default{
 		}
 	},
 	data: function(){
-		let fields = [];
+		let definition = [];
 		let tableName = "";
 
 		if(this.currentCollectionSchema){
-			fields = this.currentCollectionSchema.fields.slice(0);
+			definition = this.currentCollectionSchema.definition;
 			tableName = this.currentCollectionSchema.tableName;
 		}else{
-			fields = [{
-				properties: {},
-				name: "",
-				slug: "",
-				type: ""
-			}];
+			definition = {};
 		}
 
 		return {
 			tableName,
-			fields
+			definition
 		};
 	},
 	computed: {
@@ -87,38 +84,46 @@ export default{
 		}
 	},
 	methods: {
-		nameChanged: function(newName, i){
-			this.fields[i].name = newName;
-			this.fields[i].slug = snakeCase(newName);
+		nameChanged: function(newName, oldName){
+			const name = newName.trim();
+
+			if(newName !== oldName){
+				const appSlug = snakeCase(name);
+				this.$set(this.definition, appSlug, _.cloneDeep(this.definition[snakeCase(oldName)]));
+				this.$set(this.definition[appSlug], "app_title", name);
+				this.$delete(this.definition, oldName);
+			}
 		},
 		submitSchema: function(){
 			const schema = {
 				tableSlug: this.tableSlug,
 				tableName: this.tableName,
-				fields: this.fields
+				definition: this.definition
 			};
 
 			this.$emit("submitSchema", schema);
 		},
-		validateInput: function(tableName, fields){
+		validateInput: function(tableName, definition){
 			if(!tableName){
 				return false;
 			}
 		},
+		// NOTE: How to do this with an object? We need multiple with same name ("")
+		// Maybe an extra "order" field would be needed
 		addField: function(){
 			const newField = {
-				properties: {},
-				name: "",
-				slug: "",
-				type: ""
+				app_values: {},
+				app_title: "",
+				app_slug: "",
+				app_type: ""
 			};
-			this.fields.push(newField);
+			this.definition.push(newField);
 		},
-		removeField: function(index){
-			this.fields.splice(index, 1);
+		removeField: function(key){
+			this.$delete(this.definition, key);
 		},
 		choiceChanged: function(data){
-			this.$set(this.fields[data.index].properties, "choices", data.choices);
+			this.$set(this.definition[data.index].properties, "choices", data.choices);
 		}
 	}
 };

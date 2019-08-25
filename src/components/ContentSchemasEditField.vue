@@ -1,7 +1,7 @@
 <template>
 	<div class="schema-field">
 		<input type="text" name="field" required
-			v-on:input="nameChanged" :value="fieldName"
+			v-on:blur="nameChanged" :value="fieldName"
 		>
 		<select v-on:input="selectionChanged" :value="value" required>
 			<option disabled selected value> -- select an option -- </option>
@@ -13,7 +13,7 @@
 			<option value="file">file</option>
 		</select>
 
-		<button v-on:click.prevent="removeField(selfIndex)">Remove</button>
+		<button v-on:click.prevent="removeField(selfKey)">Remove</button>
 
 		<div class="multi-choice-container" v-if="choicesArray.length">
 			<multi-choice
@@ -51,6 +51,10 @@ export default {
 		},
 		"selfIndex": {
 			type: Number,
+			required: true
+		},
+		"selfKey":{
+			type: String,
 			required: true
 		},
 		"choices": {
@@ -96,7 +100,7 @@ export default {
 			});
 		},
 		nameChanged: function(e){
-			this.$emit("nameChanged", e.target.value, this.selfIndex);
+			this.$emit("nameChanged", e.target.value, this.selfKey);
 		},
 		addChoice: function(e){
 			this.choicesArray.push({

@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
     "snake-case": "^2.1.0",
     "url-join": "^3.0.0",
     "vue": "^2.6.10",
