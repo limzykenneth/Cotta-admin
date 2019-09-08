@@ -112,6 +112,8 @@ export default{
 							file_description: "",
 							file: entry[1]
 						};
+					}else if(this.currentCollectionSchema.definition[entry[0]].app_type === "checkbox"){
+						result[entry[0]] = [entry[1]];
 					}else{
 						// All other elements
 						result[entry[0]] = entry[1];

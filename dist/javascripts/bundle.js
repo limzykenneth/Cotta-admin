@@ -33309,7 +33309,6 @@
   		}
   	},
   	methods: {
-  		// NOTE: untested
   		submitModel: function(e){
   			const result = this.$_formToJSON(e.target);
   			const slug = this.currentCollectionSchema.tableSlug;
@@ -33368,6 +33367,8 @@
   							file_description: "",
   							file: entry[1]
   						};
+  					}else if(this.currentCollectionSchema.definition[entry[0]].app_type === "checkbox"){
+  						result[entry[0]] = [entry[1]];
   					}else{
   						// All other elements
   						result[entry[0]] = entry[1];
@@ -33455,7 +33456,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-55c2162c";
+    const __vue_scope_id__$h = "data-v-bb308d8a";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */
