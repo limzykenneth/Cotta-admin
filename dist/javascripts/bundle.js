@@ -13448,12 +13448,12 @@
   				});
   			}else{
   				// There are no upload fields
-  				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
+  				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
 
   				return sendRequest(request, (requestSuccess, model) => {
   					if(requestSuccess){
   						context.commit("setCurrentModel", {
-  							tableName,
+  							tableSlug,
   							model
   						});
   						return Promise.resolve(model);
@@ -33321,18 +33321,18 @@
   		},
 
   		validateModel: function(model){
-  			const fields = this.currentCollectionSchema.fields;
-  			for(let i=0; i<fields.length; i++){
-  				if(typeof model[fields[i].slug] == "undefined"){
-  					if(fields[i].type == "checkbox"){
-  						model[fields[i].slug] = [];
+  			const definition = this.currentCollectionSchema.definition;
+  			for(let i=0; i<definition.length; i++){
+  				if(typeof model[definition[i].slug] == "undefined"){
+  					if(definition[i].type == "checkbox"){
+  						model[definition[i].slug] = [];
   					}else{
-  						model[fields[i].slug] = "";
+  						model[definition[i].slug] = "";
   					}
   				}
 
-  				if(fields[i].type == "checkbox" && !Array.isArray(model[fields[i].slug])){
-  					model[fields[i].slug] = [model[fields[i].slug]];
+  				if(definition[i].type == "checkbox" && !Array.isArray(model[definition[i].slug])){
+  					model[definition[i].slug] = [model[definition[i].slug]];
   				}
   				// Other validations go here, return false if failed
   			}
@@ -33455,7 +33455,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-258e7cc6";
+    const __vue_scope_id__$h = "data-v-55c2162c";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */

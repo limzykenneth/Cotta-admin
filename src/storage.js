@@ -266,12 +266,12 @@ export default new Vuex.Store({
 				});
 			}else{
 				// There are no upload fields
-				const request = generateRequest(`collections/${tableName}/${uid}`, "POST", model);
+				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
 
 				return sendRequest(request, (requestSuccess, model) => {
 					if(requestSuccess){
 						context.commit("setCurrentModel", {
-							tableName,
+							tableSlug,
 							model
 						});
 						return Promise.resolve(model);

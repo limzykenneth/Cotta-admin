@@ -52,7 +52,6 @@ export default{
 		}
 	},
 	methods: {
-		// NOTE: untested
 		submitModel: function(e){
 			const result = this.$_formToJSON(e.target);
 			const slug = this.currentCollectionSchema.tableSlug;
@@ -66,18 +65,18 @@ export default{
 		},
 
 		validateModel: function(model){
-			const fields = this.currentCollectionSchema.fields;
-			for(let i=0; i<fields.length; i++){
-				if(typeof model[fields[i].slug] == "undefined"){
-					if(fields[i].type == "checkbox"){
-						model[fields[i].slug] = [];
+			const definition = this.currentCollectionSchema.definition;
+			for(let i=0; i<definition.length; i++){
+				if(typeof model[definition[i].slug] == "undefined"){
+					if(definition[i].type == "checkbox"){
+						model[definition[i].slug] = [];
 					}else{
-						model[fields[i].slug] = "";
+						model[definition[i].slug] = "";
 					}
 				}
 
-				if(fields[i].type == "checkbox" && !Array.isArray(model[fields[i].slug])){
-					model[fields[i].slug] = [model[fields[i].slug]];
+				if(definition[i].type == "checkbox" && !Array.isArray(model[definition[i].slug])){
+					model[definition[i].slug] = [model[definition[i].slug]];
 				}
 				// Other validations go here, return false if failed
 			}
