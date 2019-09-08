@@ -33321,19 +33321,14 @@
 
   		validateModel: function(model){
   			const definition = this.currentCollectionSchema.definition;
-  			for(let i=0; i<definition.length; i++){
-  				if(typeof model[definition[i].slug] == "undefined"){
-  					if(definition[i].type == "checkbox"){
-  						model[definition[i].slug] = [];
+  			for(const key in definition){
+  				if(typeof model[key] === "undefined"){
+  					if(definition[key].app_type == "checkbox"){
+  						model[key] = [];
   					}else{
-  						model[definition[i].slug] = "";
+  						model[key] = "";
   					}
   				}
-
-  				if(definition[i].type == "checkbox" && !Array.isArray(model[definition[i].slug])){
-  					model[definition[i].slug] = [model[definition[i].slug]];
-  				}
-  				// Other validations go here, return false if failed
   			}
   			return true;
   		},
@@ -33456,7 +33451,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-bb308d8a";
+    const __vue_scope_id__$h = "data-v-c667620e";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */
