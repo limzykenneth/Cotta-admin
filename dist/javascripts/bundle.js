@@ -32192,7 +32192,7 @@
   			this.$emit("input", e.target.value);
   			this.$emit("choiceChanged", {
   				choices: null,
-  				index: this.selfIndex
+  				key: this.selfKey
   			});
   		},
   		nameChanged: function(e){
@@ -32215,7 +32215,7 @@
   			}, {});
   			this.$emit("choiceChanged", {
   				choices,
-  				index: this.selfIndex
+  				key: this.selfKey
   			});
   		}
   	}
@@ -32318,7 +32318,7 @@
     /* style */
     const __vue_inject_styles__$a = undefined;
     /* scoped */
-    const __vue_scope_id__$a = "data-v-4daa4c33";
+    const __vue_scope_id__$a = "data-v-5fdd7073";
     /* module identifier */
     const __vue_module_identifier__$a = undefined;
     /* functional template */
@@ -32401,6 +32401,24 @@
   				definition: this.definition
   			};
 
+  			for(const key in schema.definition){
+  				switch(schema.definition[key].app_type){
+  					case "wysiwyg":
+  					case "text":
+  					case "email":
+  					case "radio":
+  						schema.definition[key].type = "string";
+  						break;
+
+  					case "checkbox":
+  						schema.definition[key].type = "array";
+  						break;
+
+  					default:
+  						console.log("Not implemented yet");
+  						return false;
+  				}
+  			}
   			this.$emit("submitSchema", schema);
   		},
   		validateInput: function(tableName, definition){
@@ -32410,20 +32428,21 @@
   		},
   		// NOTE: How to do this with an object? We need multiple with same name ("")
   		// Maybe an extra "order" field would be needed
+  		// Currently can only add one empty field at a time, and fields can't have same name
   		addField: function(){
   			const newField = {
-  				app_values: {},
   				app_title: "",
-  				app_slug: "",
   				app_type: ""
   			};
-  			this.definition.push(newField);
+  			this.$set(this.definition, "", newField);
   		},
   		removeField: function(key){
   			this.$delete(this.definition, key);
   		},
   		choiceChanged: function(data){
-  			this.$set(this.definition[data.index].properties, "choices", data.choices);
+  			if(data.choices){
+  				this.$set(this.definition[data.key], "app_values", data.choices);
+  			}
   		}
   	}
   };
@@ -32550,7 +32569,7 @@
     /* style */
     const __vue_inject_styles__$b = undefined;
     /* scoped */
-    const __vue_scope_id__$b = "data-v-207eb64c";
+    const __vue_scope_id__$b = "data-v-e9a208be";
     /* module identifier */
     const __vue_module_identifier__$b = undefined;
     /* functional template */

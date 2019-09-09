@@ -96,7 +96,7 @@ export default {
 			this.$emit("input", e.target.value);
 			this.$emit("choiceChanged", {
 				choices: null,
-				index: this.selfIndex
+				key: this.selfKey
 			});
 		},
 		nameChanged: function(e){
@@ -119,7 +119,7 @@ export default {
 			}, {});
 			this.$emit("choiceChanged", {
 				choices,
-				index: this.selfIndex
+				key: this.selfKey
 			});
 		}
 	}

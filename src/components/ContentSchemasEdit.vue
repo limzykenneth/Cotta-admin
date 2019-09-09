@@ -101,6 +101,24 @@ export default{
 				definition: this.definition
 			};
 
+			for(const key in schema.definition){
+				switch(schema.definition[key].app_type){
+					case "wysiwyg":
+					case "text":
+					case "email":
+					case "radio":
+						schema.definition[key].type = "string";
+						break;
+
+					case "checkbox":
+						schema.definition[key].type = "array";
+						break;
+
+					default:
+						console.log("Not implemented yet");
+						return false;
+				}
+			}
 			this.$emit("submitSchema", schema);
 		},
 		validateInput: function(tableName, definition){
@@ -110,20 +128,21 @@ export default{
 		},
 		// NOTE: How to do this with an object? We need multiple with same name ("")
 		// Maybe an extra "order" field would be needed
+		// Currently can only add one empty field at a time, and fields can't have same name
 		addField: function(){
 			const newField = {
-				app_values: {},
 				app_title: "",
-				app_slug: "",
 				app_type: ""
 			};
-			this.definition.push(newField);
+			this.$set(this.definition, "", newField);
 		},
 		removeField: function(key){
 			this.$delete(this.definition, key);
 		},
 		choiceChanged: function(data){
-			this.$set(this.definition[data.index].properties, "choices", data.choices);
+			if(data.choices){
+				this.$set(this.definition[data.key], "app_values", data.choices);
+			}
 		}
 	}
 };
