@@ -32414,6 +32414,10 @@
   						schema.definition[key].type = "array";
   						break;
 
+  					case "file":
+  						schema.definition[key].type = ["object", "array"];
+  						break;
+
   					default:
   						console.log("Not implemented yet");
   						return false;
@@ -32569,7 +32573,7 @@
     /* style */
     const __vue_inject_styles__$b = undefined;
     /* scoped */
-    const __vue_scope_id__$b = "data-v-e9a208be";
+    const __vue_scope_id__$b = "data-v-e7f014c6";
     /* module identifier */
     const __vue_module_identifier__$b = undefined;
     /* functional template */

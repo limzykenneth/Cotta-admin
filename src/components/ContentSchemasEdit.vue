@@ -114,6 +114,10 @@ export default{
 						schema.definition[key].type = "array";
 						break;
 
+					case "file":
+						schema.definition[key].type = ["object", "array"];
+						break;
+
 					default:
 						console.log("Not implemented yet");
 						return false;
