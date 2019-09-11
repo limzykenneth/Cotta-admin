@@ -33133,6 +33133,14 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$g = {
   	name: "ModelPage",
@@ -33243,6 +33251,13 @@
               ? _c("div", { staticClass: "field" }, [
                   _vm._v(_vm._s(_vm.currentModel[key]))
                 ])
+              : field.app_type == "file"
+              ? _c("div", { staticClass: "field" }, [
+                  _c("img", {
+                    staticClass: "field-image",
+                    attrs: { src: _vm.currentModel[key].permalink }
+                  })
+                ])
               : _vm._e()
           ])
         }),
@@ -33256,7 +33271,7 @@
     /* style */
     const __vue_inject_styles__$g = undefined;
     /* scoped */
-    const __vue_scope_id__$g = "data-v-e815128a";
+    const __vue_scope_id__$g = "data-v-553abaf4";
     /* module identifier */
     const __vue_module_identifier__$g = undefined;
     /* functional template */

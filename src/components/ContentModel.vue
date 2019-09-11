@@ -18,14 +18,22 @@
 				<h4>{{ field.app_title }}</h4>
 
 				<div class="field" v-if="field.app_type == 'wysiwyg'" v-html="currentModel[key]"></div>
+
 				<div class="field" v-else-if="field.app_type == 'text'">{{ currentModel[key] }}</div>
+
 				<div class="field" v-else-if="field.app_type == 'email'">{{ currentModel[key] }}</div>
+
 				<div class="field" v-else-if="field.app_type == 'checkbox'">
 					<ul>
 						<li v-for="option in currentModel[key]">{{ option }}</li>
 					</ul>
 				</div>
+
 				<div class="field" v-else-if="field.app_type == 'radio'">{{ currentModel[key] }}</div>
+
+				<div class="field" v-else-if="field.app_type == 'file'">
+					<img class="field-image" v-bind:src="currentModel[key].permalink">
+				</div>
 			</li>
 		</ul>
 	</article>
@@ -76,6 +84,10 @@ export default {
 				.field{
 					ul{
 						.unpadded-list();
+					}
+
+					.field-image{
+						max-width: ~"calc((100vw - 220px) * 0.8)";
 					}
 				}
 			}
