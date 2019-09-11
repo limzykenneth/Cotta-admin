@@ -22,6 +22,13 @@
 				</span>
 			</span>
 
+			<span class="field" v-else-if="field.app_type == 'file'">
+				<file-input
+					:name="key"
+					:file-metadata="currentModel[key]"
+				></file-input>
+			</span>
+
 			<span class="field" v-else>
 				<input required
 					:type="field.app_type"
@@ -37,8 +44,13 @@
 </template>
 
 <script>
+import FileInput from "./ContentModelFormFile.vue";
+
 export default{
 	name: "ModelForm",
+	components: {
+		"file-input": FileInput
+	},
 	props: {
 		"currentCollectionSchema": {
 			type: Object,
@@ -80,6 +92,10 @@ export default{
 		checkboxChecked: function(choice, slug){
 			if(!this.currentModel[slug]) return false;
 			return this.currentModel[slug].includes(choice);
+		},
+		fileChanged: function(key, e){
+			const files = e.srcElement.files;
+			console.log(files);
 		},
 
 		// Private functions
