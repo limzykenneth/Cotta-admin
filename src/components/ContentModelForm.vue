@@ -32,7 +32,7 @@
 			<span class="field" v-else-if="field.app_type == 'wysiwyg'">
 				<wysiwyg-input
 					:name="key"
-					:content="wysiwygContents[key]"
+					:content="currentModel[key]"
 					v-on:wysiwygChanged="wysiwygChanged"
 				></wysiwyg-input>
 			</span>

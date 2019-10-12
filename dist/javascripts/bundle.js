@@ -33674,7 +33674,7 @@
                   { staticClass: "field" },
                   [
                     _c("wysiwyg-input", {
-                      attrs: { name: key, content: _vm.wysiwygContents[key] },
+                      attrs: { name: key, content: _vm.currentModel[key] },
                       on: { wysiwygChanged: _vm.wysiwygChanged }
                     })
                   ],
@@ -33702,7 +33702,7 @@
     /* style */
     const __vue_inject_styles__$j = undefined;
     /* scoped */
-    const __vue_scope_id__$j = "data-v-4a7c4a9e";
+    const __vue_scope_id__$j = "data-v-66aab9a4";
     /* module identifier */
     const __vue_module_identifier__$j = undefined;
     /* functional template */

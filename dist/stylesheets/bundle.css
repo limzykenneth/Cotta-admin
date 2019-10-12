@@ -178,9 +178,6 @@ input[type="submit"].delete-button:hover {
 #signup-container #message[data-v-fac4a3a6] {
   color: #f00;
 }
-#schema-list-container #new-button[data-v-35ce507c] {
-  margin-bottom: 0.5rem;
-}
 #collection-container #new-button[data-v-ef6371c8] {
   margin-bottom: 0.5rem;
 }
@@ -231,6 +228,9 @@ input[type="submit"].delete-button:hover {
   display: inline-block;
   width: 300px;
   text-align: center;
+}
+#schema-list-container #new-button[data-v-35ce507c] {
+  margin-bottom: 0.5rem;
 }
 #users-container #new-button[data-v-627b01fa] {
   margin-bottom: 0.5rem;
@@ -300,6 +300,15 @@ input[type="submit"].delete-button:hover {
   display: inline-block;
   width: 500px;
 }
+.schema-field[data-v-5fdd7073] {
+  margin-bottom: 0.5rem;
+}
+.schema-field input[data-v-5fdd7073] {
+  width: 300px;
+}
+.schema-field select[data-v-5fdd7073] {
+  width: 300px;
+}
 .schema-container[data-v-16775951] {
   border: 1px solid black;
   padding: 10px;
@@ -319,15 +328,6 @@ input[type="submit"].delete-button:hover {
 }
 .schema-container button[data-v-16775951] {
   margin-left: 0.5rem;
-}
-.schema-field[data-v-5fdd7073] {
-  margin-bottom: 0.5rem;
-}
-.schema-field input[data-v-5fdd7073] {
-  width: 300px;
-}
-.schema-field select[data-v-5fdd7073] {
-  width: 300px;
 }
 .user-container[data-v-7b0c4811] {
   border: 1px solid black;
@@ -349,7 +349,7 @@ input[type="submit"].delete-button:hover {
 .user-container button[data-v-7b0c4811] {
   margin-left: 0.5rem;
 }
-#form .field-container[data-v-4a7c4a9e] {
+#form .field-container[data-v-66aab9a4] {
   margin-bottom: 1rem;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -360,7 +360,7 @@ input[type="submit"].delete-button:hover {
           flex-direction: row;
   min-height: 1.5rem;
 }
-#form .field-container .field-name[data-v-4a7c4a9e] {
+#form .field-container .field-name[data-v-66aab9a4] {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -373,11 +373,11 @@ input[type="submit"].delete-button:hover {
           flex-direction: column;
   min-width: 170px;
 }
-#form .field-container .field[data-v-4a7c4a9e] {
+#form .field-container .field[data-v-66aab9a4] {
   display: inline-block;
   width: 500px;
 }
-#form .field-container .field .v-for-container[data-v-4a7c4a9e] {
+#form .field-container .field .v-for-container[data-v-66aab9a4] {
   display: block;
   margin: 0.5rem 0;
 }
