@@ -33415,11 +33415,82 @@
     );
 
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  let quill;
 
   var script$i = {
+  	name: "ModelFormQuill",
+  	props: {
+  		"name": {
+  			type: String,
+  			default: ""
+  		}
+  	},
+  	mounted: function(){
+  		quill = new Quill(this.$el, {
+  			theme: "snow",
+  			placeholder: "Your text here..."
+  		});
+
+  		quill.on("text-change", (delta, oldDelta, source) => {
+  			const converter = new QuillDeltaToHtmlConverter(quill.getContents().ops, {});
+  			this.$emit("wysiwygChanged", converter.convert(), this.name);
+  		});
+  	}
+  };
+
+  /* script */
+  const __vue_script__$i = script$i;
+  /* template */
+  var __vue_render__$i = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "editor", attrs: { name: _vm.name } })
+  };
+  var __vue_staticRenderFns__$i = [];
+  __vue_render__$i._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$i = undefined;
+    /* scoped */
+    const __vue_scope_id__$i = "data-v-d510c8fe";
+    /* module identifier */
+    const __vue_module_identifier__$i = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$i = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+
+    
+    var WYSIWYGInput = normalizeComponent_1(
+      { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+      __vue_inject_styles__$i,
+      __vue_script__$i,
+      __vue_scope_id__$i,
+      __vue_is_functional_template__$i,
+      __vue_module_identifier__$i,
+      undefined,
+      undefined
+    );
+
+  //
+
+  var script$j = {
   	name: "ModelForm",
   	components: {
-  		"file-input": FileInput
+  		"file-input": FileInput,
+  		"wysiwyg-input": WYSIWYGInput
   	},
   	props: {
   		"currentCollectionSchema": {
@@ -33432,6 +33503,18 @@
   				return {};
   			}
   		}
+  	},
+  	data: function(){
+  		const wysiwygContents = {};
+  		_.each(this.currentCollectionSchema.definition, (el, key) => {
+  			if(el.app_type === "wysiwyg"){
+  				wysiwygContents[key] = "";
+  			}
+  		});
+
+  		return {
+  			wysiwygContents
+  		};
   	},
   	methods: {
   		submitModel: function(e){
@@ -33463,7 +33546,9 @@
   		},
   		fileChanged: function(key, e){
   			const files = e.srcElement.files;
-  			console.log(files);
+  		},
+  		wysiwygChanged: function(content, name){
+  			this.wysiwygContents[name] = content;
   		},
 
   		// Private functions
@@ -33499,15 +33584,20 @@
   					}
   				}
   			}
+
+  			// Non-form type fields
+  			_.each(this.wysiwygContents, (el, key) => {
+  				result[key] = el;
+  			});
   			return result;
   		}
   	}
   };
 
   /* script */
-  const __vue_script__$i = script$i;
+  const __vue_script__$j = script$j;
   /* template */
-  var __vue_render__$i = function() {
+  var __vue_render__$j = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -33569,6 +33659,18 @@
                   ],
                   1
                 )
+              : field.app_type == "wysiwyg"
+              ? _c(
+                  "span",
+                  { staticClass: "field" },
+                  [
+                    _c("wysiwyg-input", {
+                      attrs: { name: key },
+                      on: { wysiwygChanged: _vm.wysiwygChanged }
+                    })
+                  ],
+                  1
+                )
               : _c("span", { staticClass: "field" }, [
                   _c("input", {
                     attrs: { required: "", type: field.app_type, name: key },
@@ -33585,17 +33687,17 @@
       2
     )
   };
-  var __vue_staticRenderFns__$i = [];
-  __vue_render__$i._withStripped = true;
+  var __vue_staticRenderFns__$j = [];
+  __vue_render__$j._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$i = undefined;
+    const __vue_inject_styles__$j = undefined;
     /* scoped */
-    const __vue_scope_id__$i = "data-v-3232e3a6";
+    const __vue_scope_id__$j = "data-v-8aca967e";
     /* module identifier */
-    const __vue_module_identifier__$i = undefined;
+    const __vue_module_identifier__$j = undefined;
     /* functional template */
-    const __vue_is_functional_template__$i = false;
+    const __vue_is_functional_template__$j = false;
     /* style inject */
     
     /* style inject SSR */
@@ -33603,19 +33705,19 @@
 
     
     var ModelForm = normalizeComponent_1(
-      { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
-      __vue_inject_styles__$i,
-      __vue_script__$i,
-      __vue_scope_id__$i,
-      __vue_is_functional_template__$i,
-      __vue_module_identifier__$i,
+      { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
+      __vue_inject_styles__$j,
+      __vue_script__$j,
+      __vue_scope_id__$j,
+      __vue_is_functional_template__$j,
+      __vue_module_identifier__$j,
       undefined,
       undefined
     );
 
   //
 
-  var script$j = {
+  var script$k = {
   	name: "ModelEdit",
   	components: {
   		"model-form": ModelForm
@@ -33640,9 +33742,9 @@
   };
 
   /* script */
-  const __vue_script__$j = script$j;
+  const __vue_script__$k = script$k;
   /* template */
-  var __vue_render__$j = function() {
+  var __vue_render__$k = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -33654,17 +33756,17 @@
       on: { submitModel: _vm.submitModel }
     })
   };
-  var __vue_staticRenderFns__$j = [];
-  __vue_render__$j._withStripped = true;
+  var __vue_staticRenderFns__$k = [];
+  __vue_render__$k._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$j = undefined;
+    const __vue_inject_styles__$k = undefined;
     /* scoped */
-    const __vue_scope_id__$j = "data-v-389d15da";
+    const __vue_scope_id__$k = "data-v-389d15da";
     /* module identifier */
-    const __vue_module_identifier__$j = undefined;
+    const __vue_module_identifier__$k = undefined;
     /* functional template */
-    const __vue_is_functional_template__$j = false;
+    const __vue_is_functional_template__$k = false;
     /* style inject */
     
     /* style inject SSR */
@@ -33672,12 +33774,12 @@
 
     
     var ModelEdit = normalizeComponent_1(
-      { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
-      __vue_inject_styles__$j,
-      __vue_script__$j,
-      __vue_scope_id__$j,
-      __vue_is_functional_template__$j,
-      __vue_module_identifier__$j,
+      { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+      __vue_inject_styles__$k,
+      __vue_script__$k,
+      __vue_scope_id__$k,
+      __vue_is_functional_template__$k,
+      __vue_module_identifier__$k,
       undefined,
       undefined
     );
@@ -33702,7 +33804,7 @@
   //
   //
 
-  var script$k = {
+  var script$l = {
   	name: "AccountPage",
   	props: {
   		"loggedInUser": {
@@ -33742,9 +33844,9 @@
   };
 
   /* script */
-  const __vue_script__$k = script$k;
+  const __vue_script__$l = script$l;
   /* template */
-  var __vue_render__$k = function() {
+  var __vue_render__$l = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -33779,7 +33881,7 @@
       )
     ])
   };
-  var __vue_staticRenderFns__$k = [
+  var __vue_staticRenderFns__$l = [
     function() {
       var _vm = this;
       var _h = _vm.$createElement;
@@ -33797,16 +33899,16 @@
       ])
     }
   ];
-  __vue_render__$k._withStripped = true;
+  __vue_render__$l._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$k = undefined;
+    const __vue_inject_styles__$l = undefined;
     /* scoped */
-    const __vue_scope_id__$k = "data-v-4ddbdea3";
+    const __vue_scope_id__$l = "data-v-4ddbdea3";
     /* module identifier */
-    const __vue_module_identifier__$k = undefined;
+    const __vue_module_identifier__$l = undefined;
     /* functional template */
-    const __vue_is_functional_template__$k = false;
+    const __vue_is_functional_template__$l = false;
     /* style inject */
     
     /* style inject SSR */
@@ -33814,19 +33916,19 @@
 
     
     var AccountPage = normalizeComponent_1(
-      { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
-      __vue_inject_styles__$k,
-      __vue_script__$k,
-      __vue_scope_id__$k,
-      __vue_is_functional_template__$k,
-      __vue_module_identifier__$k,
+      { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
+      __vue_inject_styles__$l,
+      __vue_script__$l,
+      __vue_scope_id__$l,
+      __vue_is_functional_template__$l,
+      __vue_module_identifier__$l,
       undefined,
       undefined
     );
 
   //
 
-  var script$l = {
+  var script$m = {
   	name: "AppContent",
   	components: {
   		"app-dashboard": Dashboard,
@@ -33946,9 +34048,9 @@
   };
 
   /* script */
-  const __vue_script__$l = script$l;
+  const __vue_script__$m = script$m;
   /* template */
-  var __vue_render__$l = function() {
+  var __vue_render__$m = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -33990,17 +34092,17 @@
       1
     )
   };
-  var __vue_staticRenderFns__$l = [];
-  __vue_render__$l._withStripped = true;
+  var __vue_staticRenderFns__$m = [];
+  __vue_render__$m._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$l = undefined;
+    const __vue_inject_styles__$m = undefined;
     /* scoped */
-    const __vue_scope_id__$l = "data-v-23f2c399";
+    const __vue_scope_id__$m = "data-v-23f2c399";
     /* module identifier */
-    const __vue_module_identifier__$l = undefined;
+    const __vue_module_identifier__$m = undefined;
     /* functional template */
-    const __vue_is_functional_template__$l = false;
+    const __vue_is_functional_template__$m = false;
     /* style inject */
     
     /* style inject SSR */
@@ -34008,19 +34110,19 @@
 
     
     var Content = normalizeComponent_1(
-      { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
-      __vue_inject_styles__$l,
-      __vue_script__$l,
-      __vue_scope_id__$l,
-      __vue_is_functional_template__$l,
-      __vue_module_identifier__$l,
+      { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+      __vue_inject_styles__$m,
+      __vue_script__$m,
+      __vue_scope_id__$m,
+      __vue_is_functional_template__$m,
+      __vue_module_identifier__$m,
       undefined,
       undefined
     );
 
   //
 
-  var script$m = {
+  var script$n = {
   	name: "App",
   	components: {
   		"app-header": Header,
@@ -34233,9 +34335,9 @@
   };
 
   /* script */
-  const __vue_script__$m = script$m;
+  const __vue_script__$n = script$n;
   /* template */
-  var __vue_render__$m = function() {
+  var __vue_render__$n = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -34306,17 +34408,17 @@
       1
     )
   };
-  var __vue_staticRenderFns__$m = [];
-  __vue_render__$m._withStripped = true;
+  var __vue_staticRenderFns__$n = [];
+  __vue_render__$n._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$m = undefined;
+    const __vue_inject_styles__$n = undefined;
     /* scoped */
-    const __vue_scope_id__$m = "data-v-6d012a4d";
+    const __vue_scope_id__$n = "data-v-6d012a4d";
     /* module identifier */
-    const __vue_module_identifier__$m = undefined;
+    const __vue_module_identifier__$n = undefined;
     /* functional template */
-    const __vue_is_functional_template__$m = false;
+    const __vue_is_functional_template__$n = false;
     /* style inject */
     
     /* style inject SSR */
@@ -34324,12 +34426,12 @@
 
     
     var App = normalizeComponent_1(
-      { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
-      __vue_inject_styles__$m,
-      __vue_script__$m,
-      __vue_scope_id__$m,
-      __vue_is_functional_template__$m,
-      __vue_module_identifier__$m,
+      { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
+      __vue_inject_styles__$n,
+      __vue_script__$n,
+      __vue_scope_id__$n,
+      __vue_is_functional_template__$n,
+      __vue_module_identifier__$n,
       undefined,
       undefined
     );

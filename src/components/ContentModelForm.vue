@@ -29,6 +29,13 @@
 				></file-input>
 			</span>
 
+			<span class="field" v-else-if="field.app_type == 'wysiwyg'">
+				<wysiwyg-input
+					:name="key"
+					v-on:wysiwygChanged="wysiwygChanged"
+				></wysiwyg-input>
+			</span>
+
 			<span class="field" v-else>
 				<input required
 					:type="field.app_type"
@@ -45,11 +52,13 @@
 
 <script>
 import FileInput from "./ContentModelFormFile.vue";
+import WYSIWYGInput from "./ContentModelFormQuill.vue";
 
 export default{
 	name: "ModelForm",
 	components: {
-		"file-input": FileInput
+		"file-input": FileInput,
+		"wysiwyg-input": WYSIWYGInput
 	},
 	props: {
 		"currentCollectionSchema": {
@@ -62,6 +71,18 @@ export default{
 				return {};
 			}
 		}
+	},
+	data: function(){
+		const wysiwygContents = {};
+		_.each(this.currentCollectionSchema.definition, (el, key) => {
+			if(el.app_type === "wysiwyg"){
+				wysiwygContents[key] = "";
+			}
+		});
+
+		return {
+			wysiwygContents
+		};
 	},
 	methods: {
 		submitModel: function(e){
@@ -95,7 +116,9 @@ export default{
 		},
 		fileChanged: function(key, e){
 			const files = e.srcElement.files;
-			console.log(files);
+		},
+		wysiwygChanged: function(content, name){
+			this.wysiwygContents[name] = content;
 		},
 
 		// Private functions
@@ -131,6 +154,11 @@ export default{
 					}
 				}
 			}
+
+			// Non-form type fields
+			_.each(this.wysiwygContents, (el, key) => {
+				result[key] = el;
+			});
 			return result;
 		}
 	}
