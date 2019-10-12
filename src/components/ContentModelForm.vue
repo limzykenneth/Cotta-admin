@@ -32,6 +32,7 @@
 			<span class="field" v-else-if="field.app_type == 'wysiwyg'">
 				<wysiwyg-input
 					:name="key"
+					:content="wysiwygContents[key]"
 					v-on:wysiwygChanged="wysiwygChanged"
 				></wysiwyg-input>
 			</span>
@@ -76,7 +77,7 @@ export default{
 		const wysiwygContents = {};
 		_.each(this.currentCollectionSchema.definition, (el, key) => {
 			if(el.app_type === "wysiwyg"){
-				wysiwygContents[key] = "";
+				wysiwygContents[key] = this.currentModel[key] || "";
 			}
 		});
 

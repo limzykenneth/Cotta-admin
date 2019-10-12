@@ -2,8 +2,9 @@
 <template>
 	<div class="editor"
 		:name="name"
-	>
 
+		v-html="content"
+	>
 	</div>
 </template>
 
@@ -14,6 +15,10 @@ export default{
 	name: "ModelFormQuill",
 	props: {
 		"name": {
+			type: String,
+			default: ""
+		},
+		"content": {
 			type: String,
 			default: ""
 		}

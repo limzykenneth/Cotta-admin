@@ -178,6 +178,9 @@ input[type="submit"].delete-button:hover {
 #signup-container #message[data-v-fac4a3a6] {
   color: #f00;
 }
+#schema-list-container #new-button[data-v-35ce507c] {
+  margin-bottom: 0.5rem;
+}
 #collection-container #new-button[data-v-ef6371c8] {
   margin-bottom: 0.5rem;
 }
@@ -193,9 +196,6 @@ input[type="submit"].delete-button:hover {
 }
 #collection-container #collection-list .list-items:first-child li[data-v-ef6371c8] {
   border-top: 1px solid black;
-}
-#schema-list-container #new-button[data-v-35ce507c] {
-  margin-bottom: 0.5rem;
 }
 #schema-edit-container #form #collection-name[data-v-e7f014c6] {
   margin-bottom: 1rem;
@@ -349,7 +349,7 @@ input[type="submit"].delete-button:hover {
 .user-container button[data-v-7b0c4811] {
   margin-left: 0.5rem;
 }
-#form .field-container[data-v-8aca967e] {
+#form .field-container[data-v-4a7c4a9e] {
   margin-bottom: 1rem;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -360,7 +360,7 @@ input[type="submit"].delete-button:hover {
           flex-direction: row;
   min-height: 1.5rem;
 }
-#form .field-container .field-name[data-v-8aca967e] {
+#form .field-container .field-name[data-v-4a7c4a9e] {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -373,13 +373,16 @@ input[type="submit"].delete-button:hover {
           flex-direction: column;
   min-width: 170px;
 }
-#form .field-container .field[data-v-8aca967e] {
+#form .field-container .field[data-v-4a7c4a9e] {
   display: inline-block;
   width: 500px;
 }
-#form .field-container .field .v-for-container[data-v-8aca967e] {
+#form .field-container .field .v-for-container[data-v-4a7c4a9e] {
   display: block;
   margin: 0.5rem 0;
+}
+.multi-choice .choice-input[data-v-40d3be16] {
+  width: 200px;
 }
 #file-input-container .input-label[data-v-7879ffa4] {
   cursor: pointer;
@@ -431,9 +434,6 @@ input[type="submit"].delete-button:hover {
 #file-input-container .file-preview li .preview img[data-v-7879ffa4] {
   max-height: 75px;
 }
-.multi-choice .choice-input[data-v-40d3be16] {
-  width: 200px;
-}
-.editor[data-v-d510c8fe] {
+.editor[data-v-93509a14] {
   height: auto;
 }

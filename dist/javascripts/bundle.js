@@ -33423,6 +33423,7 @@
   //
   //
   //
+  //
 
   let quill;
 
@@ -33430,6 +33431,10 @@
   	name: "ModelFormQuill",
   	props: {
   		"name": {
+  			type: String,
+  			default: ""
+  		},
+  		"content": {
   			type: String,
   			default: ""
   		}
@@ -33454,7 +33459,11 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "editor", attrs: { name: _vm.name } })
+    return _c("div", {
+      staticClass: "editor",
+      attrs: { name: _vm.name },
+      domProps: { innerHTML: _vm._s(_vm.content) }
+    })
   };
   var __vue_staticRenderFns__$i = [];
   __vue_render__$i._withStripped = true;
@@ -33462,7 +33471,7 @@
     /* style */
     const __vue_inject_styles__$i = undefined;
     /* scoped */
-    const __vue_scope_id__$i = "data-v-d510c8fe";
+    const __vue_scope_id__$i = "data-v-93509a14";
     /* module identifier */
     const __vue_module_identifier__$i = undefined;
     /* functional template */
@@ -33508,7 +33517,7 @@
   		const wysiwygContents = {};
   		_.each(this.currentCollectionSchema.definition, (el, key) => {
   			if(el.app_type === "wysiwyg"){
-  				wysiwygContents[key] = "";
+  				wysiwygContents[key] = this.currentModel[key] || "";
   			}
   		});
 
@@ -33665,7 +33674,7 @@
                   { staticClass: "field" },
                   [
                     _c("wysiwyg-input", {
-                      attrs: { name: key },
+                      attrs: { name: key, content: _vm.wysiwygContents[key] },
                       on: { wysiwygChanged: _vm.wysiwygChanged }
                     })
                   ],
@@ -33693,7 +33702,7 @@
     /* style */
     const __vue_inject_styles__$j = undefined;
     /* scoped */
-    const __vue_scope_id__$j = "data-v-8aca967e";
+    const __vue_scope_id__$j = "data-v-4a7c4a9e";
     /* module identifier */
     const __vue_module_identifier__$j = undefined;
     /* functional template */
