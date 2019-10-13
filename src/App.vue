@@ -140,11 +140,12 @@ export default {
 		/**
 		 * Model related methods. Used to manipulate individual model
 		 */
-		submitModel: function(model, tableSlug, uid=""){
+		submitModel: function(model, tableSlug, uid="", schema){
 			this.$store.dispatch("submitModel", {
 				model,
 				tableSlug,
-				uid
+				uid,
+				schema
 			}).then((model) => {
 				this.$store.commit("setCurrentModel", {
 					model,

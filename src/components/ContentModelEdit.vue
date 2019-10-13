@@ -28,8 +28,8 @@ export default{
 		}
 	},
 	methods: {
-		submitModel: function(model, tableSlug, uid=""){
-			this.$emit("submitModel", model, tableSlug, uid);
+		submitModel: function(model, tableSlug, uid="", schema){
+			this.$emit("submitModel", model, tableSlug, uid, schema);
 		}
 	}
 };

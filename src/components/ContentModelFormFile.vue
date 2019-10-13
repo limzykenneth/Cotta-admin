@@ -1,21 +1,21 @@
 <template>
 	<div id="file-input-container">
 		<label class="input-label" :for="name">Browse</label>
-		<input type="file" class="file-input"
+		<input type="file" class="file-input" multiple
 			:name="name"
 			:id="name"
 
 			v-on:change="fileChanged"
 		>
 		<ol class="file-preview">
-			<li>
+			<li v-for="(file, index) in files" :key="index">
 				<p class="info">
-					{{ fileName }}
+					{{ file.fileName }}
 				</p>
 
 				<div class="preview">
 					<img class="preview-image"
-						:src="fileLink"
+						:src="file.fileLink"
 					>
 				</div>
 			</li>
@@ -31,28 +31,51 @@ export default{
 			type: String,
 			required: true
 		},
-		"fileMetadata": {
-			type: Object,
+		"filesMetadata": {
+			type: [Array, Object],
 			default: function(){
 				return null;
 			}
 		}
 	},
 	data: function(){
+		let filesArray;
+		if(Array.isArray(this.filesMetadata) && this.filesMetadata.length !== 0){
+			filesArray = _.map(this.filesMetadata, (fileMetadata, i) => {
+				return {
+					fileName: fileMetadata.file_name,
+					fileLink: fileMetadata.permalink
+				};
+			});
+			return {
+				files: filesArray
+			}
+		}else if(this.filesMetadata){
+			return {
+				files: [{
+					fileName: this.filesMetadata.file_name,
+					fileLink: this.filesMetadata.permalink
+				}]
+			}
+		}
+
 		return {
-			fileName: this.fileMetadata ? this.fileMetadata.file_name : "No files currently selected for upload",
-			fileLink: this.fileMetadata ? this.fileMetadata.permalink : ""
+			files: [{
+				fileName: "No files currently selected for upload",
+				fileLink: ""
+			}]
 		};
 	},
 	methods: {
 		fileChanged: function(e){
 			const files = e.srcElement.files;
-			// NOTE: Still need to implement multi file input field
-			if(files.length > 0){
-				const file = files[0];
-				this.fileName = file.name;
-				this.fileLink = window.URL.createObjectURL(file);
-			}
+			this.files = [];
+			_.each(files, (file, i) => {
+				this.files.push({
+					fileName: file.name,
+					fileLink: window.URL.createObjectURL(file)
+				});
+			});
 		}
 	}
 };
@@ -85,7 +108,7 @@ export default{
 
 	.file-preview{
 		width: 100%;
-		height: 75px;
+		min-height: 75px;
 		padding: 0;
 		list-style: none;
 		margin: 0.7rem 0;

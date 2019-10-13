@@ -202,23 +202,29 @@ export default new Vuex.Store({
 		},
 		submitModel: function(context, options){
 			const model = options.model;
+			const schema = options.schema;
 			const tableSlug = options.tableSlug;
 			const uid = options.uid;
+			const files = {};
 
 			// Check if there's upload field
-			const files = _.reduce(model, (acc, el, key) => {
-				if(el.file) {
-					acc[key] = el.file;
+			_.each(schema.definition, (el, key) => {
+				if(el.app_type == "file"){
+					files[key] = _.reduce(model[key], (acc, item) => {
+						acc.push(item.file);
+						return acc;
+					}, []);
 				}
-				return acc;
-			}, {});
+			});
 
 			if(_.size(files) > 0){
 				// There are at least one upload field
 				// Remove the binary file entry from the model
-				_.each(model, (el) => {
-					if(el.file){
-						delete el.file;
+				_.each(schema.definition, (el, key) => {
+					if(el.app_type == "file"){
+						_.each(model[key], (el2) => {
+							delete el2.file;
+						});
 					}
 				});
 
@@ -236,26 +242,28 @@ export default new Vuex.Store({
 					const promises = [];
 
 					// Send individual images according to the link provided in the response
-					_.each(model, (el, key) => {
-						if(el.permalink){
-							const file = _.find(files, (f, k) => {
-								return k === key;
+					_.each(schema.definition, (el, key) => {
+						if(el.app_type == "file"){
+							_.each(model[key], (el2) => {
+								const file = _.find(files[key], (f, k) => {
+									return f.name == el2.file_name;
+								});
+
+								const req = generateRequest(
+									`upload/${el2.uid}`,
+									"POST",
+									file,
+									file.type
+								);
+
+								promises.push(sendRequest(req, (success, res) => {
+									if(success) {
+										return Promise.resolve(res);
+									}else{
+										return Promise.reject(res);
+									}
+								}));
 							});
-
-							const req = generateRequest(
-								`upload/${model[key].uid}`,
-								"POST",
-								file,
-								file.type
-							);
-
-							promises.push(sendRequest(req, (success, res) => {
-								if(success) {
-									return Promise.resolve(res);
-								}else{
-									return Promise.reject(res);
-								}
-							}));
 						}
 					});
 

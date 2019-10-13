@@ -13384,23 +13384,29 @@
   		},
   		submitModel: function(context, options){
   			const model = options.model;
+  			const schema = options.schema;
   			const tableSlug = options.tableSlug;
   			const uid = options.uid;
+  			const files = {};
 
   			// Check if there's upload field
-  			const files = _.reduce(model, (acc, el, key) => {
-  				if(el.file) {
-  					acc[key] = el.file;
+  			_.each(schema.definition, (el, key) => {
+  				if(el.app_type == "file"){
+  					files[key] = _.reduce(model[key], (acc, item) => {
+  						acc.push(item.file);
+  						return acc;
+  					}, []);
   				}
-  				return acc;
-  			}, {});
+  			});
 
   			if(_.size(files) > 0){
   				// There are at least one upload field
   				// Remove the binary file entry from the model
-  				_.each(model, (el) => {
-  					if(el.file){
-  						delete el.file;
+  				_.each(schema.definition, (el, key) => {
+  					if(el.app_type == "file"){
+  						_.each(model[key], (el2) => {
+  							delete el2.file;
+  						});
   					}
   				});
 
@@ -13418,26 +13424,28 @@
   					const promises = [];
 
   					// Send individual images according to the link provided in the response
-  					_.each(model, (el, key) => {
-  						if(el.permalink){
-  							const file = _.find(files, (f, k) => {
-  								return k === key;
+  					_.each(schema.definition, (el, key) => {
+  						if(el.app_type == "file"){
+  							_.each(model[key], (el2) => {
+  								const file = _.find(files[key], (f, k) => {
+  									return f.name == el2.file_name;
+  								});
+
+  								const req = generateRequest(
+  									`upload/${el2.uid}`,
+  									"POST",
+  									file,
+  									file.type
+  								);
+
+  								promises.push(sendRequest(req, (success, res) => {
+  									if(success) {
+  										return Promise.resolve(res);
+  									}else{
+  										return Promise.reject(res);
+  									}
+  								}));
   							});
-
-  							const req = generateRequest(
-  								`upload/${model[key].uid}`,
-  								"POST",
-  								file,
-  								file.type
-  							);
-
-  							promises.push(sendRequest(req, (success, res) => {
-  								if(success) {
-  									return Promise.resolve(res);
-  								}else{
-  									return Promise.reject(res);
-  								}
-  							}));
   						}
   					});
 
@@ -33141,6 +33149,12 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$g = {
   	name: "ModelPage",
@@ -33216,11 +33230,7 @@
       _c(
         "ul",
         { attrs: { id: "model-list" } },
-        _vm._l(_vm.currentCollectionSchema.definition, function(
-          field,
-          key,
-          index
-        ) {
+        _vm._l(_vm.currentCollectionSchema.definition, function(field, key) {
           return _c("li", { key: key }, [
             _c("h4", [_vm._v(_vm._s(field.app_title))]),
             _vm._v(" "),
@@ -33241,8 +33251,8 @@
               ? _c("div", { staticClass: "field" }, [
                   _c(
                     "ul",
-                    _vm._l(_vm.currentModel[key], function(option) {
-                      return _c("li", [_vm._v(_vm._s(option))])
+                    _vm._l(_vm.currentModel[key], function(option, key) {
+                      return _c("li", { key: key }, [_vm._v(_vm._s(option))])
                     }),
                     0
                   )
@@ -33252,12 +33262,25 @@
                   _vm._v(_vm._s(_vm.currentModel[key]))
                 ])
               : field.app_type == "file"
-              ? _c("div", { staticClass: "field" }, [
-                  _c("img", {
-                    staticClass: "field-image",
-                    attrs: { src: _vm.currentModel[key].permalink }
-                  })
-                ])
+              ? _c(
+                  "div",
+                  { staticClass: "field" },
+                  [
+                    !Array.isArray(_vm.currentModel[key])
+                      ? _c("img", {
+                          staticClass: "field-image",
+                          attrs: { src: _vm.currentModel[key].permalink }
+                        })
+                      : _vm._l(_vm.currentModel[key], function(file, index) {
+                          return _c("img", {
+                            key: index,
+                            staticClass: "field-image",
+                            attrs: { src: file.permalink }
+                          })
+                        })
+                  ],
+                  2
+                )
               : _vm._e()
           ])
         }),
@@ -33271,7 +33294,7 @@
     /* style */
     const __vue_inject_styles__$g = undefined;
     /* scoped */
-    const __vue_scope_id__$g = "data-v-553abaf4";
+    const __vue_scope_id__$g = "data-v-1618f312";
     /* module identifier */
     const __vue_module_identifier__$g = undefined;
     /* functional template */
@@ -33326,28 +33349,51 @@
   			type: String,
   			required: true
   		},
-  		"fileMetadata": {
-  			type: Object,
+  		"filesMetadata": {
+  			type: [Array, Object],
   			default: function(){
   				return null;
   			}
   		}
   	},
   	data: function(){
+  		let filesArray;
+  		if(Array.isArray(this.filesMetadata) && this.filesMetadata.length !== 0){
+  			filesArray = _.map(this.filesMetadata, (fileMetadata, i) => {
+  				return {
+  					fileName: fileMetadata.file_name,
+  					fileLink: fileMetadata.permalink
+  				};
+  			});
+  			return {
+  				files: filesArray
+  			}
+  		}else if(this.filesMetadata){
+  			return {
+  				files: [{
+  					fileName: this.filesMetadata.file_name,
+  					fileLink: this.filesMetadata.permalink
+  				}]
+  			}
+  		}
+
   		return {
-  			fileName: this.fileMetadata ? this.fileMetadata.file_name : "No files currently selected for upload",
-  			fileLink: this.fileMetadata ? this.fileMetadata.permalink : ""
+  			files: [{
+  				fileName: "No files currently selected for upload",
+  				fileLink: ""
+  			}]
   		};
   	},
   	methods: {
   		fileChanged: function(e){
   			const files = e.srcElement.files;
-  			// NOTE: Still need to implement multi file input field
-  			if(files.length > 0){
-  				const file = files[0];
-  				this.fileName = file.name;
-  				this.fileLink = window.URL.createObjectURL(file);
-  			}
+  			this.files = [];
+  			_.each(files, (file, i) => {
+  				this.files.push({
+  					fileName: file.name,
+  					fileLink: window.URL.createObjectURL(file)
+  				});
+  			});
   		}
   	}
   };
@@ -33366,24 +33412,29 @@
       _vm._v(" "),
       _c("input", {
         staticClass: "file-input",
-        attrs: { type: "file", name: _vm.name, id: _vm.name },
+        attrs: { type: "file", multiple: "", name: _vm.name, id: _vm.name },
         on: { change: _vm.fileChanged }
       }),
       _vm._v(" "),
-      _c("ol", { staticClass: "file-preview" }, [
-        _c("li", [
-          _c("p", { staticClass: "info" }, [
-            _vm._v("\n\t\t\t\t" + _vm._s(_vm.fileName) + "\n\t\t\t")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "preview" }, [
-            _c("img", {
-              staticClass: "preview-image",
-              attrs: { src: _vm.fileLink }
-            })
+      _c(
+        "ol",
+        { staticClass: "file-preview" },
+        _vm._l(_vm.files, function(file, index) {
+          return _c("li", { key: index }, [
+            _c("p", { staticClass: "info" }, [
+              _vm._v("\n\t\t\t\t" + _vm._s(file.fileName) + "\n\t\t\t")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "preview" }, [
+              _c("img", {
+                staticClass: "preview-image",
+                attrs: { src: file.fileLink }
+              })
+            ])
           ])
-        ])
-      ])
+        }),
+        0
+      )
     ])
   };
   var __vue_staticRenderFns__$h = [];
@@ -33392,7 +33443,7 @@
     /* style */
     const __vue_inject_styles__$h = undefined;
     /* scoped */
-    const __vue_scope_id__$h = "data-v-7879ffa4";
+    const __vue_scope_id__$h = "data-v-64d5f317";
     /* module identifier */
     const __vue_module_identifier__$h = undefined;
     /* functional template */
@@ -33532,7 +33583,7 @@
   			const uid = this.currentModel._uid || "";
 
   			if(this.validateModel(result)){
-  				this.$emit("submitModel", result, slug, uid);
+  				this.$emit("submitModel", result, slug, uid, this.currentCollectionSchema);
   			}
   		},
 
@@ -33567,24 +33618,33 @@
   			const data = new FormData(formElement);
   			for(const entry of data){
   				if(result[entry[0]]){
-  					// Handling multiple choice form
-  					result[entry[0]] = Array(result[entry[0]]).concat([entry[1]]);
-  					// Flatten 2D array
-  					result[entry[0]] = result[entry[0]].reduce(
-  						function(a, b) {
-  							return a.concat(b);
-  						},
-  						[]
-  					);
-  				}else{
   					if(entry[1] instanceof File){
-  						// File upload
-  						result[entry[0]] = {
+  						result[entry[0]].push({
   							"content-type": entry[1].type,
   							file_name: entry[1].name,
   							file_description: "",
   							file: entry[1]
-  						};
+  						});
+  					}else{
+  						// Handling multiple choice form
+  						result[entry[0]] = Array(result[entry[0]]).concat([entry[1]]);
+  						// Flatten 2D array
+  						result[entry[0]] = result[entry[0]].reduce(
+  							function(a, b) {
+  								return a.concat(b);
+  							},
+  							[]
+  						);
+  					}
+  				}else{
+  					if(entry[1] instanceof File){
+  						// File upload
+  						result[entry[0]] = [{
+  							"content-type": entry[1].type,
+  							file_name: entry[1].name,
+  							file_description: "",
+  							file: entry[1]
+  						}];
   					}else if(this.currentCollectionSchema.definition[entry[0]].app_type === "checkbox"){
   						result[entry[0]] = [entry[1]];
   					}else{
@@ -33622,11 +33682,7 @@
         }
       },
       [
-        _vm._l(_vm.currentCollectionSchema.definition, function(
-          field,
-          key,
-          index
-        ) {
+        _vm._l(_vm.currentCollectionSchema.definition, function(field, key) {
           return _c("div", { key: key, staticClass: "field-container" }, [
             _c("label", { staticClass: "field-name", attrs: { for: key } }, [
               _vm._v("\n\t\t\t" + _vm._s(field.app_title) + "\n\t\t")
@@ -33663,7 +33719,10 @@
                   { staticClass: "field" },
                   [
                     _c("file-input", {
-                      attrs: { name: key, "file-metadata": _vm.currentModel[key] }
+                      attrs: {
+                        name: key,
+                        "files-metadata": _vm.currentModel[key]
+                      }
                     })
                   ],
                   1
@@ -33702,7 +33761,7 @@
     /* style */
     const __vue_inject_styles__$j = undefined;
     /* scoped */
-    const __vue_scope_id__$j = "data-v-66aab9a4";
+    const __vue_scope_id__$j = "data-v-02f6303a";
     /* module identifier */
     const __vue_module_identifier__$j = undefined;
     /* functional template */
@@ -33744,8 +33803,8 @@
   		}
   	},
   	methods: {
-  		submitModel: function(model, tableSlug, uid=""){
-  			this.$emit("submitModel", model, tableSlug, uid);
+  		submitModel: function(model, tableSlug, uid="", schema){
+  			this.$emit("submitModel", model, tableSlug, uid, schema);
   		}
   	}
   };
@@ -33771,7 +33830,7 @@
     /* style */
     const __vue_inject_styles__$k = undefined;
     /* scoped */
-    const __vue_scope_id__$k = "data-v-389d15da";
+    const __vue_scope_id__$k = "data-v-4c7d3c1a";
     /* module identifier */
     const __vue_module_identifier__$k = undefined;
     /* functional template */
@@ -34020,8 +34079,8 @@
   		renderModelForm: function(tableSlug, uid){
   			this.$emit("renderModelForm", tableSlug, uid);
   		},
-  		submitModel: function(model, tableSlug, uid=""){
-  			this.$emit("submitModel", model, tableSlug, uid);
+  		submitModel: function(model, tableSlug, uid="", schema){
+  			this.$emit("submitModel", model, tableSlug, uid, schema);
   		},
   		deleteModel: function(tableSlug, uid){
   			this.$emit("deleteModel", tableSlug, uid);
@@ -34107,7 +34166,7 @@
     /* style */
     const __vue_inject_styles__$m = undefined;
     /* scoped */
-    const __vue_scope_id__$m = "data-v-23f2c399";
+    const __vue_scope_id__$m = "data-v-4fb74b0e";
     /* module identifier */
     const __vue_module_identifier__$m = undefined;
     /* functional template */
@@ -34207,11 +34266,12 @@
   		/**
   		 * Model related methods. Used to manipulate individual model
   		 */
-  		submitModel: function(model, tableSlug, uid=""){
+  		submitModel: function(model, tableSlug, uid="", schema){
   			this.$store.dispatch("submitModel", {
   				model,
   				tableSlug,
-  				uid
+  				uid,
+  				schema
   			}).then((model) => {
   				this.$store.commit("setCurrentModel", {
   					model,
@@ -34423,7 +34483,7 @@
     /* style */
     const __vue_inject_styles__$n = undefined;
     /* scoped */
-    const __vue_scope_id__$n = "data-v-6d012a4d";
+    const __vue_scope_id__$n = "data-v-7db21dd2";
     /* module identifier */
     const __vue_module_identifier__$n = undefined;
     /* functional template */

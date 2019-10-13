@@ -14,7 +14,7 @@
 		</button>
 
 		<ul id="model-list">
-			<li v-for="(field, key, index) in currentCollectionSchema.definition" :key="key">
+			<li v-for="(field, key) in currentCollectionSchema.definition" :key="key">
 				<h4>{{ field.app_title }}</h4>
 
 				<div class="field" v-if="field.app_type == 'wysiwyg'" v-html="currentModel[key]"></div>
@@ -25,14 +25,20 @@
 
 				<div class="field" v-else-if="field.app_type == 'checkbox'">
 					<ul>
-						<li v-for="option in currentModel[key]">{{ option }}</li>
+						<li v-for="(option, key) in currentModel[key]" :key="key">{{ option }}</li>
 					</ul>
 				</div>
 
 				<div class="field" v-else-if="field.app_type == 'radio'">{{ currentModel[key] }}</div>
 
 				<div class="field" v-else-if="field.app_type == 'file'">
-					<img class="field-image" v-bind:src="currentModel[key].permalink">
+					<img class="field-image" v-if="!Array.isArray(currentModel[key])"
+						v-bind:src="currentModel[key].permalink"
+					>
+					<img class="field-image" v-else 
+						v-for="(file, index) in currentModel[key]" :key="index"
+						v-bind:src="file.permalink"
+					>
 				</div>
 			</li>
 		</ul>

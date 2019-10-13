@@ -130,8 +130,8 @@ export default {
 		renderModelForm: function(tableSlug, uid){
 			this.$emit("renderModelForm", tableSlug, uid);
 		},
-		submitModel: function(model, tableSlug, uid=""){
-			this.$emit("submitModel", model, tableSlug, uid);
+		submitModel: function(model, tableSlug, uid="", schema){
+			this.$emit("submitModel", model, tableSlug, uid, schema);
 		},
 		deleteModel: function(tableSlug, uid){
 			this.$emit("deleteModel", tableSlug, uid);
