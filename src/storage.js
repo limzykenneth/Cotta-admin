@@ -211,7 +211,7 @@ export default new Vuex.Store({
 			_.each(schema.definition, (el, key) => {
 				if(el.app_type == "file"){
 					files[key] = _.reduce(model[key], (acc, item) => {
-						acc.push(item.file);
+						if(item.file) acc.push(item.file);
 						return acc;
 					}, []);
 				}
@@ -223,7 +223,7 @@ export default new Vuex.Store({
 				_.each(schema.definition, (el, key) => {
 					if(el.app_type == "file"){
 						_.each(model[key], (el2) => {
-							delete el2.file;
+							if(el2.file) delete el2.file;
 						});
 					}
 				});
@@ -249,20 +249,22 @@ export default new Vuex.Store({
 									return f.name == el2.file_name;
 								});
 
-								const req = generateRequest(
-									`upload/${el2.uid}`,
-									"POST",
-									file,
-									file.type
-								);
+								if(file){
+									const req = generateRequest(
+										`upload/${el2.uid}`,
+										"POST",
+										file,
+										file.type
+									);
 
-								promises.push(sendRequest(req, (success, res) => {
-									if(success) {
-										return Promise.resolve(res);
-									}else{
-										return Promise.reject(res);
-									}
-								}));
+									promises.push(sendRequest(req, (success, res) => {
+										if(success) {
+											return Promise.resolve(res);
+										}else{
+											return Promise.reject(res);
+										}
+									}));
+								}
 							});
 						}
 					});

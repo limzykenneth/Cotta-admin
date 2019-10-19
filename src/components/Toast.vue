@@ -10,7 +10,7 @@ export default {
 	props: {
 		"toastMessage": {
 			type: String,
-			default: "This is a toast message!"
+			default: "An unknown error occured."
 		}
 	},
 	watch: {

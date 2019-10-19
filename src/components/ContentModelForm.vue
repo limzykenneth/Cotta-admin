@@ -128,16 +128,35 @@ export default{
 
 			const data = new FormData(formElement);
 			for(const entry of data){
-				if(result[entry[0]]){
-					if(entry[1] instanceof File){
-						result[entry[0]].push({
-							"content-type": entry[1].type,
-							file_name: entry[1].name,
-							file_description: "",
-							file: entry[1]
-						});
+				const fieldSlug = entry[0];
+				const fieldValue = entry[1];
+				if(this.currentCollectionSchema.definition[fieldSlug].app_type === "file"){
+					if(fieldValue !== ""){
+						if(result[fieldSlug]){
+							// Multiple occurence
+							result[fieldSlug].push({
+								"content-type": fieldValue.type,
+								file_name: fieldValue.name,
+								file_description: "",
+								file: fieldValue
+							});
+						}else{
+							// First occurence
+							result[fieldSlug] = [{
+								"content-type": fieldValue.type,
+								file_name: fieldValue.name,
+								file_description: "",
+								file: fieldValue
+							}];
+						}
 					}else{
-						// Handling multiple choice form
+						// (Editing) nothing changed
+						result[fieldSlug] = this.currentModel[fieldSlug];
+					}
+				}else if(this.currentCollectionSchema.definition[fieldSlug].app_type === "checkbox"){
+					// Handling multiple choice form
+					if(result[fieldSlug]){
+						// Multiple occurence
 						result[entry[0]] = Array(result[entry[0]]).concat([entry[1]]);
 						// Flatten 2D array
 						result[entry[0]] = result[entry[0]].reduce(
@@ -146,22 +165,13 @@ export default{
 							},
 							[]
 						);
+					}else{
+						// First occurence
+						result[entry[0]] = [entry[1]];
 					}
 				}else{
-					if(entry[1] instanceof File){
-						// File upload
-						result[entry[0]] = [{
-							"content-type": entry[1].type,
-							file_name: entry[1].name,
-							file_description: "",
-							file: entry[1]
-						}];
-					}else if(this.currentCollectionSchema.definition[entry[0]].app_type === "checkbox"){
-						result[entry[0]] = [entry[1]];
-					}else{
-						// All other elements
-						result[entry[0]] = entry[1];
-					}
+					// All other elements
+					result[entry[0]] = entry[1];
 				}
 			}
 

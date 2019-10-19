@@ -13393,7 +13393,7 @@
   			_.each(schema.definition, (el, key) => {
   				if(el.app_type == "file"){
   					files[key] = _.reduce(model[key], (acc, item) => {
-  						acc.push(item.file);
+  						if(item.file) acc.push(item.file);
   						return acc;
   					}, []);
   				}
@@ -13405,7 +13405,7 @@
   				_.each(schema.definition, (el, key) => {
   					if(el.app_type == "file"){
   						_.each(model[key], (el2) => {
-  							delete el2.file;
+  							if(el2.file) delete el2.file;
   						});
   					}
   				});
@@ -13431,20 +13431,22 @@
   									return f.name == el2.file_name;
   								});
 
-  								const req = generateRequest(
-  									`upload/${el2.uid}`,
-  									"POST",
-  									file,
-  									file.type
-  								);
+  								if(file){
+  									const req = generateRequest(
+  										`upload/${el2.uid}`,
+  										"POST",
+  										file,
+  										file.type
+  									);
 
-  								promises.push(sendRequest(req, (success, res) => {
-  									if(success) {
-  										return Promise.resolve(res);
-  									}else{
-  										return Promise.reject(res);
-  									}
-  								}));
+  									promises.push(sendRequest(req, (success, res) => {
+  										if(success) {
+  											return Promise.resolve(res);
+  										}else{
+  											return Promise.reject(res);
+  										}
+  									}));
+  								}
   							});
   						}
   					});
@@ -14041,7 +14043,7 @@
   	props: {
   		"toastMessage": {
   			type: String,
-  			default: "This is a toast message!"
+  			default: "An unknown error occured."
   		}
   	},
   	watch: {
@@ -14096,7 +14098,7 @@
     /* style */
     const __vue_inject_styles__$2 = undefined;
     /* scoped */
-    const __vue_scope_id__$2 = "data-v-4d2725d2";
+    const __vue_scope_id__$2 = "data-v-7c3b11d5";
     /* module identifier */
     const __vue_module_identifier__$2 = undefined;
     /* functional template */
@@ -33617,16 +33619,35 @@
 
   			const data = new FormData(formElement);
   			for(const entry of data){
-  				if(result[entry[0]]){
-  					if(entry[1] instanceof File){
-  						result[entry[0]].push({
-  							"content-type": entry[1].type,
-  							file_name: entry[1].name,
-  							file_description: "",
-  							file: entry[1]
-  						});
+  				const fieldSlug = entry[0];
+  				const fieldValue = entry[1];
+  				if(this.currentCollectionSchema.definition[fieldSlug].app_type === "file"){
+  					if(fieldValue !== ""){
+  						if(result[fieldSlug]){
+  							// Multiple occurence
+  							result[fieldSlug].push({
+  								"content-type": fieldValue.type,
+  								file_name: fieldValue.name,
+  								file_description: "",
+  								file: fieldValue
+  							});
+  						}else{
+  							// First occurence
+  							result[fieldSlug] = [{
+  								"content-type": fieldValue.type,
+  								file_name: fieldValue.name,
+  								file_description: "",
+  								file: fieldValue
+  							}];
+  						}
   					}else{
-  						// Handling multiple choice form
+  						// (Editing) nothing changed
+  						result[fieldSlug] = this.currentModel[fieldSlug];
+  					}
+  				}else if(this.currentCollectionSchema.definition[fieldSlug].app_type === "checkbox"){
+  					// Handling multiple choice form
+  					if(result[fieldSlug]){
+  						// Multiple occurence
   						result[entry[0]] = Array(result[entry[0]]).concat([entry[1]]);
   						// Flatten 2D array
   						result[entry[0]] = result[entry[0]].reduce(
@@ -33635,22 +33656,13 @@
   							},
   							[]
   						);
+  					}else{
+  						// First occurence
+  						result[entry[0]] = [entry[1]];
   					}
   				}else{
-  					if(entry[1] instanceof File){
-  						// File upload
-  						result[entry[0]] = [{
-  							"content-type": entry[1].type,
-  							file_name: entry[1].name,
-  							file_description: "",
-  							file: entry[1]
-  						}];
-  					}else if(this.currentCollectionSchema.definition[entry[0]].app_type === "checkbox"){
-  						result[entry[0]] = [entry[1]];
-  					}else{
-  						// All other elements
-  						result[entry[0]] = entry[1];
-  					}
+  					// All other elements
+  					result[entry[0]] = entry[1];
   				}
   			}
 
@@ -33761,7 +33773,7 @@
     /* style */
     const __vue_inject_styles__$j = undefined;
     /* scoped */
-    const __vue_scope_id__$j = "data-v-02f6303a";
+    const __vue_scope_id__$j = "data-v-4d32604c";
     /* module identifier */
     const __vue_module_identifier__$j = undefined;
     /* functional template */
