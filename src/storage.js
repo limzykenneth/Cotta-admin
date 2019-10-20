@@ -133,7 +133,7 @@ export default new Vuex.Store({
 					context.commit("addNewEditSchema", schema);
 					return Promise.resolve(schema);
 				}else{
-					return Promise.reject(schema);
+					return Promise.reject(schemas);
 				}
 			});
 		},
@@ -144,7 +144,7 @@ export default new Vuex.Store({
 					context.commit("removeSchema", tableSlug);
 					return Promise.resolve(schemas);
 				}else{
-					return Promise.reject(schema);
+					return Promise.reject(schemas);
 				}
 			});
 		},

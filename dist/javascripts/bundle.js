@@ -13315,7 +13315,7 @@
   					context.commit("addNewEditSchema", schema);
   					return Promise.resolve(schema);
   				}else{
-  					return Promise.reject(schema);
+  					return Promise.reject(schemas);
   				}
   			});
   		},
@@ -13326,7 +13326,7 @@
   					context.commit("removeSchema", tableSlug);
   					return Promise.resolve(schemas);
   				}else{
-  					return Promise.reject(schema);
+  					return Promise.reject(schemas);
   				}
   			});
   		},
@@ -34319,12 +34319,17 @@
   			this.$store.dispatch("submitSchema", schema).then((schema) => {
   				this.$store.commit("setContentView", this.contentViews.schemasList);
   				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
+  			}).catch((err) => {
+  				// console.log(err);
+  				this.$store.commit("setToastMessage", err.detail);
   			});
   		},
   		deleteSchema: function(tableSlug){
   			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
   				this.$store.commit("setContentView", this.contentViews.schemasList);
   				this.$store.commit("setToastMessage", response.message);
+  			}).catch((err) => {
+  				this.$store.commit("setToastMessage", err.detail);
   			});
   		},
 
@@ -34495,7 +34500,7 @@
     /* style */
     const __vue_inject_styles__$n = undefined;
     /* scoped */
-    const __vue_scope_id__$n = "data-v-7db21dd2";
+    const __vue_scope_id__$n = "data-v-31eccf12";
     /* module identifier */
     const __vue_module_identifier__$n = undefined;
     /* functional template */

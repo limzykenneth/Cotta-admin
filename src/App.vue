@@ -181,12 +181,17 @@ export default {
 			this.$store.dispatch("submitSchema", schema).then((schema) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
 				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
+			}).catch((err) => {
+				// console.log(err);
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		deleteSchema: function(tableSlug){
 			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
 				this.$store.commit("setToastMessage", response.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 
