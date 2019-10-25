@@ -182,7 +182,6 @@ export default {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
 				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
 			}).catch((err) => {
-				// console.log(err);
 				this.$store.commit("setToastMessage", err.detail);
 			});
 		},

@@ -4,8 +4,8 @@ import jwtDecode from "jwt-decode";
 //---------------------------------------------//
 //               App constants                 //
 //---------------------------------------------//
-export const siteTitle = "Char Admin";
-export const url = "http://localhost:3000/api";
+export const siteTitle = window.SiteTitle;
+export const url = window.SiteURL;
 
 //---------------------------------------------//
 //                  Utils                      //
