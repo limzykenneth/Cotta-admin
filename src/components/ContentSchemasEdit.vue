@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import cloneDeep from "lodash/lang";
+import cloneDeep from "lodash";
 import snakeCase from "snake-case";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
@@ -89,7 +89,7 @@ export default{
 
 			if(newName !== oldName){
 				const appSlug = snakeCase(name);
-				this.$set(this.definition, appSlug,cloneDeep(this.definition[snakeCase(oldName)]));
+				this.$set(this.definition, appSlug, cloneDeep(this.definition[snakeCase(oldName)]));
 				this.$set(this.definition[appSlug], "app_title", name);
 				this.$delete(this.definition, oldName);
 			}
