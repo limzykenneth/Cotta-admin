@@ -8,7 +8,9 @@
     "server": "gulp server",
     "build": "gulp",
     "build:prod": "gulp production",
-    "release": "gulp release"
+    "prerelease": "npm run build",
+    "release": "np",
+    "postrelease": "gulp release"
   },
   "dependencies": {
     "jwt-decode": "^2.2.0",
