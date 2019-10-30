@@ -1,6 +1,6 @@
 {
   "name": "cotta-admin",
-  "version": "0.2.2-beta",
+  "version": "0.2.2",
   "description": "Admin panel for Cotta",
   "author": "limzykenneth <limzy.kenneth@gmail.com>",
   "private": true,
