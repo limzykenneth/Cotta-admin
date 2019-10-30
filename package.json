@@ -1,17 +1,18 @@
 {
   "name": "cotta-admin",
-  "version": "0.2.1",
+  "version": "0.2.2-beta",
   "description": "Admin panel for Cotta",
   "author": "limzykenneth <limzy.kenneth@gmail.com>",
   "private": true,
   "scripts": {
     "server": "gulp server",
     "build": "gulp",
-    "build:prod": "gulp production"
+    "build:prod": "gulp production",
+    "release": "gulp release"
   },
   "dependencies": {
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.15",
+    "lodash.clonedeep": "^4.5.0",
     "snake-case": "^2.1.0",
     "url-join": "^3.0.0",
     "vue": "^2.6.10",
