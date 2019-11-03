@@ -60,7 +60,7 @@ export default{
 		let tableName = "";
 
 		if(this.currentCollectionSchema){
-			definition = this.currentCollectionSchema.definition;
+			definition = cloneDeep(this.currentCollectionSchema.definition);
 			tableName = this.currentCollectionSchema.tableName;
 		}else{
 			definition = {};

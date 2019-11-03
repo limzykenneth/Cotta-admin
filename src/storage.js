@@ -126,16 +126,29 @@ export default new Vuex.Store({
 			}
 		},
 		submitSchema: function(context, schema){
-			const request = generateRequest("schema", "POST", schema);
-			return sendRequest(request, (requestSuccess, schemas) => {
-				if(requestSuccess){
-					context.commit("setCurrentCollectionSchema", schema);
-					context.commit("addNewEditSchema", schema);
-					return Promise.resolve(schema);
-				}else{
-					return Promise.reject(schemas);
-				}
-			});
+			if(context.state.currentCollectionSchema){
+				const request = generateRequest(`schema/${context.state.currentCollectionSchema.tableSlug}`, "POST", schema);
+				return sendRequest(request, (requestSuccess, schemas) => {
+					if(requestSuccess){
+						context.commit("setCurrentCollectionSchema", schema);
+						context.commit("addNewEditSchema", schema);
+						return Promise.resolve("edit");
+					}else{
+						return Promise.reject(schemas);
+					}
+				});
+			}else{
+				const request = generateRequest("schema", "POST", schema);
+				return sendRequest(request, (requestSuccess, schemas) => {
+					if(requestSuccess){
+						context.commit("setCurrentCollectionSchema", schema);
+						context.commit("addNewEditSchema", schema);
+						return Promise.resolve("new");
+					}else{
+						return Promise.reject(schemas);
+					}
+				});
+			}
 		},
 		deleteSchema: function(context, tableSlug){
 			const request = generateRequest(`schema/${tableSlug}`, "DELETE");

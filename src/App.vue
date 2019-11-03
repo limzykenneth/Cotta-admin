@@ -178,9 +178,13 @@ export default {
 			this.$store.commit("setContentView", this.contentViews.schemasEdit);
 		},
 		submitSchema: function(schema){
-			this.$store.dispatch("submitSchema", schema).then((schema) => {
+			this.$store.dispatch("submitSchema", schema).then((type) => {
 				this.$store.commit("setContentView", this.contentViews.schemasList);
-				this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
+				if(type === "new"){
+					this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
+				}else if(type === "edit"){
+					this.$store.commit("setToastMessage", `Edited schema "${schema.tableName}".`);
+				}
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
