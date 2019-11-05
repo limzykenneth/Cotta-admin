@@ -8,6 +8,7 @@
 			:users-list="usersList"
 			:current-model="currentModel"
 			:current-view-user="currentViewUser"
+			:configurations="configurations"
 
 			v-on:loginUser="loginUser"
 			v-on:renderLogin="renderLogin"
@@ -29,6 +30,8 @@
 			v-on:submitUser="submitUser"
 
 			v-on:submitChangePassword="submitChangePassword"
+
+			v-on:submitConfig="submitConfig"
 		></component>
 	</section>
 </template>
@@ -46,6 +49,7 @@ import UserPage from "./ContentUser.vue";
 import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
 import AccountPage from "./ContentAccount.vue";
+import SettingsPage from "./ContentSettings.vue";
 
 export default {
 	name: "AppContent",
@@ -61,7 +65,8 @@ export default {
 		"user-page": UserPage,
 		"model-page": ModelPage,
 		"model-edit": ModelEdit,
-		"account-page": AccountPage
+		"account-page": AccountPage,
+		"settings-page": SettingsPage
 	},
 	props: {
 		"loggedInUser": {
@@ -88,7 +93,7 @@ export default {
 		"currentCollectionSchema": {
 			type: Object,
 			default: function(){
-				return null;
+				return {};
 			}
 		},
 		"currentModel": {
@@ -108,6 +113,10 @@ export default {
 			default: function(){
 				return {};
 			}
+		},
+		"configurations": {
+			type: Array,
+			required: true
 		}
 	},
 	methods: {
@@ -162,6 +171,10 @@ export default {
 
 		submitChangePassword: function(result){
 			this.$emit("submitChangePassword", result);
+		},
+
+		submitConfig: function(result){
+			this.$emit("submitConfig", result);
 		}
 	}
 };

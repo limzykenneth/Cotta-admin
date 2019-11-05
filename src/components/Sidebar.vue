@@ -56,7 +56,7 @@ export default {
 			this.$emit("renderUsersList");
 		},
 		renderSettings: function(){
-
+			this.$emit("renderSettings");
 		}
 	}
 };

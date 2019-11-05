@@ -25,7 +25,9 @@ export default new Vuex.Store({
 		currentCollection: [],
 		currentCollectionSchema: {},
 		currentModel: {},
-		currentViewUser: {}
+		currentViewUser: {},
+
+		configurations: []
 	},
 	/**
 	 * Vuex store mutations. Used to modify Vuex store states.
@@ -81,7 +83,7 @@ export default new Vuex.Store({
 		setCurrentCollectionSchema: function(state, tableSlug){
 			const selectedSchema = _.find(state.schemas, function(el){
 				return el.tableSlug == tableSlug;
-			});
+			}) || {};
 			state.currentCollectionSchema = selectedSchema;
 		},
 		setCurrentModel: function(state, result){
@@ -99,6 +101,10 @@ export default new Vuex.Store({
 			state.currentCollection = _.filter(state.currentCollection, function(el){
 				return el._uid != model._uid;
 			});
+		},
+
+		setConfigurations: function(state, configurations){
+			state.configurations = configurations;
 		}
 	},
 	/**
@@ -390,6 +396,27 @@ export default new Vuex.Store({
 		},
 		submitChangePassword: function(context, details){
 			const request = generateRequest("account/change_password", "POST", details);
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
+			});
+		},
+
+		fetchConfigurations: function(context, details){
+			const request = generateRequest("config");
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
+			});
+		},
+		submitConfigurations: function(context, result){
+			const request = generateRequest(`config/${result.config_name}`, "POST", result);
 			return sendRequest(request, (requestSuccess, response) => {
 				if(requestSuccess){
 					return Promise.resolve(response);

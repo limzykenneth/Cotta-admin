@@ -22,6 +22,7 @@
 				v-on:renderDashboard="renderDashboard"
 				v-on:renderCollection="renderCollection"
 				v-on:renderUsersList="renderUsersList"
+				v-on:renderSettings="renderSettings"
 			></app-sidebar>
 			<app-content
 				:logged-in-user="loggedInUser"
@@ -32,6 +33,7 @@
 				:current-model="currentModel"
 				:users-list="usersList"
 				:current-view-user="currentViewUser"
+				:configurations="configurations"
 
 				v-on:loginUser="loginUser"
 				v-on:renderLogin="renderLogin"
@@ -53,6 +55,8 @@
 				v-on:submitUser="submitUser"
 
 				v-on:submitChangePassword="submitChangePassword"
+
+				v-on:submitConfig="submitConfig"
 			></app-content>
 		</div>
 	</div>
@@ -280,6 +284,23 @@ export default {
 				this.$store.commit("setToastMessage", res.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
+			});
+		},
+
+		/**
+		 * Settings/configurations related methods
+		 */
+		renderSettings: function(){
+			this.$store.dispatch("fetchConfigurations").then((res) => {
+				this.$store.commit("setConfigurations", res);
+				this.$store.commit("setContentView", this.contentViews.settingsPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
+		},
+		submitConfig: function(result){
+			this.$store.dispatch("submitConfigurations", result).then((res) => {
+				this.$store.commit("setToastMessage", `Config "${res.config_name}" changed.`);
 			});
 		}
 	}
