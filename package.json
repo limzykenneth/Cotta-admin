@@ -15,7 +15,8 @@
   "dependencies": {
     "jwt-decode": "^2.2.0",
     "lodash.clonedeep": "^4.5.0",
-    "snake-case": "^2.1.0",
+    "lodash.snakecase": "^4.1.1",
+    "lodash.startcase": "^4.4.0",
     "url-join": "^3.0.0",
     "vue": "^2.6.10",
     "vuex": "^3.0.1"
