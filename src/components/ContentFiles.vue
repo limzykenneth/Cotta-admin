@@ -12,6 +12,8 @@
 		<files-drawer
 			v-if="selectedFile !== null"
 			:file="selectedFile"
+
+			v-on:hideDrawer="hideDrawer"
 		></files-drawer>
 	</article>
 </template>
@@ -44,6 +46,9 @@ export default {
 			}else{
 				this.$set(this, "selectedFile", null);
 			}
+		},
+		hideDrawer: function(){
+			this.$set(this, "selectedFile", null);
 		}
 	}
 };

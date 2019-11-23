@@ -25,6 +25,10 @@
 				<button class="delete-button">Delete</button>
 			</div>
 		</div>
+
+		<button id="hide-button"
+			v-on:click.prevent="hideDrawer"
+		><i class="fa fa-caret-down" aria-hidden="true"></i></button>
 	</section>
 </template>
 
@@ -35,6 +39,11 @@ export default {
 		"file": {
 			type: Object,
 			required: true
+		}
+	},
+	methods: {
+		hideDrawer: function(){
+			this.$emit("hideDrawer");
 		}
 	}
 };
@@ -82,6 +91,12 @@ export default {
 				position: absolute;
 				bottom: 20px;
 			}
+		}
+
+		#hide-button{
+			position: absolute;
+			top: 10px;
+			right: 10px;
 		}
 	}
 </style>
