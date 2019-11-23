@@ -35,7 +35,8 @@ App.data = function(){
 			modelPage: "model-page",
 			modelEdit: "model-edit",
 			accountPage: "account-page",
-			settingsPage: "settings-page"
+			settingsPage: "settings-page",
+			filesPage: "files-page"
 		},
 
 		utils: {
@@ -82,6 +83,9 @@ App.computed = {
 	},
 	configurations: function(){
 		return appStore.state.configurations;
+	},
+	files: function(){
+		return appStore.state.files;
 	}
 };
 

@@ -9,6 +9,7 @@
 			:current-model="currentModel"
 			:current-view-user="currentViewUser"
 			:configurations="configurations"
+			:files="files"
 
 			v-on:loginUser="loginUser"
 			v-on:renderLogin="renderLogin"
@@ -50,6 +51,7 @@ import ModelPage from "./ContentModel.vue";
 import ModelEdit from "./ContentModelEdit.vue";
 import AccountPage from "./ContentAccount.vue";
 import SettingsPage from "./ContentSettings.vue";
+import FilesPage from "./ContentFiles.vue";
 
 export default {
 	name: "AppContent",
@@ -66,7 +68,8 @@ export default {
 		"model-page": ModelPage,
 		"model-edit": ModelEdit,
 		"account-page": AccountPage,
-		"settings-page": SettingsPage
+		"settings-page": SettingsPage,
+		"files-page": FilesPage
 	},
 	props: {
 		"loggedInUser": {
@@ -117,6 +120,10 @@ export default {
 		"configurations": {
 			type: Array,
 			required: true
+		},
+		"files": {
+			type: Array,
+			default: () => []
 		}
 	},
 	methods: {

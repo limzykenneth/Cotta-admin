@@ -23,7 +23,9 @@
 				v-on:renderCollection="renderCollection"
 				v-on:renderUsersList="renderUsersList"
 				v-on:renderSettings="renderSettings"
+				v-on:renderFilesList="renderFilesList"
 			></app-sidebar>
+
 			<app-content
 				:logged-in-user="loggedInUser"
 				:schemas="schemas"
@@ -34,6 +36,7 @@
 				:users-list="usersList"
 				:current-view-user="currentViewUser"
 				:configurations="configurations"
+				:files="files"
 
 				v-on:loginUser="loginUser"
 				v-on:renderLogin="renderLogin"
@@ -301,6 +304,18 @@ export default {
 		submitConfig: function(result){
 			this.$store.dispatch("submitConfigurations", result).then((res) => {
 				this.$store.commit("setToastMessage", `Config "${res.config_name}" changed.`);
+			});
+		},
+
+		/**
+		 * Files metadata manipulation methods
+		 */
+		renderFilesList: function(){
+			this.$store.dispatch("fetchFiles").then((res) => {
+				this.$store.commit("setFiles", res);
+				this.$store.commit("setContentView", this.contentViews.filesPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		}
 	}

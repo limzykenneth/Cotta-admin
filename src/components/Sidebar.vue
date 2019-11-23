@@ -7,6 +7,9 @@
 			<a href="schemas" v-on:click.prevent="renderSchemasList"><li>
 				<i class="fa fa-table" aria-hidden="true"></i>Schemas
 			</li></a>
+			<a href="files" v-on:click.prevent="renderFilesList"><li>
+				<i class="fa fa-picture-o" aria-hidden="true"></i>Files
+			</li></a>
 			<a href="users" v-on:click.prevent="renderUsersList"><li>
 				<i class="fa fa-users" aria-hidden="true"></i>Users
 			</li></a>
@@ -57,6 +60,9 @@ export default {
 		},
 		renderSettings: function(){
 			this.$emit("renderSettings");
+		},
+		renderFilesList: function(){
+			this.$emit("renderFilesList");
 		}
 	}
 };

@@ -27,7 +27,9 @@ export default new Vuex.Store({
 		currentModel: {},
 		currentViewUser: {},
 
-		configurations: []
+		configurations: [],
+
+		files: []
 	},
 	/**
 	 * Vuex store mutations. Used to modify Vuex store states.
@@ -105,6 +107,10 @@ export default new Vuex.Store({
 
 		setConfigurations: function(state, configurations){
 			state.configurations = configurations;
+		},
+
+		setFiles: function(state, files){
+			state.files = files;
 		}
 	},
 	/**
@@ -405,7 +411,10 @@ export default new Vuex.Store({
 			});
 		},
 
-		fetchConfigurations: function(context, details){
+		/**
+		 * Configurations related actions
+		 */
+		fetchConfigurations: function(context){
 			const request = generateRequest("config");
 			return sendRequest(request, (requestSuccess, response) => {
 				if(requestSuccess){
@@ -417,6 +426,20 @@ export default new Vuex.Store({
 		},
 		submitConfigurations: function(context, result){
 			const request = generateRequest(`config/${result.config_name}`, "POST", result);
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
+			});
+		},
+
+		/**
+		 * Files related actions
+		 */
+		fetchFiles: function(context){
+			const request = generateRequest("files");
 			return sendRequest(request, (requestSuccess, response) => {
 				if(requestSuccess){
 					return Promise.resolve(response);
