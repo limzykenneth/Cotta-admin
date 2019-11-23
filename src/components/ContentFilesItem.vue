@@ -32,6 +32,7 @@ export default {
 		border: 1px solid black;
 		padding: 10px;
 		margin: 1px;
+		cursor: pointer;
 
 		.file-name {
 			font-size: 1em;

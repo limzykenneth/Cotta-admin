@@ -5,23 +5,45 @@
 		<div id="files-flex">
 			<files-item v-for="file in files" :key="file.uid"
 				:file="file"
+				v-on:click.native="selectFile(file)"
 			></files-item>
 		</div>
+
+		<files-drawer
+			v-if="selectedFile !== null"
+			:file="selectedFile"
+		></files-drawer>
 	</article>
 </template>
 
 <script>
 import FilesItem from "./ContentFilesItem.vue";
+import FilesDrawer from "./ContentFilesDrawer.vue";
 
 export default {
 	name: "FilesPage",
 	components: {
-		"files-item": FilesItem
+		"files-item": FilesItem,
+		"files-drawer": FilesDrawer
 	},
 	props: {
 		"files": {
 			type: Array,
 			required: true
+		}
+	},
+	data: function(){
+		return {
+			selectedFile: null
+		};
+	},
+	methods: {
+		selectFile: function(file){
+			if(this.selectedFile !== file){
+				this.selectedFile = file;
+			}else{
+				this.$set(this, "selectedFile", null);
+			}
 		}
 	}
 };
@@ -31,6 +53,8 @@ export default {
 	@import "../mixins.less";
 
 	#files-container{
+		height: 125%;
+
 		#files-flex{
 			display: flex;
 			flex-direction: row;
