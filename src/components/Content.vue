@@ -33,6 +33,8 @@
 			v-on:submitChangePassword="submitChangePassword"
 
 			v-on:submitConfig="submitConfig"
+
+			v-on:deleteFile="deleteFile"
 		></component>
 	</section>
 </template>
@@ -182,6 +184,10 @@ export default {
 
 		submitConfig: function(result){
 			this.$emit("submitConfig", result);
+		},
+
+		deleteFile: function(file){
+			this.$emit("deleteFile", file);
 		}
 	}
 };

@@ -62,5 +62,6 @@ function popToast(){
 	display: none;
 	opacity: 0;
 	transition: opacity 0.5s ease;
+	z-index: 1000;
 }
 </style>

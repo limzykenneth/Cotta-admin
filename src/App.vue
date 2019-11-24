@@ -60,6 +60,8 @@
 				v-on:submitChangePassword="submitChangePassword"
 
 				v-on:submitConfig="submitConfig"
+
+				v-on:deleteFile="deleteFile"
 			></app-content>
 		</div>
 	</div>
@@ -314,6 +316,16 @@ export default {
 			this.$store.dispatch("fetchFiles").then((res) => {
 				this.$store.commit("setFiles", res);
 				this.$store.commit("setContentView", this.contentViews.filesPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
+		},
+		deleteFile: function(file){
+			this.$store.dispatch("deleteFile", file).then((res) => {
+				this.$store.commit("setToastMessage", res.detail);
+				return this.$store.dispatch("fetchFiles");
+			}).then((res) => {
+				this.$store.commit("setFiles", res);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});

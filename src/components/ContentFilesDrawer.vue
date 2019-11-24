@@ -22,7 +22,9 @@
 			</div>
 
 			<div class="file-actions">
-				<button class="delete-button">Delete</button>
+				<button class="delete-button"
+					v-on:click.prevent="deleteFile"
+				>Delete</button>
 			</div>
 		</div>
 
@@ -44,6 +46,9 @@ export default {
 	methods: {
 		hideDrawer: function(){
 			this.$emit("hideDrawer");
+		},
+		deleteFile: function(){
+			this.$emit("deleteFile", this.file);
 		}
 	}
 };

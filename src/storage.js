@@ -447,6 +447,16 @@ export default new Vuex.Store({
 					return Promise.reject(response);
 				}
 			});
+		},
+		deleteFile: function(context, file){
+			const request = generateRequest(`files/${file.uid}`, "DELETE");
+			return sendRequest(request, (requestSuccess, response) => {
+				if(requestSuccess){
+					return Promise.resolve(response);
+				}else{
+					return Promise.reject(response);
+				}
+			});
 		}
 	}
 });
