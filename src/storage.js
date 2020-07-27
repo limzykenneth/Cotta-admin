@@ -1,5 +1,5 @@
-import Vue from "vue/dist/vue.esm.browser";
-import Vuex from "vuex/dist/vuex.js";
+import Vue from "vue";
+import Vuex from "vuex";
 import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
 Vue.use(Vuex);

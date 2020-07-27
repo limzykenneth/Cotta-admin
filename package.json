@@ -5,12 +5,10 @@
   "author": "limzykenneth <limzy.kenneth@gmail.com>",
   "private": true,
   "scripts": {
-    "server": "gulp server",
-    "build": "gulp",
-    "build:prod": "gulp production",
+    "server": "npx parcel index.html",
+    "build": "npx parcel build index.html",
     "prerelease": "npm run build",
-    "release": "np",
-    "postrelease": "gulp release"
+    "release": "np"
   },
   "dependencies": {
     "jwt-decode": "^2.2.0",
@@ -18,31 +16,20 @@
     "lodash.snakecase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
     "url-join": "^3.0.0",
-    "vue": "^2.6.10",
-    "vuex": "^3.0.1"
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
     "archiver": "^3.1.1",
-    "autoprefixer": "^7.2.5",
-    "browser-sync": "^2.26.12",
     "change-case": "^3.0.1",
-    "connect-history-api-fallback": "^1.5.0",
     "eslint": "^5.12.1",
     "eslint-plugin-html": "^5.0.0",
     "eslint-plugin-vue": "^5.1.0",
-    "gulp": "^4.0.0",
-    "gulp-compile-handlebars": "^0.6.1",
-    "gulp-plumber": "^1.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-util": "^3.0.8",
+    "less": "^3.12.2",
     "np": "^5.1.3",
-    "rollup": "^1.20.1",
-    "rollup-plugin-commonjs": "^10.0.2",
-    "rollup-plugin-css-only": "^1.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-replace": "^2.2.0",
-    "rollup-plugin-terser": "^5.1.2",
-    "rollup-plugin-vue": "^5.0.1",
-    "vue-template-compiler": "^2.6.10"
+    "parcel-bundler": "^1.12.4",
+    "vue-template-compiler": "^2.6.11"
   }
 }

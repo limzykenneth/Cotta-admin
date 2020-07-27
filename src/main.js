@@ -1,7 +1,7 @@
 //---------------------------------------------//
 //               Dependencies                  //
 //---------------------------------------------//
-import Vue from "vue/dist/vue.esm.browser";
+import Vue from "vue";
 import urlJoin from "url-join";
 import {url, siteTitle, generateRequest, appTokenValid} from "./utils.js";
 
