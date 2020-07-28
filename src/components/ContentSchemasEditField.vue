@@ -13,9 +13,9 @@
 			<option value="file">file</option>
 		</select>
 
-		<button v-on:click.prevent="removeField(selfKey)">Remove</button>
+		<button v-on:click.prevent="removeField(selfIndex)">Remove</button>
 
-		<div class="multi-choice-container" v-if="choicesArray.length">
+		<div class="multi-choice-container" v-if="isChoices">
 			<multi-choice
 				v-for="(choice, index) in choicesArray" :key="index"
 
@@ -80,6 +80,9 @@ export default {
 	computed: {
 		showRemove: function(){
 			return this.choicesArray.length > 1;
+		},
+		isChoices: function(){
+			return _.includes(["checkbox", "radio"], this.value);
 		}
 	},
 	methods: {
@@ -88,10 +91,10 @@ export default {
 		},
 		selectionChanged: function(e){
 			if(e.target.value === "checkbox" || e.target.value === "radio"){
-				this.choicesArray = [{
+				this.choicesArray = this.choicesArray.length === 0 ? [{
 					label: "",
 					value: ""
-				}];
+				}] : this.choicesArray;
 			}
 			this.$emit("input", e.target.value);
 			this.$emit("choiceChanged", {
@@ -100,7 +103,7 @@ export default {
 			});
 		},
 		nameChanged: function(e){
-			this.$emit("nameChanged", e.target.value, this.selfKey);
+			this.$emit("nameChanged", e.target.value, this.selfIndex);
 		},
 		addChoice: function(e){
 			this.choicesArray.push({
@@ -119,7 +122,7 @@ export default {
 			}, {});
 			this.$emit("choiceChanged", {
 				choices,
-				key: this.selfKey
+				index: this.selfIndex
 			});
 		}
 	}

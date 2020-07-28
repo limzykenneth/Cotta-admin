@@ -16,13 +16,13 @@
 				</div>
 
 				<schemas-edit-field
-					v-for="(field, key, index) in definition" :key="key"
+					v-for="(field, index) in definition" :key="index"
 
-					:fieldName="field.app_title"
+					:fieldName="field.properties.app_title"
 					:selfIndex="index"
-					:selfKey="key"
-					:choices="field.app_values"
-					v-model="field.app_type"
+					:selfKey="field.key"
+					:choices="field.properties.app_values"
+					v-model="field.properties.app_type"
 
 					v-on:nameChanged="nameChanged"
 					v-on:removeField="removeField"
@@ -60,10 +60,10 @@ export default{
 		let tableName = "";
 
 		if(this.currentCollectionSchema){
-			definition = cloneDeep(this.currentCollectionSchema.definition);
+			definition = this._objectToArray(this.currentCollectionSchema.definition);
 			tableName = this.currentCollectionSchema.tableName;
 		}else{
-			definition = {};
+			definition = [];
 		}
 
 		return {
@@ -84,69 +84,91 @@ export default{
 		}
 	},
 	methods: {
-		nameChanged: function(newName, oldName){
+		nameChanged: function(newName, index){
 			const name = newName.trim();
+			const nameSlug = snakeCase(name);
 
-			if(newName !== oldName){
-				const appSlug = snakeCase(name);
-				this.$set(this.definition, appSlug, cloneDeep(this.definition[snakeCase(oldName)]));
-				this.$set(this.definition[appSlug], "app_title", name);
-				this.$delete(this.definition, oldName);
-			}
+			const selected = this.definition[index];
+			selected.key = nameSlug;
+			selected.properties.app_title = name;
 		},
 		submitSchema: function(){
-			const schema = {
-				tableSlug: this.tableSlug,
-				tableName: this.tableName,
-				definition: this.definition
-			};
+			try{
+				const parsedDefinition = this._arrayToObject(this.definition);
 
-			for(const key in schema.definition){
-				switch(schema.definition[key].app_type){
-					case "wysiwyg":
-					case "text":
-					case "email":
-					case "radio":
-						schema.definition[key].type = "string";
-						break;
+				const schema = {
+					tableSlug: this.tableSlug,
+					tableName: this.tableName,
+					definition: parsedDefinition
+				};
 
-					case "checkbox":
-						schema.definition[key].type = "array";
-						break;
+				// Maybe move this so that it is reactive
+				for(const key in schema.definition){
+					switch(schema.definition[key].app_type){
+						case "wysiwyg":
+						case "text":
+						case "email":
+						case "radio":
+							schema.definition[key].type = "string";
+							break;
 
-					case "file":
-						schema.definition[key].type = ["object", "array"];
-						break;
+						case "checkbox":
+							schema.definition[key].type = "array";
+							break;
 
-					default:
-						console.log("Not implemented yet");
-						return false;
+						case "file":
+							schema.definition[key].type = ["object", "array"];
+							break;
+
+						default:
+							console.log("Not implemented yet");
+							return false;
+					}
 				}
+				this.$emit("submitSchema", schema);
+			}catch(err){
+				this.$store.commit("setToastMessage", err.message);
 			}
-			this.$emit("submitSchema", schema);
 		},
 		validateInput: function(tableName, definition){
 			if(!tableName){
 				return false;
 			}
 		},
-		// NOTE: How to do this with an object? We need multiple with same name ("")
-		// Maybe an extra "order" field would be needed
-		// Currently can only add one empty field at a time, and fields can't have same name
 		addField: function(){
-			const newField = {
-				app_title: "",
-				app_type: ""
-			};
-			this.$set(this.definition, "", newField);
+			this.definition.push({
+				key: "",
+				properties: {
+					app_title: "",
+					app_type: ""
+				}
+			});
 		},
-		removeField: function(key){
-			this.$delete(this.definition, key);
+		removeField: function(index){
+			this.$delete(this.definition, index);
 		},
 		choiceChanged: function(data){
 			if(data.choices){
-				this.$set(this.definition[data.key], "app_values", data.choices);
+				this.definition[data.index].properties.app_values = data.choices;
 			}
+		},
+
+		_objectToArray: function(obj){
+			return _.map(obj, (prop, key) => {
+				return {
+					key,
+					properties: prop
+				};
+			});
+		},
+		_arrayToObject: function(arr){
+			return _.reduce(arr, (acc, val) => {
+				if(acc[val.key]){
+					throw new Error(`Duplicate field name: ${val.key}`);
+				}
+				acc[val.key] = val.properties;
+				return acc;
+			}, {});
 		}
 	}
 };
