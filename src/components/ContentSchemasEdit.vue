@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import cloneDeep from "lodash.clonedeep";
 import snakeCase from "lodash.snakecase";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
