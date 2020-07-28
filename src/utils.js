@@ -4,8 +4,8 @@ import jwtDecode from "jwt-decode";
 //---------------------------------------------//
 //               App constants                 //
 //---------------------------------------------//
-export const siteTitle = window.SiteTitle;
-export const url = window.SiteURL;
+export const siteTitle = process.env.SITE_TITLE || "Cotta Admin";
+export const url = process.env.SERVER_URL || window.location.origin + "/api";
 
 //---------------------------------------------//
 //                  Utils                      //
