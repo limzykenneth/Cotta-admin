@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../mixins.less";
+@import "../assets/stylesheets/mixins.less";
 
 @background-color: #8888ff;
 #page-sidebar{

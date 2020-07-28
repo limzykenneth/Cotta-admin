@@ -344,7 +344,3 @@ export default {
 	}
 }
 </style>
-
-<style lang="less">
-	@import "./global.less";
-</style>

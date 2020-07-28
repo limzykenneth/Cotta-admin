@@ -35,7 +35,7 @@
 					<img class="field-image" v-if="!Array.isArray(currentModel[key])"
 						v-bind:src="currentModel[key].permalink"
 					>
-					<img class="field-image" v-else 
+					<img class="field-image" v-else
 						v-for="(file, index) in currentModel[key]" :key="index"
 						v-bind:src="file.permalink"
 					>
@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-	@import "../mixins.less";
+	@import "../assets/stylesheets/mixins.less";
 
 	#model-container{
 		max-width: ~"calc(100vw - 220px)";

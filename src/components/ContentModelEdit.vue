@@ -36,5 +36,5 @@ export default{
 </script>
 
 <style lang="less" scoped>
-@import "../mixins.less";
+@import "../assets/stylesheets/mixins.less";
 </style>

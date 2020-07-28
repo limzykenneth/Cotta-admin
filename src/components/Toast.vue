@@ -48,7 +48,7 @@ function popToast(){
 </script>
 
 <style lang="less" scoped>
-@import "../mixins.less";
+@import "../assets/stylesheets/mixins.less";
 
 @background-color: #FFF5D4;
 #page-toast{
