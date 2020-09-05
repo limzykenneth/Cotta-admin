@@ -28,7 +28,7 @@
 		"space-before-blocks": "off"
 	},
 	"plugins": [
-		"html"
+		"vue"
 	],
 	"env": {
 		"browser": true,

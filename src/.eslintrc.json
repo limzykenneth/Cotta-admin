@@ -4,5 +4,9 @@
 	],
 	"parserOptions":{
 		"sourceType": "module"
+	},
+	"globals": {
+		"_": "readonly",
+		"store": "readonly"
 	}
 }
