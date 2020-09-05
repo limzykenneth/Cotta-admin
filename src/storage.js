@@ -267,16 +267,16 @@ export default new Vuex.Store({
 					const promises = [];
 
 					// Send individual images according to the link provided in the response
-					_.each(schema.definition, (el, key) => {
-						if(el.app_type == "file"){
-							_.each(model[key], (el2) => {
-								const file = _.find(files[key], (f, k) => {
-									return f.name == el2.file_name;
+					_.each(schema.definition, (definition, key) => {
+						if(definition.app_type == "file"){
+							_.each(model[key], (property) => {
+								const file = _.find(files[key], (f) => {
+									return f.name == property.file_name;
 								});
 
 								if(file){
 									const req = generateRequest(
-										`upload/${el2.uid}`,
+										`upload/${property.uid}`,
 										"POST",
 										file,
 										file.type
@@ -294,9 +294,11 @@ export default new Vuex.Store({
 						}
 					});
 
-					// All images successfully uploaded, resolve promise to model
+					// All files successfully uploaded, resolve promise to model
 					return Promise.all(promises).then(() => {
 						return Promise.resolve(model);
+					}).catch((err) => {
+						return Promise.reject(err);
 					});
 				});
 			}else{

@@ -69,8 +69,7 @@ export function sendRequest(request, responseHandler){
 		}else if(res.status >= 400){
 			requestSuccess = false;
 		}else{
-			// PANIC
-			throw new Error(request);
+			return new Error(request);
 		}
 		return res.json();
 	}).then((response) => {

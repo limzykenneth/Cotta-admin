@@ -7,6 +7,8 @@
 	},
 	"globals": {
 		"_": "readonly",
-		"store": "readonly"
+		"store": "readonly",
+		"Quill": "readonly",
+		"QuillDeltaToHtmlConverter": "readonly"
 	}
 }
