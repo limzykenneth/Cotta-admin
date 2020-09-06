@@ -319,15 +319,15 @@ export default new Vuex.Store({
 										file.type
 									);
 
-									// promises.push(
-									// 	sendRequest(req).then(({success, response}) => {
-									// 		if(success){
-									// 			return response;
-									// 		}else{
-									// 			throw response;
-									// 		}
-									// 	})
-									// );
+									promises.push(
+										sendRequest(req).then(({success, response}) => {
+											if(success){
+												return response;
+											}else{
+												throw response;
+											}
+										})
+									);
 								}
 							});
 						}
