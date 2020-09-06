@@ -59,20 +59,19 @@ export function appTokenValid(){
 
 /**
  * Utility function to send fetch request and deal with errors.
- * `responseHandler` callback should return promise resolution
  */
-export function sendRequest(request, responseHandler){
-	let requestSuccess;
-	return fetch(request).then((res) => {
-		if(res.status >= 200 && res.status < 300){
-			requestSuccess = true;
-		}else if(res.status >= 400){
-			requestSuccess = false;
-		}else{
-			return new Error(request);
-		}
-		return res.json();
-	}).then((response) => {
-		return responseHandler(requestSuccess, response);
-	});
+export async function sendRequest(request){
+	let success;
+	const res = await fetch(request);
+
+	if(res.status >= 200 && res.status < 300){
+		success = true;
+	}else if(res.status >= 400){
+		success = false;
+	}else{
+		throw new Error("Unknown error occurred");
+	}
+
+	const response = await res.json();
+	return {success, response};
 }

@@ -118,73 +118,74 @@ export default new Vuex.Store({
 	 * update the Vuex store by calling Vuex mutations.
 	 */
 	actions: {
-		fetchSchemas: function(context){
+		fetchSchemas: async function(context){
 			const token = store.get("access_token");
 			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
 				const request = generateRequest("schema");
-				return sendRequest(request, (requestSuccess, schemas) => {
-					if(requestSuccess){
-						context.commit("updateSchemas", schemas);
-						context.commit("setLoggedIn", true);
-						context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
-						return Promise.resolve(schemas);
-					}else{
-						context.commit("setLoggedIn", false);
-						context.commit("updateSchemas", []);
-						context.commit("setLoggedInUser", "");
-						context.commit("setContentView", "login-page");
-					}
-				});
-			}
-		},
-		submitSchema: function(context, schema){
-			if(context.state.currentCollectionSchema){
-				const request = generateRequest(`schema/${context.state.currentCollectionSchema.tableSlug}`, "POST", schema);
-				return sendRequest(request, (requestSuccess, schemas) => {
-					if(requestSuccess){
-						context.commit("setCurrentCollectionSchema", schema);
-						context.commit("addNewEditSchema", schema);
-						return Promise.resolve("edit");
-					}else{
-						return Promise.reject(schemas);
-					}
-				});
-			}else{
-				const request = generateRequest("schema", "POST", schema);
-				return sendRequest(request, (requestSuccess, schemas) => {
-					if(requestSuccess){
-						context.commit("setCurrentCollectionSchema", schema);
-						context.commit("addNewEditSchema", schema);
-						return Promise.resolve("new");
-					}else{
-						return Promise.reject(schemas);
-					}
-				});
-			}
-		},
-		deleteSchema: function(context, tableSlug){
-			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
-			return sendRequest(request, (requestSuccess, schemas) => {
-				if(requestSuccess){
-					context.commit("removeSchema", tableSlug);
-					return Promise.resolve(schemas);
+				const {success, response} = await sendRequest(request);
+
+				if(success){
+					context.commit("updateSchemas", response);
+					context.commit("setLoggedIn", true);
+					context.commit("setLoggedInUser", jwtDecode(store.get("access_token")).username);
+					return response;
 				}else{
-					return Promise.reject(schemas);
+					context.commit("setLoggedIn", false);
+					context.commit("updateSchemas", []);
+					context.commit("setLoggedInUser", "");
+					context.commit("setContentView", "login-page");
 				}
-			});
+			}
 		},
-		fetchUsersList: function(context){
+		submitSchema: async function(context, schema){
+			if(context.state.currentCollectionSchema){
+				// Editing schema
+				const request = generateRequest(`schema/${context.state.currentCollectionSchema.tableSlug}`, "POST", schema);
+				const {success, response} = await sendRequest(request);
+				if(success){
+					context.commit("setCurrentCollectionSchema", schema);
+					context.commit("addNewEditSchema", schema);
+					return "edit";
+				}else{
+					throw response;
+				}
+			}else{
+				// Creating new schema
+				const request = generateRequest("schema", "POST", schema);
+				const {success, response} = await sendRequest(request);
+				if(success){
+					context.commit("setCurrentCollectionSchema", schema);
+					context.commit("addNewEditSchema", schema);
+					return "new";
+				}else{
+					throw response;
+				}
+			}
+		},
+		deleteSchema: async function(context, tableSlug){
+			const request = generateRequest(`schema/${tableSlug}`, "DELETE");
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				context.commit("removeSchema", tableSlug);
+				return response;
+			}else{
+				throw response;
+			}
+		},
+		fetchUsersList: async function(context){
 			const token = store.get("access_token");
+
 			if(token && Math.floor(Date.now()/1000) < jwtDecode(token).exp){
 				const request = generateRequest("users");
-				return sendRequest(request, (requestSuccess, users) => {
-					if(requestSuccess){
-						context.commit("updateUsersList", users);
-						return Promise.resolve(users);
-					}else{
-						return Promise.reject(users);
-					}
-				});
+
+				const {success, response} = await sendRequest(request);
+				if(success){
+					context.commit("updateUsersList", response);
+					return response;
+				}else{
+					throw response;
+				}
 			}
 		},
 		fetchInitialData: function(context){
@@ -193,39 +194,39 @@ export default new Vuex.Store({
 				context.dispatch("fetchUsersList")
 			]);
 		},
-		fetchCollection: function(context, tableSlug){
+		fetchCollection: async function(context, tableSlug){
 			const request = generateRequest(`collections/${tableSlug}`);
-			return sendRequest(request, (requestSuccess, collection) => {
-				if(requestSuccess){
-					context.commit("setCurrentCollection", {
-						collection,
-						tableSlug
-					});
+			const {success, response} = await sendRequest(request);
 
-					return Promise.resolve(collection);
-				}else{
-					return Promise.reject(collection);
-				}
-			});
+			if(success){
+				context.commit("setCurrentCollection", {
+					collection: response,
+					tableSlug
+				});
+
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		fetchModel: function(context, options){
+		fetchModel: async function(context, options){
 			const tableSlug = options.tableSlug;
 			const uid = options.uid;
 			const request = generateRequest(`collections/${tableSlug}/${uid}`);
-			return sendRequest(request, (requestSuccess, model) => {
-				if(requestSuccess){
-					context.commit("setCurrentModel", {
-						tableSlug,
-						model
-					});
+			const {success, response} = await sendRequest(request);
 
-					return Promise.resolve(model);
-				}else{
-					return Promise.reject(model);
-				}
-			});
+			if(success){
+				context.commit("setCurrentModel", {
+					tableSlug,
+					model: response
+				});
+
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		submitModel: function(context, options){
+		submitModel: async function(context, options){
 			const model = options.model;
 			const schema = options.schema;
 			const tableSlug = options.tableSlug;
@@ -255,15 +256,12 @@ export default new Vuex.Store({
 
 				// Create the request for submitting the model
 				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
+
 				// Submit the model
-				return sendRequest(request, (requestSuccess, model) => {
-					if(requestSuccess){
-						return Promise.resolve(model);
-					}else{
-						return Promise.reject(model);
-					}
-				}).then((model) => {
-					// Model submission successful
+				const {success, response} = await sendRequest(request);
+
+				if(success){
+					const model = response;
 					const promises = [];
 
 					// Send individual images according to the link provided in the response
@@ -282,183 +280,182 @@ export default new Vuex.Store({
 										file.type
 									);
 
-									promises.push(sendRequest(req, (success, res) => {
-										if(success) {
-											return Promise.resolve(res);
-										}else{
-											return Promise.reject(res);
-										}
-									}));
+									promises.push(
+										sendRequest(req).then(({success, response}) => {
+											if(success){
+												return response;
+											}else{
+												throw response;
+											}
+										})
+									);
 								}
 							});
 						}
 					});
 
 					// All files successfully uploaded, resolve promise to model
-					return Promise.all(promises).then(() => {
-						return Promise.resolve(model);
-					}).catch((err) => {
-						return Promise.reject(err);
-					});
-				});
+					await Promise.all(promises);
+					return model;
+				}else{
+					throw response;
+				}
+
 			}else{
 				// There are no upload fields
 				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
 
-				return sendRequest(request, (requestSuccess, model) => {
-					if(requestSuccess){
-						context.commit("setCurrentModel", {
-							tableSlug,
-							model
-						});
-						return Promise.resolve(model);
-					}else{
-						return Promise.reject(model);
-					}
-				});
+				const {success, response} = await sendRequest(request);
+				if(success){
+					context.commit("setCurrentModel", {
+						tableSlug,
+						model: response
+					});
+
+					return response;
+				}else{
+					throw response;
+				}
 			}
 		},
-		deleteModel: function(context, options){
+		deleteModel: async function(context, options){
 			const tableSlug = options.tableSlug;
 			const uid = options.uid;
 			const request = generateRequest(`collections/${tableSlug}/${uid}`, "DELETE");
 
-			return sendRequest(request, (requestSuccess, model) => {
-				if(requestSuccess){
-					context.commit("removeModel", {
-						tableSlug,
-						model
-					});
-					return Promise.resolve(model);
-				}else{
-					return Promise.reject(model);
-				}
-			});
-		},
+			const {success, response} = await sendRequest(request);
+			if(success){
+				context.commit("removeModel", {
+					tableSlug,
+					model: response
+				});
 
-		fetchUser: function(context, username){
+				return response;
+			}else{
+				throw response;
+			}
+		},
+		fetchUser: async function(context, username){
 			const request = generateRequest(`users/${username}`);
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		deleteUser: function(context, username){
+		deleteUser: async function(context, username){
 			const request = generateRequest(`users/${username}`, "DELETE");
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		submitUser: function(context, user){
+		submitUser: async function(context, user){
 			if(user.role && !user.password){
+				// Edit user role
 				const request = generateRequest(`users/${user.username}`, "POST", user);
-				return sendRequest(request, (requestSuccess, response) => {
-					if(requestSuccess){
-						return Promise.resolve(response);
-					}else{
-						return Promise.reject(response);
-					}
-				});
+				const {success, response} = await sendRequest(request);
+				if(success){
+					return response;
+				}else{
+					throw response;
+				}
 			}else if(user.password && !user.role){
+				// Edit user password
 				const request = generateRequest("users", "POST", user);
-				return sendRequest(request, (requestSuccess, response) => {
-					if(requestSuccess){
-						return Promise.resolve(response);
-					}else{
-						return Promise.reject(response);
-					}
-				});
+				const {success, response} = await sendRequest(request);
+				if(success){
+					return response;
+				}else{
+					throw response;
+				}
 			}
 		},
 
 		/**
 		 * Login/Sign up related actions
 		 */
-		loginUser: function(context, loginDetails){
+		loginUser: async function(context, loginDetails){
 			const request = generateRequest("tokens/generate_new_token", "POST", loginDetails);
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					store.set("access_token", response.access_token);
-					return context.dispatch("fetchInitialData");
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				store.set("access_token", response.access_token);
+				return context.dispatch("fetchInitialData");
+			}else{
+				throw response;
+			}
 		},
-		signupUser: function(context, signupDetails){
+		signupUser: async function(context, signupDetails){
 			const request = generateRequest("signup", "POST", signupDetails);
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		submitChangePassword: function(context, details){
+		submitChangePassword: async function(context, details){
 			const request = generateRequest("account/change_password", "POST", details);
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
 
 		/**
 		 * Configurations related actions
 		 */
-		fetchConfigurations: function(context){
+		fetchConfigurations: async function(context){
 			const request = generateRequest("config");
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		submitConfigurations: function(context, result){
+		submitConfigurations: async function(context, result){
 			const request = generateRequest(`config/${result.config_name}`, "POST", result);
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
 
 		/**
 		 * Files related actions
 		 */
-		fetchFiles: function(context){
+		fetchFiles: async function(context){
 			const request = generateRequest("files");
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		},
-		deleteFile: function(context, file){
+		deleteFile: async function(context, file){
 			const request = generateRequest(`files/${file.uid}`, "DELETE");
-			return sendRequest(request, (requestSuccess, response) => {
-				if(requestSuccess){
-					return Promise.resolve(response);
-				}else{
-					return Promise.reject(response);
-				}
-			});
+			const {success, response} = await sendRequest(request);
+
+			if(success){
+				return response;
+			}else{
+				throw response;
+			}
 		}
 	}
 });
