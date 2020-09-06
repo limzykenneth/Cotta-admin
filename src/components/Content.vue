@@ -198,9 +198,8 @@ export default {
 
 	#page-content{
 		flex-grow: 2;
-
-		margin: 10px;
-		padding: 10px;
+		width: ~"calc(100vw - 200px)";
+		padding: 20px;
 		overflow: scroll;
 	}
 </style>
