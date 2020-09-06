@@ -254,6 +254,45 @@ export default new Vuex.Store({
 					}
 				});
 
+				let failed = null;
+				const configs = await context.dispatch("fetchConfigurations");
+
+				// Check file size
+				const maxFileSize = _.find(configs, (config) => {
+					return config.config_name === "upload_file_size_max";
+				}).config_value;
+
+				_.each(files, (file) => {
+					for(const f of file){
+						if(f.size > maxFileSize){
+							failed = f.name;
+							break;
+						}
+					}
+				});
+
+				if(failed !== null){
+					throw new Error(`File "${failed}" exceeds maximum upload file size allowed.`);
+				}
+
+				// Check file type
+				const acceptedFileMIME = _.find(configs, (config) => {
+					return config.config_name === "upload_file_accepted_MIME";
+				}).config_value;
+
+				_.each(files, (file) => {
+					for(const f of file){
+						if(!_.contains(acceptedFileMIME, f.type)){
+							failed = f.name;
+							break;
+						}
+					}
+				});
+
+				if(failed !== null){
+					throw new Error(`File "${failed}" is of a type that is not allowed.`);
+				}
+
 				// Create the request for submitting the model
 				const request = generateRequest(`collections/${tableSlug}/${uid}`, "POST", model);
 
@@ -280,15 +319,15 @@ export default new Vuex.Store({
 										file.type
 									);
 
-									promises.push(
-										sendRequest(req).then(({success, response}) => {
-											if(success){
-												return response;
-											}else{
-												throw response;
-											}
-										})
-									);
+									// promises.push(
+									// 	sendRequest(req).then(({success, response}) => {
+									// 		if(success){
+									// 			return response;
+									// 		}else{
+									// 			throw response;
+									// 		}
+									// 	})
+									// );
 								}
 							});
 						}

@@ -163,7 +163,7 @@ export default {
 				this.$store.commit("setContentView", this.contentViews.modelPage);
 				this.$store.commit("setToastMessage", "Created new model");
 			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
+				this.$store.commit("setToastMessage", err.message || err.detail);
 			});
 		},
 		deleteModel: function(tableSlug, uid){
