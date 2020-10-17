@@ -30,7 +30,13 @@ export default{
 		submitChangePassword: function(e){
 			var result = this.$_formToJSON(e.target);
 			result.username = this.loggedInUser;
-			this.$emit("submitChangePassword", result);
+
+			this.$store.dispatch("submitChangePassword", result).then((res) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
+				this.$store.commit("setToastMessage", res.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 
 		// Private functions

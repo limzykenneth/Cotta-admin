@@ -26,8 +26,6 @@
 				:configurations="configurations"
 				:files="files"
 
-				v-on:signupUser="signupUser"
-
 				v-on:renderModel="renderModel"
 				v-on:renderModelForm="renderModelForm"
 				v-on:submitModel="submitModel"
@@ -41,8 +39,6 @@
 				v-on:renderUserForm="renderUserForm"
 				v-on:deleteUser="deleteUser"
 				v-on:submitUser="submitUser"
-
-				v-on:submitChangePassword="submitChangePassword"
 
 				v-on:submitConfig="submitConfig"
 
@@ -215,15 +211,6 @@ export default {
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		submitChangePassword: function(result){
-			this.$store.dispatch("submitChangePassword", result).then((res) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
-				this.$store.commit("setToastMessage", res.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});

@@ -25,8 +25,6 @@
 			v-on:deleteUser="deleteUser"
 			v-on:submitUser="submitUser"
 
-			v-on:submitChangePassword="submitChangePassword"
-
 			v-on:submitConfig="submitConfig"
 
 			v-on:deleteFile="deleteFile"
@@ -124,19 +122,6 @@ export default {
 		}
 	},
 	methods: {
-		loginUser: function(loginDetails){
-			this.$emit("loginUser", loginDetails);
-		},
-		renderLogin: function(){
-			this.$emit("renderLogin");
-		},
-		signupUser: function(signupDetails){
-			this.$emit("signupUser", signupDetails);
-		},
-		renderSignup: function(){
-			this.$emit("renderSignup");
-		},
-
 		renderModel: function(tableSlug, uid){
 			this.$emit("renderModel", tableSlug, uid);
 		},
@@ -171,10 +156,6 @@ export default {
 		},
 		submitUser: function(user){
 			this.$emit("submitUser", user);
-		},
-
-		submitChangePassword: function(result){
-			this.$emit("submitChangePassword", result);
 		},
 
 		submitConfig: function(result){
