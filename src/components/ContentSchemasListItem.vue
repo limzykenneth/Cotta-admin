@@ -17,10 +17,16 @@ export default {
 	},
 	methods: {
 		renderSchemaForm: function(){
-			this.$emit("renderSchemaForm", this.schema.tableSlug);
+			this.$store.commit("setCurrentCollectionSchema", this.schema.tableSlug);
+			this.$store.commit("setContentView", this.$store.state.contentViews.schemasEdit);
 		},
 		deleteSchema: function(){
-			this.$emit("deleteSchema", this.schema.tableSlug);
+			this.$store.dispatch("deleteSchema", this.schema.tableSlug).then((response) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
+				this.$store.commit("setToastMessage", response.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };

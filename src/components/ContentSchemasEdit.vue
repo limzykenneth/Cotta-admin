@@ -124,7 +124,17 @@ export default{
 							return false;
 					}
 				}
-				this.$emit("submitSchema", schema);
+
+				this.$store.dispatch("submitSchema", schema).then((type) => {
+					this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
+					if(type === "new"){
+						this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
+					}else if(type === "edit"){
+						this.$store.commit("setToastMessage", `Edited schema "${schema.tableName}".`);
+					}
+				}).catch((err) => {
+					this.$store.commit("setToastMessage", err.detail);
+				});
 			}catch(err){
 				this.$store.commit("setToastMessage", err.message);
 			}

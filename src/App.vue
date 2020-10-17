@@ -25,10 +25,6 @@
 				:current-view-user="currentViewUser"
 				:configurations="configurations"
 				:files="files"
-
-				v-on:renderSchemaForm="renderSchemaForm"
-				v-on:submitSchema="submitSchema"
-				v-on:deleteSchema="deleteSchema"
 			></app-content>
 		</div>
 	</div>
@@ -47,48 +43,6 @@ export default {
 		"app-sidebar": Sidebar,
 		"app-toast": Toast,
 		"app-content": Content
-	},
-	methods: {
-		/**
-		 * Schema related methods. Used to render schema form and manipulate
-		 * individual schema
-		 */
-		renderSchemaForm: function(tableSlug=""){
-			this.$store.commit("setCurrentCollectionSchema", tableSlug);
-			this.$store.commit("setContentView", this.$store.state.contentViews.schemasEdit);
-		},
-		submitSchema: function(schema){
-			this.$store.dispatch("submitSchema", schema).then((type) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
-				if(type === "new"){
-					this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
-				}else if(type === "edit"){
-					this.$store.commit("setToastMessage", `Edited schema "${schema.tableName}".`);
-				}
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-		deleteSchema: function(tableSlug){
-			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
-				this.$store.commit("setToastMessage", response.message);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		/**
-		 * Login/logout/signup related methods.
-		 */
-		signupUser: function(signupDetails){
-			this.$store.dispatch("signupUser", signupDetails).then((res) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
-				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		}
 	}
 };
 </script>

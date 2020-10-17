@@ -10,10 +10,6 @@
 			:current-view-user="currentViewUser"
 			:configurations="configurations"
 			:files="files"
-
-			v-on:renderSchemaForm="renderSchemaForm"
-			v-on:submitSchema="submitSchema"
-			v-on:deleteSchema="deleteSchema"
 		></component>
 	</section>
 </template>
@@ -105,17 +101,6 @@ export default {
 		"files": {
 			type: Array,
 			default: () => []
-		}
-	},
-	methods: {
-		renderSchemaForm: function(tableSlug){
-			this.$emit("renderSchemaForm", tableSlug);
-		},
-		submitSchema: function(schema){
-			this.$emit("submitSchema", schema);
-		},
-		deleteSchema: function(tableSlug){
-			this.$emit("deleteSchema", tableSlug);
 		}
 	}
 };
