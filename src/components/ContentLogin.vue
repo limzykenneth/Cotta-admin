@@ -25,16 +25,22 @@ export default {
 	},
 	methods: {
 		loginUser: function(e){
-			var username = e.target.querySelector("#username").value;
-			var password = e.target.querySelector("#password").value;
+			const username = e.target.querySelector("#username").value;
+			const password = e.target.querySelector("#password").value;
 
-			this.$emit("loginUser", {
-				username: username,
-				password: password
+			this.$store.dispatch("loginUser", {username, password}).then((res) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
+			}).catch((err) => {
+				if(err.title === "Authentication Failed"){
+					this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
+				}else{
+					console.error(err);
+				}
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderSignup: function(){
-			this.$emit("renderSignup");
+			this.$store.commit("setContentView", this.$store.state.contentViews.signupPage);
 		}
 	}
 };

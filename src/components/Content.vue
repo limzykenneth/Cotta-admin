@@ -11,11 +11,6 @@
 			:configurations="configurations"
 			:files="files"
 
-			v-on:loginUser="loginUser"
-			v-on:renderLogin="renderLogin"
-			v-on:signupUser="signupUser"
-			v-on:renderSignup="renderSignup"
-
 			v-on:renderModel="renderModel"
 			v-on:renderModelForm="renderModelForm"
 			v-on:submitModel="submitModel"

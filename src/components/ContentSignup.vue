@@ -24,9 +24,9 @@ export default {
 	name: "SignupPage",
 	methods: {
 		signupUser: function(e){
-			var username = e.target.querySelector("#username").value;
-			var password = e.target.querySelector("#password").value;
-			var confirmPassword = e.target.querySelector("#confirm-password").value;
+			const username = e.target.querySelector("#username").value;
+			const password = e.target.querySelector("#password").value;
+			const confirmPassword = e.target.querySelector("#confirm-password").value;
 
 			if(password !== confirmPassword){
 				this.$el.querySelector("#message").innerHTML = "Passwords don't match";
@@ -35,13 +35,15 @@ export default {
 				this.$el.querySelector("#message").innerHTML = "";
 			}
 
-			this.$emit("signupUser", {
-				username: username,
-				password: password
+			this.$store.dispatch("signupUser", {username, password}).then((res) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
+				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderLogin: function(){
-			this.$emit("renderLogin");
+			this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 		}
 	}
 };

@@ -26,10 +26,7 @@
 				:configurations="configurations"
 				:files="files"
 
-				v-on:loginUser="loginUser"
-				v-on:renderLogin="renderLogin"
 				v-on:signupUser="signupUser"
-				v-on:renderSignup="renderSignup"
 
 				v-on:renderModel="renderModel"
 				v-on:renderModelForm="renderModelForm"
@@ -73,9 +70,6 @@ export default {
 		/**
 		 * Render methods. Used to render different pages.
 		 */
-		renderLogin: function(){
-			this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
-		},
 		renderModel: function(tableSlug, uid){
 			this.$store.dispatch("fetchModel", {
 				tableSlug,
@@ -217,18 +211,6 @@ export default {
 		/**
 		 * Login/logout/signup related methods.
 		 */
-		loginUser: function(loginDetails){
-			this.$store.dispatch("loginUser", loginDetails).then((res) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
-			}).catch((err) => {
-				if(err.title === "Authentication Failed"){
-					this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
-				}else{
-					console.error(err);
-				}
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
 		signupUser: function(signupDetails){
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
@@ -236,9 +218,6 @@ export default {
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
-		},
-		renderSignup: function(){
-			this.$store.commit("setContentView", this.$store.state.contentViews.signupPage);
 		},
 
 		submitChangePassword: function(result){
