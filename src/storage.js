@@ -1,10 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import jwtDecode from "jwt-decode";
-import urlJoin from "url-join";
 Vue.use(Vuex);
 
-import {siteTitle, url, generateRequest, sendRequest} from "./utils.js";
+import {siteTitle, generateRequest, sendRequest} from "./utils.js";
 
 /**
  * Vuex store initialization
