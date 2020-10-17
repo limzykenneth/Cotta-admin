@@ -41,8 +41,14 @@ export default{
 	},
 	methods: {
 		submitUser: function(e){
-			var result = this.$_formToJSON(e.target);
-			this.$emit("submitUser", result);
+			const result = this.$_formToJSON(e.target);
+
+			this.$store.dispatch("submitUser", result).then((res) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
+				this.$store.commit("setToastMessage", res.message);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 
 		// Private functions

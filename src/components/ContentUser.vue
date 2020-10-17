@@ -50,7 +50,14 @@ export default{
 	},
 	methods: {
 		renderModel: function(tableSlug, uid){
-			this.$emit("renderModel", tableSlug, uid);
+			this.$store.dispatch("fetchModel", {
+				tableSlug,
+				uid
+			}).then((model) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };

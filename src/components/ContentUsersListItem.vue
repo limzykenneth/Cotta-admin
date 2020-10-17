@@ -19,13 +19,28 @@ export default {
 	},
 	methods: {
 		renderUser: function(username){
-			this.$emit("renderUser", username);
+			this.$store.dispatch("fetchUser", username).then((user) => {
+				this.$store.commit("setCurrentViewUser", user);
+				this.$store.commit("setContentView", this.$store.state.contentViews.userPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 		renderUserForm: function(){
-			this.$emit("renderUserForm", this.user.username);
+			this.$store.dispatch("fetchUser", this.user.username).then((user) => {
+				this.$store.commit("setCurrentViewUser", user);
+				this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
+			});
 		},
 		deleteUser: function(){
-			this.$emit("deleteUser", this.user.username);
+			this.$store.dispatch("deleteUser", this.user.username).then((res) => {
+				this.$store.commit("setToastMessage", res.message);
+				this.$store.dispatch("fetchUsersList").catch((err) => {
+					this.$store.commit("setToastMessage", err.detail);
+				});
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };

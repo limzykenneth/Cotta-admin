@@ -19,11 +19,6 @@
 			v-on:renderSchemaForm="renderSchemaForm"
 			v-on:submitSchema="submitSchema"
 			v-on:deleteSchema="deleteSchema"
-
-			v-on:renderUser="renderUser"
-			v-on:renderUserForm="renderUserForm"
-			v-on:deleteUser="deleteUser"
-			v-on:submitUser="submitUser"
 		></component>
 	</section>
 </template>
@@ -139,19 +134,6 @@ export default {
 		},
 		deleteSchema: function(tableSlug){
 			this.$emit("deleteSchema", tableSlug);
-		},
-
-		renderUser: function(username){
-			this.$emit("renderUser", username);
-		},
-		renderUserForm: function(username){
-			this.$emit("renderUserForm", username);
-		},
-		deleteUser: function(username){
-			this.$emit("deleteUser", username);
-		},
-		submitUser: function(user){
-			this.$emit("submitUser", user);
 		}
 	}
 };

@@ -34,11 +34,6 @@
 				v-on:renderSchemaForm="renderSchemaForm"
 				v-on:submitSchema="submitSchema"
 				v-on:deleteSchema="deleteSchema"
-
-				v-on:renderUser="renderUser"
-				v-on:renderUserForm="renderUserForm"
-				v-on:deleteUser="deleteUser"
-				v-on:submitUser="submitUser"
 			></app-content>
 		</div>
 	</div>
@@ -153,48 +148,6 @@ export default {
 			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
 				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
 				this.$store.commit("setToastMessage", response.message);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		/**
-		 * User related methods. Used to render user form and manipulate
-		 * individual user's data
-		 */
-		renderUser: function(username){
-			this.$store.dispatch("fetchUser", username).then((user) => {
-				this.$store.commit("setCurrentViewUser", user);
-				this.$store.commit("setContentView", this.$store.state.contentViews.userPage);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-		renderUserForm: function(username){
-			if(username){
-				this.$store.dispatch("fetchUser", username).then((user) => {
-					this.$store.commit("setCurrentViewUser", user);
-					this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
-				});
-			}else{
-				this.$store.commit("setCurrentViewUser", {});
-				this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
-			}
-		},
-		deleteUser: function(username){
-			this.$store.dispatch("deleteUser", username).then((res) => {
-				this.$store.commit("setToastMessage", res.message);
-				this.$store.dispatch("fetchUsersList").catch((err) => {
-					this.$store.commit("setToastMessage", err.detail);
-				});
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-		submitUser: function(user){
-			this.$store.dispatch("submitUser", user).then((res) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
-				this.$store.commit("setToastMessage", res.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});

@@ -1,16 +1,12 @@
 <template>
 	<article id="users-container">
 		<h1>Users</h1>
-		<button id="new-button" v-on:click.prevent="renderUserForm('')">New</button>
+		<button id="new-button" v-on:click.prevent="renderUserForm">New</button>
 
 		<ul id="users-list">
 			<users-list-item
 				v-for="user in usersList" :key="user.username"
 				:user="user"
-
-				v-on:renderUser="renderUser"
-				v-on:renderUserForm="renderUserForm"
-				v-on:deleteUser="deleteUser"
 			></users-list-item>
 		</ul>
 	</article>
@@ -31,14 +27,9 @@ export default {
 		}
 	},
 	methods:{
-		renderUser: function(username){
-			this.$emit("renderUser", username);
-		},
 		renderUserForm: function(username){
-			this.$emit("renderUserForm", username);
-		},
-		deleteUser: function(username){
-			this.$emit("deleteUser", username);
+			this.$store.commit("setCurrentViewUser", {});
+			this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
 		}
 	}
 };
