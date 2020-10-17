@@ -20,10 +20,9 @@
 <script>
 export default{
 	name: "AccountPage",
-	props: {
-		"loggedInUser": {
-			type: String,
-			default: ""
+	computed: {
+		loggedInUser: function(){
+			return this.$store.state.loggedInUser;
 		}
 	},
 	methods: {

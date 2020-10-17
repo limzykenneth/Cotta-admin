@@ -21,10 +21,11 @@ export default {
 		"siteTitle": {
 			type: String,
 			required: true
-		},
-		"loggedIn": {
-			type: Boolean,
-			default: false
+		}
+	},
+	computed: {
+		loggedIn: function(){
+			return this.$store.state.loggedIn;
 		}
 	},
 	methods: {

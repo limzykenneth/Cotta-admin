@@ -31,12 +31,9 @@
 <script>
 export default{
 	name: "UserEdit",
-	props: {
-		"currentViewUser": {
-			type: Object,
-			default: function(){
-				return {};
-			}
+	computed: {
+		currentViewUser: function(){
+			return this.$store.state.currentViewUser;
 		}
 	},
 	methods: {

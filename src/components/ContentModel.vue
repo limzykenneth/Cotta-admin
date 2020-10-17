@@ -48,14 +48,12 @@
 <script>
 export default {
 	name: "ModelPage",
-	props: {
-		"currentModel": {
-			type: Object,
-			required: true
+	computed: {
+		currentCollectionSchema: function(){
+			return this.$store.state.currentCollectionSchema;
 		},
-		"currentCollectionSchema": {
-			type: Object,
-			required: true
+		currentModel: function(){
+			return this.$store.state.currentModel;
 		}
 	},
 	methods: {

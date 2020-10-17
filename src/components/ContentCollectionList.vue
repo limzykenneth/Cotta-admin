@@ -21,14 +21,12 @@
 <script>
 export default {
 	name: "CollectionList",
-	props: {
-		"currentCollection": {
-			type: Array,
-			required: true
+	computed: {
+		currentCollection: function(){
+			return this.$store.state.currentCollection;
 		},
-		"currentCollectionSchema": {
-			type: Object,
-			required: true
+		currentCollectionSchema: function(){
+			return this.$store.state.currentCollectionSchema;
 		}
 	},
 	methods: {

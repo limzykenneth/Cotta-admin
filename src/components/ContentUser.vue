@@ -24,13 +24,10 @@
 <script>
 export default{
 	name: "UserPage",
-	props: {
-		"currentViewUser": {
-			type: Object,
-			required: true
-		}
-	},
 	computed: {
+		currentViewUser: function(){
+			return this.$store.state.currentViewUser;
+		},
 		userModelLinks: function(){
 			let models = [];
 			_.each(this.currentViewUser.models, (model, i) => {

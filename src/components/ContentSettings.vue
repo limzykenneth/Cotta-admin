@@ -30,10 +30,9 @@ export default {
 			return startCase(val);
 		}
 	},
-	props: {
-		"configurations": {
-			type: Array,
-			required: true
+	computed: {
+		configurations: function(){
+			return this.$store.state.configurations;
 		}
 	},
 	methods: {

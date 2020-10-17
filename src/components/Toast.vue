@@ -7,10 +7,9 @@
 <script>
 export default {
 	name: "AppToast",
-	props: {
-		"toastMessage": {
-			type: String,
-			default: "An unknown error occured."
+	computed: {
+		toastMessage: function(){
+			return this.$store.state.toastMessage;
 		}
 	},
 	watch: {
@@ -19,9 +18,6 @@ export default {
 				popToast.call(this);
 			}
 		}
-	},
-	methods: {
-
 	}
 };
 

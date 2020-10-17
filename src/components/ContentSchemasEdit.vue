@@ -46,39 +46,30 @@ export default{
 	components: {
 		"schemas-edit-field": SchemasEditField
 	},
-	props: {
-		"currentCollectionSchema": {
-			type: Object,
-			default: function(){
-				return null;
-			}
-		}
-	},
-	data: function(){
-		let definition = [];
-		let tableName = "";
-
-		if(this.currentCollectionSchema){
-			definition = this._objectToArray(this.currentCollectionSchema.definition);
-			tableName = this.currentCollectionSchema.tableName;
-		}else{
-			definition = [];
-		}
-
-		return {
-			tableName,
-			definition
-		};
-	},
 	computed: {
+		currentCollectionSchema: function(){
+			return this.$store.state.currentCollectionSchema;
+		},
 		tableSlug: function(){
-			return snakeCase(this.tableName);
+			return snakeCase(this.$store.state.currentCollectionSchema.tableName);
 		},
 		editName: function(){
-			if(this.currentCollectionSchema){
+			if(!_.isEmpty(this.$store.state.currentCollectionSchema)){
 				return true;
 			}else{
 				return false;
+			}
+		},
+		definition: function(){
+			return this._objectToArray(this.$store.state.currentCollectionSchema.definition);
+		},
+		tableName: {
+			get(){
+				return this.$store.state.currentCollectionSchema.tableName;
+			},
+			set(val){
+				// PENDING
+				console.log(val);
 			}
 		}
 	},

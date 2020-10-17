@@ -20,10 +20,9 @@ export default {
 	components: {
 		"users-list-item": UsersListItem
 	},
-	props: {
-		"usersList": {
-			type: Array,
-			required: true
+	computed: {
+		usersList: function(){
+			return this.$store.state.usersList;
 		}
 	},
 	methods:{

@@ -28,16 +28,15 @@ export default {
 		"files-item": FilesItem,
 		"files-drawer": FilesDrawer
 	},
-	props: {
-		"files": {
-			type: Array,
-			required: true
-		}
-	},
 	data: function(){
 		return {
 			selectedFile: null
 		};
+	},
+	computed: {
+		files: function(){
+			return this.$store.state.files;
+		}
 	},
 	methods: {
 		selectFile: function(file){

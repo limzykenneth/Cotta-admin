@@ -15,16 +15,12 @@ export default{
 	components: {
 		"model-form": ModelForm
 	},
-	props: {
-		"currentModel": {
-			type: Object,
-			default: function(){
-				return {};
-			}
+	computed: {
+		currentCollectionSchema: function(){
+			return this.$store.state.currentCollectionSchema;
 		},
-		"currentCollectionSchema": {
-			type: Object,
-			required: true
+		currentModel: function(){
+			return this.$store.state.currentModel;
 		}
 	},
 	methods: {

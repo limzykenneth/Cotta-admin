@@ -47,48 +47,6 @@ App.data = function(){
 	};
 };
 
-/**
- * Computed properties controlled by Vuex
- */
-App.computed = {
-	toastMessage: function(){
-		return appStore.state.toastMessage;
-	},
-	loggedIn: function(){
-		return appStore.state.loggedIn;
-	},
-	loggedInUser: function(){
-		return appStore.state.loggedInUser;
-	},
-	schemas: function(){
-		return appStore.state.schemas;
-	},
-	usersList: function(){
-		return appStore.state.usersList;
-	},
-	currentViewUser: function(){
-		return appStore.state.currentViewUser;
-	},
-	currentContentView: function(){
-		return appStore.state.currentContentView;
-	},
-	currentCollection: function(){
-		return appStore.state.currentCollection;
-	},
-	currentCollectionSchema: function(){
-		return appStore.state.currentCollectionSchema;
-	},
-	currentModel: function(){
-		return appStore.state.currentModel;
-	},
-	configurations: function(){
-		return appStore.state.configurations;
-	},
-	files: function(){
-		return appStore.state.files;
-	}
-};
-
 //---------------------------------------------//
 //              Start the app!                 //
 //---------------------------------------------//

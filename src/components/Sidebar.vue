@@ -33,16 +33,12 @@
 <script>
 export default {
 	name: "AppSidebar",
-	props: {
-		"schemas": {
-			type: Array,
-			default: function(){
-				return [];
-			}
+	computed: {
+		schemas: function(){
+			return this.$store.state.schemas;
 		},
-		"loggedIn": {
-			type: Boolean,
-			default: false
+		loggedIn: function(){
+			return this.$store.state.loggedIn;
 		}
 	},
 	methods: {

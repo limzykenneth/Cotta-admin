@@ -1,15 +1,7 @@
 <template>
 	<section id="page-content">
-		<component v-bind:is="currentView"
-			:logged-in-user="loggedInUser"
-			:schemas="schemas"
-			:current-collection="currentCollection"
-			:current-collection-schema="currentCollectionSchema"
-			:users-list="usersList"
-			:current-model="currentModel"
-			:current-view-user="currentViewUser"
-			:configurations="configurations"
-			:files="files"
+		<component
+			v-bind:is="currentView"
 		></component>
 	</section>
 </template>
@@ -48,59 +40,9 @@ export default {
 		"settings-page": SettingsPage,
 		"files-page": FilesPage
 	},
-	props: {
-		"loggedInUser": {
-			type: String,
-			default: ""
-		},
-		"schemas": {
-			type: Array,
-			default: function(){
-				return [];
-			}
-		},
-		"currentView": {
-			type: String,
-			default: "app-dashboard",
-			required: true
-		},
-		"currentCollection": {
-			type: Array,
-			default: function(){
-				return [];
-			}
-		},
-		"currentCollectionSchema": {
-			type: Object,
-			default: function(){
-				return {};
-			}
-		},
-		"currentModel": {
-			type: Object,
-			default: function(){
-				return {};
-			}
-		},
-		"usersList": {
-			type: Array,
-			default: function(){
-				return [];
-			}
-		},
-		"currentViewUser": {
-			type: Object,
-			default: function(){
-				return {};
-			}
-		},
-		"configurations": {
-			type: Array,
-			required: true
-		},
-		"files": {
-			type: Array,
-			default: () => []
+	computed: {
+		currentView: function(){
+			return this.$store.state.currentContentView;
 		}
 	}
 };

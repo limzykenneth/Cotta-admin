@@ -2,7 +2,6 @@
 	<div id="page-container">
 		<app-header
 			:site-title="siteTitle"
-			:logged-in="loggedIn"
 		></app-header>
 
 		<app-toast
@@ -10,22 +9,9 @@
 		></app-toast>
 
 		<div class="flex-container">
-			<app-sidebar :schemas="schemas"
-				:logged-in="loggedIn"
-			></app-sidebar>
+			<app-sidebar></app-sidebar>
 
-			<app-content
-				:logged-in-user="loggedInUser"
-				:schemas="schemas"
-				:current-view="currentContentView"
-				:current-collection="currentCollection"
-				:current-collection-schema="currentCollectionSchema"
-				:current-model="currentModel"
-				:users-list="usersList"
-				:current-view-user="currentViewUser"
-				:configurations="configurations"
-				:files="files"
-			></app-content>
+			<app-content></app-content>
 		</div>
 	</div>
 </template>

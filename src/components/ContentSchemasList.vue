@@ -17,10 +17,9 @@ export default {
 	components: {
 		"schemas-list-item": SchemaListItem
 	},
-	props: {
-		"schemas": {
-			type: Array,
-			required: true
+	computed: {
+		schemas: function(){
+			return this.$store.state.schemas;
 		}
 	},
 	methods: {
