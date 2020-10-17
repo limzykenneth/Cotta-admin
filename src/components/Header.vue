@@ -29,14 +29,18 @@ export default {
 	},
 	methods: {
 		renderLogin: function(){
-			this.$emit("renderLogin");
+			this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 		},
 		logoutUser: function(){
-			this.$emit("logoutUser");
-			this.$emit("renderLogin");
+			store.remove("access_token");
+			this.$store.commit("updateSchemas", []);
+			this.$store.commit("setLoggedIn", false);
+			this.$store.commit("updateUsersList", []);
+			this.$store.commit("setLoggedInUser", "");
+			this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 		},
 		renderAccount: function(){
-			this.$emit("renderAccount");
+			this.$store.commit("setContentView", this.$store.state.contentViews.accountPage);
 		}
 	}
 };

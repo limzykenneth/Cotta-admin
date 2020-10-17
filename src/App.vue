@@ -3,11 +3,6 @@
 		<app-header
 			:site-title="siteTitle"
 			:logged-in="loggedIn"
-
-			v-on:renderLogin="renderLogin"
-			v-on:logoutUser="logoutUser"
-			v-on:renderSignup="renderSignup"
-			v-on:renderAccount="renderAccount"
 		></app-header>
 
 		<app-toast
@@ -114,9 +109,6 @@ export default {
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
-		},
-		renderAccount: function(){
-			this.$store.commit("setContentView", this.$store.state.contentViews.accountPage);
 		},
 
 		/**
@@ -236,13 +228,6 @@ export default {
 				}
 				this.$store.commit("setToastMessage", err.detail);
 			});
-		},
-		logoutUser: function(){
-			store.remove("access_token");
-			this.$store.commit("updateSchemas", []);
-			this.$store.commit("setLoggedIn", false);
-			this.$store.commit("updateUsersList", []);
-			this.$store.commit("setLoggedInUser", "");
 		},
 		signupUser: function(signupDetails){
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
