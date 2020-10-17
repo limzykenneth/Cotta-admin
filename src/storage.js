@@ -29,7 +29,24 @@ export default new Vuex.Store({
 
 		configurations: [],
 
-		files: []
+		files: [],
+
+		contentViews: {
+			dashboard: "app-dashboard",
+			loginPage: "login-page",
+			signupPage: "signup-page",
+			schemasList: "schemas-list",
+			schemasEdit: "schemas-edit",
+			collectionList: "collection-list",
+			usersList: "users-list",
+			userEdit: "user-edit",
+			userPage: "user-page",
+			modelPage: "model-page",
+			modelEdit: "model-edit",
+			accountPage: "account-page",
+			settingsPage: "settings-page",
+			filesPage: "files-page"
+		}
 	},
 	/**
 	 * Vuex store mutations. Used to modify Vuex store states.

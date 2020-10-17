@@ -17,13 +17,6 @@
 		<div class="flex-container">
 			<app-sidebar :schemas="schemas"
 				:logged-in="loggedIn"
-
-				v-on:renderSchemasList="renderSchemasList"
-				v-on:renderDashboard="renderDashboard"
-				v-on:renderCollection="renderCollection"
-				v-on:renderUsersList="renderUsersList"
-				v-on:renderSettings="renderSettings"
-				v-on:renderFilesList="renderFilesList"
 			></app-sidebar>
 
 			<app-content
@@ -85,35 +78,15 @@ export default {
 		/**
 		 * Render methods. Used to render different pages.
 		 */
-		renderDashboard: function(){
-			this.$store.commit("setContentView", this.contentViews.dashboard);
-		},
-		renderSchemasList: function(){
-			this.$store.commit("setContentView", this.contentViews.schemasList);
-		},
-		renderCollection: function(tableSlug){
-			this.$store.dispatch("fetchCollection", tableSlug).then(() => {
-				this.$store.commit("setContentView", this.contentViews.collectionList);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-		renderUsersList: function(){
-			this.$store.dispatch("fetchUsersList").then(() => {
-				this.$store.commit("setContentView", this.contentViews.usersList);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
 		renderLogin: function(){
-			this.$store.commit("setContentView", this.contentViews.loginPage);
+			this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 		},
 		renderModel: function(tableSlug, uid){
 			this.$store.dispatch("fetchModel", {
 				tableSlug,
 				uid
 			}).then((model) => {
-				this.$store.commit("setContentView", this.contentViews.modelPage);
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
@@ -126,14 +99,14 @@ export default {
 						model: {},
 						tableSlug
 					});
-					this.$store.commit("setContentView", this.contentViews.modelEdit);
+					this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
 				}else{
 					// If uid is defined, fetch model then render populated form
 					this.$store.dispatch("fetchModel", {
 						tableSlug,
 						uid
 					}).then((model) => {
-						this.$store.commit("setContentView", this.contentViews.modelEdit);
+						this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
 					}).catch((err) => {
 						this.$store.commit("setToastMessage", err.detail);
 					});
@@ -143,7 +116,7 @@ export default {
 			});
 		},
 		renderAccount: function(){
-			this.$store.commit("setContentView", this.contentViews.accountPage);
+			this.$store.commit("setContentView", this.$store.state.contentViews.accountPage);
 		},
 
 		/**
@@ -160,7 +133,7 @@ export default {
 					model,
 					tableSlug
 				});
-				this.$store.commit("setContentView", this.contentViews.modelPage);
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
 				this.$store.commit("setToastMessage", "Created new model");
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.message || err.detail);
@@ -171,7 +144,7 @@ export default {
 				tableSlug,
 				uid
 			}).then((model) => {
-				this.$store.commit("setContentView", this.contentViews.collectionList);
+				this.$store.commit("setContentView", this.$store.state.contentViews.collectionList);
 				this.$store.commit("setToastMessage", "Deleted model");
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
@@ -184,11 +157,11 @@ export default {
 		 */
 		renderSchemaForm: function(tableSlug=""){
 			this.$store.commit("setCurrentCollectionSchema", tableSlug);
-			this.$store.commit("setContentView", this.contentViews.schemasEdit);
+			this.$store.commit("setContentView", this.$store.state.contentViews.schemasEdit);
 		},
 		submitSchema: function(schema){
 			this.$store.dispatch("submitSchema", schema).then((type) => {
-				this.$store.commit("setContentView", this.contentViews.schemasList);
+				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
 				if(type === "new"){
 					this.$store.commit("setToastMessage", `Created schema "${schema.tableName}".`);
 				}else if(type === "edit"){
@@ -200,7 +173,7 @@ export default {
 		},
 		deleteSchema: function(tableSlug){
 			this.$store.dispatch("deleteSchema", tableSlug).then((response) => {
-				this.$store.commit("setContentView", this.contentViews.schemasList);
+				this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
 				this.$store.commit("setToastMessage", response.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
@@ -214,7 +187,7 @@ export default {
 		renderUser: function(username){
 			this.$store.dispatch("fetchUser", username).then((user) => {
 				this.$store.commit("setCurrentViewUser", user);
-				this.$store.commit("setContentView", this.contentViews.userPage);
+				this.$store.commit("setContentView", this.$store.state.contentViews.userPage);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
@@ -223,11 +196,11 @@ export default {
 			if(username){
 				this.$store.dispatch("fetchUser", username).then((user) => {
 					this.$store.commit("setCurrentViewUser", user);
-					this.$store.commit("setContentView", this.contentViews.userEdit);
+					this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
 				});
 			}else{
 				this.$store.commit("setCurrentViewUser", {});
-				this.$store.commit("setContentView", this.contentViews.userEdit);
+				this.$store.commit("setContentView", this.$store.state.contentViews.userEdit);
 			}
 		},
 		deleteUser: function(username){
@@ -242,7 +215,7 @@ export default {
 		},
 		submitUser: function(user){
 			this.$store.dispatch("submitUser", user).then((res) => {
-				this.$store.commit("setContentView", this.contentViews.dashboard);
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
 				this.$store.commit("setToastMessage", res.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
@@ -254,10 +227,10 @@ export default {
 		 */
 		loginUser: function(loginDetails){
 			this.$store.dispatch("loginUser", loginDetails).then((res) => {
-				this.$store.commit("setContentView", this.contentViews.dashboard);
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
 			}).catch((err) => {
 				if(err.title === "Authentication Failed"){
-					this.$store.commit("setContentView", this.contentViews.loginPage);
+					this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 				}else{
 					console.error(err);
 				}
@@ -273,19 +246,19 @@ export default {
 		},
 		signupUser: function(signupDetails){
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
-				this.$store.commit("setContentView", this.contentViews.loginPage);
+				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});
 		},
 		renderSignup: function(){
-			this.$store.commit("setContentView", this.contentViews.signupPage);
+			this.$store.commit("setContentView", this.$store.state.contentViews.signupPage);
 		},
 
 		submitChangePassword: function(result){
 			this.$store.dispatch("submitChangePassword", result).then((res) => {
-				this.$store.commit("setContentView", this.contentViews.dashboard);
+				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
 				this.$store.commit("setToastMessage", res.message);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
@@ -295,14 +268,6 @@ export default {
 		/**
 		 * Settings/configurations related methods
 		 */
-		renderSettings: function(){
-			this.$store.dispatch("fetchConfigurations").then((res) => {
-				this.$store.commit("setConfigurations", res);
-				this.$store.commit("setContentView", this.contentViews.settingsPage);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
 		submitConfig: function(result){
 			this.$store.dispatch("submitConfigurations", result).then((res) => {
 				this.$store.commit("setToastMessage", `Config "${res.config_name}" changed.`);
@@ -312,14 +277,6 @@ export default {
 		/**
 		 * Files metadata manipulation methods
 		 */
-		renderFilesList: function(){
-			this.$store.dispatch("fetchFiles").then((res) => {
-				this.$store.commit("setFiles", res);
-				this.$store.commit("setContentView", this.contentViews.filesPage);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
 		deleteFile: function(file){
 			this.$store.dispatch("deleteFile", file).then((res) => {
 				this.$store.commit("setToastMessage", res.detail);

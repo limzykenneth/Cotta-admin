@@ -47,22 +47,40 @@ export default {
 	},
 	methods: {
 		renderDashboard: function(e){
-			this.$emit("renderDashboard");
+			this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
 		},
 		renderSchemasList: function(e){
-			this.$emit("renderSchemasList");
+			this.$store.commit("setContentView", this.$store.state.contentViews.schemasList);
 		},
 		renderCollection: function(tableSlug){
-			this.$emit("renderCollection", tableSlug);
+			this.$store.dispatch("fetchCollection", tableSlug).then((res) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.collectionList);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 		renderUsersList: function(){
-			this.$emit("renderUsersList");
+			this.$store.dispatch("fetchUsersList").then(() => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.usersList);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 		renderSettings: function(){
-			this.$emit("renderSettings");
+			this.$store.dispatch("fetchConfigurations").then((res) => {
+				this.$store.commit("setConfigurations", res);
+				this.$store.commit("setContentView", this.$store.state.contentViews.settingsPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 		renderFilesList: function(){
-			this.$emit("renderFilesList");
+			this.$store.dispatch("fetchFiles").then((res) => {
+				this.$store.commit("setFiles", res);
+				this.$store.commit("setContentView", this.$store.state.contentViews.filesPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };
