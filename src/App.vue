@@ -26,11 +26,6 @@
 				:configurations="configurations"
 				:files="files"
 
-				v-on:renderModel="renderModel"
-				v-on:renderModelForm="renderModelForm"
-				v-on:submitModel="submitModel"
-				v-on:deleteModel="deleteModel"
-
 				v-on:renderSchemaForm="renderSchemaForm"
 				v-on:submitSchema="submitSchema"
 				v-on:deleteSchema="deleteSchema"
@@ -54,76 +49,6 @@ export default {
 		"app-content": Content
 	},
 	methods: {
-		/**
-		 * Render methods. Used to render different pages.
-		 */
-		renderModel: function(tableSlug, uid){
-			this.$store.dispatch("fetchModel", {
-				tableSlug,
-				uid
-			}).then((model) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-		renderModelForm: function(tableSlug, uid){
-			this.$store.dispatch("fetchCollection", tableSlug).then((collection) => {
-				if(!uid){
-					// If not uid is defined, render blank form
-					this.$store.commit("setCurrentModel", {
-						model: {},
-						tableSlug
-					});
-					this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
-				}else{
-					// If uid is defined, fetch model then render populated form
-					this.$store.dispatch("fetchModel", {
-						tableSlug,
-						uid
-					}).then((model) => {
-						this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
-					}).catch((err) => {
-						this.$store.commit("setToastMessage", err.detail);
-					});
-				}
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		/**
-		 * Model related methods. Used to manipulate individual model
-		 */
-		submitModel: function(model, tableSlug, uid="", schema){
-			this.$store.dispatch("submitModel", {
-				model,
-				tableSlug,
-				uid,
-				schema
-			}).then((model) => {
-				this.$store.commit("setCurrentModel", {
-					model,
-					tableSlug
-				});
-				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
-				this.$store.commit("setToastMessage", "Created new model");
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.message || err.detail);
-			});
-		},
-		deleteModel: function(tableSlug, uid){
-			this.$store.dispatch("deleteModel", {
-				tableSlug,
-				uid
-			}).then((model) => {
-				this.$store.commit("setContentView", this.$store.state.contentViews.collectionList);
-				this.$store.commit("setToastMessage", "Deleted model");
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
 		/**
 		 * Schema related methods. Used to render schema form and manipulate
 		 * individual schema

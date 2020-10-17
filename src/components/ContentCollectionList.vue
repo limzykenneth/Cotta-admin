@@ -2,7 +2,7 @@
 	<article id="collection-container">
 		<h1>{{ currentCollectionSchema.tableName }}</h1>
 
-		<button id="new-button" v-on:click.prevent="renderModelForm(currentCollectionSchema.tableSlug)">New</button>
+		<button id="new-button" v-on:click.prevent="renderModelForm">New</button>
 
 		<ul id="collection-list">
 			<a class="list-items"
@@ -33,10 +33,25 @@ export default {
 	},
 	methods: {
 		renderModel: function(tableSlug, uid){
-			this.$emit("renderModel", tableSlug, uid);
+			this.$store.dispatch("fetchModel", {
+				tableSlug,
+				uid
+			}).then((model) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
-		renderModelForm: function(tableSlug){
-			this.$emit("renderModelForm", tableSlug);
+		renderModelForm: function(){
+			this.$store.dispatch("fetchCollection", this.currentCollectionSchema.tableSlug).then((collection) => {
+				this.$store.commit("setCurrentModel", {
+					model: {},
+					tableSlug: this.currentCollectionSchema.tableSlug
+				});
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };

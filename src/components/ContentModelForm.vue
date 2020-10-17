@@ -88,11 +88,23 @@ export default{
 	methods: {
 		submitModel: function(e){
 			const result = this.$_formToJSON(e.target);
-			const slug = this.currentCollectionSchema.tableSlug;
-			const uid = this.currentModel._uid || "";
 
 			if(this.validateModel(result)){
-				this.$emit("submitModel", result, slug, uid, this.currentCollectionSchema);
+				this.$store.dispatch("submitModel", {
+					model: result,
+					tableSlug: this.currentCollectionSchema.tableSlug,
+					uid: this.currentModel._uid || "",
+					schema: this.currentCollectionSchema
+				}).then((model) => {
+					this.$store.commit("setCurrentModel", {
+						model,
+						tableSlug: this.currentCollectionSchema.tableSlug
+					});
+					this.$store.commit("setContentView", this.$store.state.contentViews.modelPage);
+					this.$store.commit("setToastMessage", "Created new model");
+				}).catch((err) => {
+					this.$store.commit("setToastMessage", err.message || err.detail);
+				});
 			}else{
 				// Validation failed, show message
 			}

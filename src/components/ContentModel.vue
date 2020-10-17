@@ -60,16 +60,29 @@ export default {
 	},
 	methods: {
 		renderModelForm: function(){
-			this.$emit("renderModelForm",
-				this.currentCollectionSchema.tableSlug,
-				this.currentModel._uid
-			);
+			this.$store.dispatch("fetchCollection", this.currentCollectionSchema.tableSlug).then((collection) => {
+				this.$store.dispatch("fetchModel", {
+					tableSlug: this.currentCollectionSchema.tableSlug,
+					uid: this.currentModel._uid
+				}).then((model) => {
+					this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
+				}).catch((err) => {
+					this.$store.commit("setToastMessage", err.detail);
+				});
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		},
 		deleteModel: function(){
-			this.$emit("deleteModel",
-				this.currentCollectionSchema.tableSlug,
-				this.currentModel._uid
-			);
+			this.$store.dispatch("deleteModel", {
+				tableSlug: this.currentCollectionSchema.tableSlug,
+				uid: this.currentModel._uid
+			}).then((model) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.collectionList);
+				this.$store.commit("setToastMessage", "Deleted model");
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };

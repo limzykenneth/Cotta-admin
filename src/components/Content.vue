@@ -11,11 +11,6 @@
 			:configurations="configurations"
 			:files="files"
 
-			v-on:renderModel="renderModel"
-			v-on:renderModelForm="renderModelForm"
-			v-on:submitModel="submitModel"
-			v-on:deleteModel="deleteModel"
-
 			v-on:renderSchemaForm="renderSchemaForm"
 			v-on:submitSchema="submitSchema"
 			v-on:deleteSchema="deleteSchema"
@@ -113,19 +108,6 @@ export default {
 		}
 	},
 	methods: {
-		renderModel: function(tableSlug, uid){
-			this.$emit("renderModel", tableSlug, uid);
-		},
-		renderModelForm: function(tableSlug, uid){
-			this.$emit("renderModelForm", tableSlug, uid);
-		},
-		submitModel: function(model, tableSlug, uid="", schema){
-			this.$emit("submitModel", model, tableSlug, uid, schema);
-		},
-		deleteModel: function(tableSlug, uid){
-			this.$emit("deleteModel", tableSlug, uid);
-		},
-
 		renderSchemaForm: function(tableSlug){
 			this.$emit("renderSchemaForm", tableSlug);
 		},
