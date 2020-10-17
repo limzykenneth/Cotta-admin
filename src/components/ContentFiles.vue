@@ -14,7 +14,6 @@
 			:file="selectedFile"
 
 			v-on:hideDrawer="hideDrawer"
-			v-on:deleteFile="deleteFile"
 		></files-drawer>
 	</article>
 </template>
@@ -49,10 +48,6 @@ export default {
 			}
 		},
 		hideDrawer: function(){
-			this.$set(this, "selectedFile", null);
-		},
-		deleteFile: function(file){
-			this.$emit("deleteFile", file);
 			this.$set(this, "selectedFile", null);
 		}
 	}

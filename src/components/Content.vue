@@ -24,8 +24,6 @@
 			v-on:renderUserForm="renderUserForm"
 			v-on:deleteUser="deleteUser"
 			v-on:submitUser="submitUser"
-
-			v-on:deleteFile="deleteFile"
 		></component>
 	</section>
 </template>
@@ -154,10 +152,6 @@ export default {
 		},
 		submitUser: function(user){
 			this.$emit("submitUser", user);
-		},
-
-		deleteFile: function(file){
-			this.$emit("deleteFile", file);
 		}
 	}
 };

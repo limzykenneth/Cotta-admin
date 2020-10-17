@@ -39,8 +39,6 @@
 				v-on:renderUserForm="renderUserForm"
 				v-on:deleteUser="deleteUser"
 				v-on:submitUser="submitUser"
-
-				v-on:deleteFile="deleteFile"
 			></app-content>
 		</div>
 	</div>
@@ -209,20 +207,6 @@ export default {
 			this.$store.dispatch("signupUser", signupDetails).then((res) => {
 				this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
-			}).catch((err) => {
-				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		/**
-		 * Files metadata manipulation methods
-		 */
-		deleteFile: function(file){
-			this.$store.dispatch("deleteFile", file).then((res) => {
-				this.$store.commit("setToastMessage", res.detail);
-				return this.$store.dispatch("fetchFiles");
-			}).then((res) => {
-				this.$store.commit("setFiles", res);
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
 			});

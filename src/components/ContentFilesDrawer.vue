@@ -48,7 +48,14 @@ export default {
 			this.$emit("hideDrawer");
 		},
 		deleteFile: function(){
-			this.$emit("deleteFile", this.file);
+			this.$store.dispatch("deleteFile", this.file).then((res) => {
+				this.$store.commit("setToastMessage", res.detail);
+				return this.$store.dispatch("fetchFiles");
+			}).then((res) => {
+				this.$store.commit("setFiles", res);
+			}).catch((err) => {
+				this.$store.commit("setToastMessage", err.detail);
+			});
 		}
 	}
 };
