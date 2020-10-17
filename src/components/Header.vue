@@ -17,15 +17,12 @@
 <script>
 export default {
 	name: "AppHeader",
-	props: {
-		"siteTitle": {
-			type: String,
-			required: true
-		}
-	},
 	computed: {
 		loggedIn: function(){
 			return this.$store.state.loggedIn;
+		},
+		siteTitle: function(){
+			return this.$store.state.siteTitle;
 		}
 	},
 	methods: {

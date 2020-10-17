@@ -1,12 +1,8 @@
 <template>
 	<div id="page-container">
-		<app-header
-			:site-title="siteTitle"
-		></app-header>
+		<app-header></app-header>
 
-		<app-toast
-			:toast-message="toastMessage"
-		></app-toast>
+		<app-toast></app-toast>
 
 		<div class="flex-container">
 			<app-sidebar></app-sidebar>

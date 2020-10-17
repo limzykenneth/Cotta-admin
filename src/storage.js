@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode";
 import urlJoin from "url-join";
 Vue.use(Vuex);
 
-import {url, generateRequest, sendRequest} from "./utils.js";
+import {siteTitle, url, generateRequest, sendRequest} from "./utils.js";
 
 /**
  * Vuex store initialization
@@ -14,6 +14,7 @@ export default new Vuex.Store({
 	 * Vuex store states initialization.
 	 */
 	state: {
+		siteTitle,
 		toastMessage: "",
 
 		loggedIn: false,
