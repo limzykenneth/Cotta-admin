@@ -25,8 +25,6 @@
 			v-on:deleteUser="deleteUser"
 			v-on:submitUser="submitUser"
 
-			v-on:submitConfig="submitConfig"
-
 			v-on:deleteFile="deleteFile"
 		></component>
 	</section>
@@ -156,10 +154,6 @@ export default {
 		},
 		submitUser: function(user){
 			this.$emit("submitUser", user);
-		},
-
-		submitConfig: function(result){
-			this.$emit("submitConfig", result);
 		},
 
 		deleteFile: function(file){

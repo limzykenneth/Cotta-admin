@@ -40,8 +40,6 @@
 				v-on:deleteUser="deleteUser"
 				v-on:submitUser="submitUser"
 
-				v-on:submitConfig="submitConfig"
-
 				v-on:deleteFile="deleteFile"
 			></app-content>
 		</div>
@@ -213,15 +211,6 @@ export default {
 				this.$store.commit("setToastMessage", "You have sucessfully signed up!");
 			}).catch((err) => {
 				this.$store.commit("setToastMessage", err.detail);
-			});
-		},
-
-		/**
-		 * Settings/configurations related methods
-		 */
-		submitConfig: function(result){
-			this.$store.dispatch("submitConfigurations", result).then((res) => {
-				this.$store.commit("setToastMessage", `Config "${res.config_name}" changed.`);
 			});
 		},
 

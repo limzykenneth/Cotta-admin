@@ -7,7 +7,7 @@
 			v-on:submit.prevent="submitConfig"
 		>
 			<span class="labels">
-				<label :for="config.config_name">{{ startCase(config.config_name) }}</label>
+				<label :for="config.config_name">{{ config.config_name | startCase }}</label>
 			</span>
 			<span class="inputs">
 				<input type="text"
@@ -25,6 +25,11 @@ import startCase from "lodash.startcase";
 
 export default {
 	name: "SettingsPage",
+	filters: {
+		startCase: function(val){
+			return startCase(val);
+		}
+	},
 	props: {
 		"configurations": {
 			type: Array,
@@ -32,9 +37,6 @@ export default {
 		}
 	},
 	methods: {
-		startCase: function(str){
-			return startCase(str);
-		},
 		submitConfig: function(e){
 			const data = new FormData(e.target);
 			const result = {};
@@ -72,7 +74,9 @@ export default {
 				}
 			}
 
-			this.$emit("submitConfig", result);
+			this.$store.dispatch("submitConfigurations", result).then((res) => {
+				this.$store.commit("setToastMessage", `Config "${res.config_name}" changed.`);
+			});
 		}
 	}
 };
