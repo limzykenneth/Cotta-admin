@@ -6,7 +6,7 @@
 			<files-item v-for="file in files" :key="file.uid"
 				:file="file"
 				v-on:click.native="selectFile(file)"
-			></files-item>
+			/>
 		</div>
 
 		<files-drawer
@@ -14,7 +14,7 @@
 			:file="selectedFile"
 
 			v-on:hideDrawer="hideDrawer"
-		></files-drawer>
+		/>
 	</article>
 </template>
 

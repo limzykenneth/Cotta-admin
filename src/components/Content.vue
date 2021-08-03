@@ -2,7 +2,7 @@
 	<section id="page-content">
 		<component
 			v-bind:is="currentView"
-		></component>
+		/>
 	</section>
 </template>
 

@@ -12,7 +12,7 @@
 					:href="userModelLinks[index].link"
 					v-on:click.prevent="renderModel(userModelLinks[index].tableSlug, userModelLinks[index].modelID)"
 				>
-					<li >
+					<li>
 						{{ model }}
 					</li>
 				</a>

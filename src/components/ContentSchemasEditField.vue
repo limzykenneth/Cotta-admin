@@ -25,8 +25,7 @@
 
 				v-on:removeChoice="removeChoice"
 				v-on:choiceChanged="choiceChanged"
-			>
-			</multi-choice>
+			/>
 			<button v-on:click.prevent="addChoice">Add</button>
 		</div>
 	</div>

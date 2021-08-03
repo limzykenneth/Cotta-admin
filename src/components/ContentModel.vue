@@ -1,9 +1,10 @@
 <template>
 	<article id="model-container">
-		<h1>{{currentCollectionSchema.tableName}} - {{ currentModel._uid }}</h1>
+		<h1>{{ currentCollectionSchema.tableName }} - {{ currentModel._uid }}</h1>
 
 		<button
-			v-on:click.prevent="renderModelForm">
+			v-on:click.prevent="renderModelForm"
+		>
 			Edit
 		</button>
 

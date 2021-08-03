@@ -21,7 +21,7 @@
 		<ul class="lists schema-list">
 			<h4 class="list-section-title">Collections</h4>
 			<a v-for="schema in schemas" :key="schema.tableSlug"
-				v-bind:href="schema.tableSlug"
+				:href="schema.tableSlug"
 				v-on:click.prevent="renderCollection(schema.tableSlug)"
 			>
 				<li><i class="fa fa-file" aria-hidden="true"></i>{{ schema.tableName }}</li>

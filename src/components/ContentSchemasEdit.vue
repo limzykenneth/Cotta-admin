@@ -27,7 +27,7 @@
 					v-on:nameChanged="nameChanged"
 					v-on:removeField="removeField"
 					v-on:choiceChanged="choiceChanged"
-				></schemas-edit-field>
+				/>
 			</div>
 
 			<button v-on:click.prevent="addField">Add</button>

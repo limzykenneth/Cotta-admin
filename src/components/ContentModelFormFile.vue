@@ -2,8 +2,8 @@
 	<div id="file-input-container">
 		<label class="input-label" :for="name">Browse</label>
 		<input type="file" class="file-input" multiple
-			:name="name"
 			:id="name"
+			:name="name"
 
 			v-on:change="fileChanged"
 		>

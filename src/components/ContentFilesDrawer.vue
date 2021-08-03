@@ -30,7 +30,9 @@
 
 		<button id="hide-button"
 			v-on:click.prevent="hideDrawer"
-		><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+		>
+			<i class="fa fa-caret-down" aria-hidden="true"></i>
+		</button>
 	</section>
 </template>
 

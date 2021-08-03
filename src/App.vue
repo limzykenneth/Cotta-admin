@@ -1,13 +1,12 @@
 <template>
 	<div id="page-container">
-		<app-header></app-header>
+		<app-header />
 
-		<app-toast></app-toast>
+		<app-toast />
 
 		<div class="flex-container">
-			<app-sidebar></app-sidebar>
-
-			<app-content></app-content>
+			<app-sidebar />
+			<app-content />
 		</div>
 	</div>
 </template>

@@ -12,10 +12,10 @@
 					v-for="(choice, label) in field.app_values" :key="label"
 				>
 					<input
+						:id="choice"
 						:type="field.app_type"
 						:name="key"
 						:value="choice"
-						:id="choice"
 						:checked="checkboxChecked(choice, key)"
 					>
 					<label :for="choice">{{ label }}</label>
@@ -26,7 +26,7 @@
 				<file-input
 					:name="key"
 					:files-metadata="currentModel[key]"
-				></file-input>
+				/>
 			</span>
 
 			<span class="field" v-else-if="field.app_type == 'wysiwyg'">
@@ -34,7 +34,7 @@
 					:name="key"
 					:content="currentModel[key]"
 					v-on:wysiwygChanged="wysiwygChanged"
-				></wysiwyg-input>
+				/>
 			</span>
 
 			<span class="field" v-else>

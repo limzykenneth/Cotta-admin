@@ -4,7 +4,7 @@
 		:current-model="currentModel"
 
 		v-on:submitModel="submitModel"
-	></model-form>
+	/>
 </template>
 
 <script>

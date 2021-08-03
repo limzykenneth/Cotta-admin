@@ -7,7 +7,7 @@
 			<users-list-item
 				v-for="user in usersList" :key="user.username"
 				:user="user"
-			></users-list-item>
+			/>
 		</ul>
 	</article>
 </template>

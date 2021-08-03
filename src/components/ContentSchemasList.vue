@@ -5,7 +5,7 @@
 		<schemas-list-item
 			v-for="schema in schemas" :key="schema.tableSlug"
 			:schema="schema"
-		></schemas-list-item>
+		/>
 	</article>
 </template>
 
