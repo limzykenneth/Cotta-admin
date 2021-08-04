@@ -5,9 +5,15 @@
 		<div id="message"></div>
 
 		<form v-on:submit.prevent="signupUser">
-			<input id="username" type="text" name="username" placeholder="Username" required>
-			<input id="password" type="password" name="password" placeholder="Password" required>
-			<input id="confirm-password" type="password" name="confirm-password" placeholder="Confirm Password" required>
+			<input id="username" type="text" name="username" placeholder="Username" required
+				v-model="username"
+			>
+			<input id="password" type="password" name="password" placeholder="Password" required
+				v-model="password"
+			>
+			<input id="confirm-password" type="password" name="confirm-password" placeholder="Confirm Password" required
+				v-model="confirmPassword"
+			>
 			<input type="submit" name="submit" value="Submit">
 		</form>
 
@@ -22,11 +28,18 @@
 <script>
 export default {
 	name: "SignupPage",
+	data: function(){
+		return {
+			username: "",
+			password: "",
+			confirmPassword: ""
+		};
+	},
 	methods: {
 		signupUser: function(e){
-			const username = e.target.querySelector("#username").value;
-			const password = e.target.querySelector("#password").value;
-			const confirmPassword = e.target.querySelector("#confirm-password").value;
+			const username = this.username;
+			const password = this.password;
+			const confirmPassword = this.confirmPassword;
 
 			if(password !== confirmPassword){
 				this.$el.querySelector("#message").innerHTML = "Passwords don't match";

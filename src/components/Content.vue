@@ -1,8 +1,6 @@
 <template>
 	<section id="page-content">
-		<component
-			v-bind:is="currentView"
-		/>
+		<component :is="currentView" />
 	</section>
 </template>
 

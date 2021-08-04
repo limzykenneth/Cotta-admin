@@ -127,9 +127,6 @@ export default{
 			if(!this.currentModel[slug]) return false;
 			return this.currentModel[slug].includes(choice);
 		},
-		fileChanged: function(key, e){
-			const files = e.srcElement.files;
-		},
 		wysiwygChanged: function(content, name){
 			this.wysiwygContents[name] = content;
 		},

@@ -34,11 +34,11 @@
 
 				<div class="field" v-else-if="field.app_type == 'file'">
 					<img class="field-image" v-if="!Array.isArray(currentModel[key])"
-						v-bind:src="currentModel[key].permalink"
+						:src="currentModel[key].permalink"
 					>
 					<img class="field-image" v-else
 						v-for="(file, index) in currentModel[key]" :key="index"
-						v-bind:src="file.permalink"
+						:src="file.permalink"
 					>
 				</div>
 			</li>
@@ -58,30 +58,29 @@ export default {
 		}
 	},
 	methods: {
-		renderModelForm: function(){
-			this.$store.dispatch("fetchCollection", this.currentCollectionSchema.tableSlug).then((collection) => {
-				this.$store.dispatch("fetchModel", {
+		renderModelForm: async function(){
+			try{
+				await this.$store.dispatch("fetchCollection", this.currentCollectionSchema.tableSlug);
+				await this.$store.dispatch("fetchModel", {
 					tableSlug: this.currentCollectionSchema.tableSlug,
 					uid: this.currentModel._uid
-				}).then((model) => {
-					this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
-				}).catch((err) => {
-					this.$store.commit("setToastMessage", err.detail);
 				});
-			}).catch((err) => {
+				this.$store.commit("setContentView", this.$store.state.contentViews.modelEdit);
+			}catch(err) {
 				this.$store.commit("setToastMessage", err.detail);
-			});
+			}
 		},
-		deleteModel: function(){
-			this.$store.dispatch("deleteModel", {
-				tableSlug: this.currentCollectionSchema.tableSlug,
-				uid: this.currentModel._uid
-			}).then((model) => {
+		deleteModel: async function(){
+			try{
+				await this.$store.dispatch("deleteModel", {
+					tableSlug: this.currentCollectionSchema.tableSlug,
+					uid: this.currentModel._uid
+				});
 				this.$store.commit("setContentView", this.$store.state.contentViews.collectionList);
 				this.$store.commit("setToastMessage", "Deleted model");
-			}).catch((err) => {
+			}catch(err) {
 				this.$store.commit("setToastMessage", err.detail);
-			});
+			}
 		}
 	}
 };

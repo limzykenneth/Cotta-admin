@@ -3,8 +3,12 @@
 		<h1>Login</h1>
 
 		<form v-on:submit.prevent="loginUser">
-			<input id="username" type="text" name="username" placeholder="Username" required>
-			<input id="password" type="password" name="password" placeholder="Password" required>
+			<input id="username" type="text" name="username" placeholder="Username" required
+				v-model="username"
+			>
+			<input id="password" type="password" name="password" placeholder="Password" required
+				v-model="password"
+			>
 			<input type="submit" name="submit" value="Submit">
 		</form>
 
@@ -21,23 +25,28 @@
 <script>
 export default {
 	name: "LoginPage",
-	props: {
+	data: function(){
+		return {
+			username: "",
+			password: ""
+		};
 	},
 	methods: {
-		loginUser: function(e){
-			const username = e.target.querySelector("#username").value;
-			const password = e.target.querySelector("#password").value;
+		loginUser: async function(e){
+			const username = this.username;
+			const password = this.password;
 
-			this.$store.dispatch("loginUser", {username, password}).then((res) => {
+			try{
+				await this.$store.dispatch("loginUser", {username, password});
 				this.$store.commit("setContentView", this.$store.state.contentViews.dashboard);
-			}).catch((err) => {
+			}catch(err) {
 				if(err.title === "Authentication Failed"){
 					this.$store.commit("setContentView", this.$store.state.contentViews.loginPage);
 				}else{
 					console.error(err);
 				}
 				this.$store.commit("setToastMessage", err.detail);
-			});
+			}
 		},
 		renderSignup: function(){
 			this.$store.commit("setContentView", this.$store.state.contentViews.signupPage);

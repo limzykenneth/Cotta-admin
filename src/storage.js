@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import jwtDecode from "jwt-decode";
+import findIndex from "lodash/findIndex";
 Vue.use(Vuex);
 
 import {siteTitle, generateRequest, sendRequest} from "./utils.js";
@@ -124,6 +125,13 @@ export default new Vuex.Store({
 
 		setConfigurations: function(state, configurations){
 			state.configurations = configurations;
+		},
+		setConfiguration: function(state, configuration){
+			const configIndex = findIndex(state.configurations, (entry) => {
+				return entry.config_name === configuration.config_name;
+			});
+
+			state.configurations[configIndex] = configuration;
 		},
 
 		setFiles: function(state, files){
@@ -480,10 +488,12 @@ export default new Vuex.Store({
 			}
 		},
 		submitConfigurations: async function(context, result){
+			console.log(result);
 			const request = generateRequest(`config/${result.config_name}`, "POST", result);
 			const {success, response} = await sendRequest(request);
 
 			if(success){
+				context.commit("setConfiguration", response);
 				return response;
 			}else{
 				throw response;

@@ -4,15 +4,15 @@
 
 		<form v-for="(config, key) in configurations" :key="key"
 			class="config-field"
-			v-on:submit.prevent="submitConfig"
+			v-on:submit.prevent="submitConfig($event, key)"
 		>
 			<span class="labels">
-				<label :for="config.config_name">{{ config.config_name | startCase }}</label>
+				<label :for="config.config_name">{{ key | startCase }}</label>
 			</span>
 			<span class="inputs">
 				<input type="text"
-					:name="config.config_name"
-					:value="config.config_value"
+					:name="key"
+					v-model="configurations[key]"
 				>
 			</span>
 			<input class="submit" type="submit" name="submit" value="Submit">
@@ -22,6 +22,9 @@
 
 <script>
 import startCase from "lodash.startcase";
+import isString from "lodash/isString";
+import reduce from "lodash/reduce";
+import find from "lodash/find";
 
 export default {
 	name: "SettingsPage",
@@ -30,47 +33,47 @@ export default {
 			return startCase(val);
 		}
 	},
-	computed: {
-		configurations: function(){
-			return this.$store.state.configurations;
-		}
+	data: function(){
+		return {
+			configurations: reduce(this.$store.state.configurations, (acc, configuration) => {
+				acc[configuration.config_name] = configuration.config_value;
+
+				return acc;
+			}, {})
+		};
 	},
 	methods: {
-		submitConfig: function(e){
-			const data = new FormData(e.target);
-			const result = {};
+		submitConfig: function(e, key){
+			const result = {
+				config_name: key,
+				config_value: this.configurations[key]
+			};
+			const config_type = find(this.$store.state.configurations, (config) => {
+				return config.config_name === key;
+			}).config_type;
 
-			for(const entry of data){
-				result.config_name = entry[0];
+			switch(config_type){
+				case "array":
+					if(isString(result.config_value)){
+						result.config_value = result.config_value.split(",");
+					}
+					break;
 
-				const configType = _.find(this.configurations, (c) => {
-					return c.config_name === result.config_name;
-				}).config_type;
+				case "boolean":
+					if(_.isBoolean(JSON.parse(result.config_value))){
+						result.config_value = JSON.parse(result.config_value);
+					}
+					break;
 
-				switch(configType){
-					case "string":
-						result.config_value = entry[1];
-						break;
+				case "number":
+					if(!_.isNaN(parseFloat(result.config_value))){
+						result.config_value = parseFloat(result.config_value);
+					}
+					break;
 
-					case "array":
-						result.config_value = entry[1].split(",");
-						break;
-
-					case "boolean":
-						if(_.isBoolean(JSON.parse(entry[1]))){
-							result.config_value = JSON.parse(entry[1]);
-						}
-						break;
-
-					case "number":
-						if(!_.isNaN(parseFloat(entry[1]))){
-							result.config_value = parseFloat(entry[1]);
-						}
-						break;
-
-					default:
-						break;
-				}
+				case "string":
+				default:
+					break;
 			}
 
 			this.$store.dispatch("submitConfigurations", result).then((res) => {
