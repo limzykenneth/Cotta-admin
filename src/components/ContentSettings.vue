@@ -58,7 +58,9 @@ export default {
 			switch(config_type){
 				case "array":
 					if(isString(result.config_value)){
-						result.config_value = result.config_value.split(",");
+						result.config_value = result.config_value
+							.split(",")
+							.map((val) => val.trim());
 					}
 					break;
 
