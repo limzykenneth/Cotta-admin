@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import {map, each} from "lodash";
+
 export default{
 	name: "FileInput",
 	props: {
@@ -41,7 +43,7 @@ export default{
 	data: function(){
 		let filesArray;
 		if(Array.isArray(this.filesMetadata) && this.filesMetadata.length !== 0){
-			filesArray = _.map(this.filesMetadata, (fileMetadata, i) => {
+			filesArray = map(this.filesMetadata, (fileMetadata, i) => {
 				return {
 					fileName: fileMetadata.file_name,
 					fileLink: fileMetadata.permalink
@@ -49,14 +51,14 @@ export default{
 			});
 			return {
 				files: filesArray
-			}
+			};
 		}else if(this.filesMetadata){
 			return {
 				files: [{
 					fileName: this.filesMetadata.file_name,
 					fileLink: this.filesMetadata.permalink
 				}]
-			}
+			};
 		}
 
 		return {
@@ -70,7 +72,7 @@ export default{
 		fileChanged: function(e){
 			const files = e.srcElement.files;
 			this.files = [];
-			_.each(files, (file, i) => {
+			each(files, (file, i) => {
 				this.files.push({
 					fileName: file.name,
 					fileLink: window.URL.createObjectURL(file)

@@ -32,6 +32,11 @@
 </template>
 
 <script>
+import {
+	map,
+	includes,
+	reduce
+} from "lodash";
 import MultiChoice from "./ContentSchemasEditFieldMultiChoice.vue";
 
 export default {
@@ -65,7 +70,7 @@ export default {
 	},
 	data: function(){
 		// choices object to choicesArray
-		const choicesArray = _.map(this.choices, (choice, key) => {
+		const choicesArray = map(this.choices, (choice, key) => {
 			return {
 				label: key,
 				value: choice
@@ -81,7 +86,7 @@ export default {
 			return this.choicesArray.length > 1;
 		},
 		isChoices: function(){
-			return _.includes(["checkbox", "radio"], this.value);
+			return includes(["checkbox", "radio"], this.value);
 		}
 	},
 	methods: {
@@ -115,7 +120,7 @@ export default {
 		},
 		choiceChanged: function(data){
 			this.choicesArray[data.index] = data.choice;
-			const choices = _.reduce(this.choicesArray, (acc, c, i) => {
+			const choices = reduce(this.choicesArray, (acc, c, i) => {
 				acc[c.label] = c.value;
 				return acc;
 			}, {});

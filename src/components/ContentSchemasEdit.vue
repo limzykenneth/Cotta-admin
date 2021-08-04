@@ -38,7 +38,12 @@
 </template>
 
 <script>
-import {snakeCase} from "lodash";
+import {
+	snakeCase,
+	isEmpty,
+	map,
+	reduce
+} from "lodash";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
 export default{
@@ -54,7 +59,7 @@ export default{
 			return snakeCase(this.$store.state.currentCollectionSchema.tableName);
 		},
 		editName: function(){
-			if(!_.isEmpty(this.$store.state.currentCollectionSchema)){
+			if(!isEmpty(this.$store.state.currentCollectionSchema)){
 				return true;
 			}else{
 				return false;
@@ -154,7 +159,7 @@ export default{
 		},
 
 		_objectToArray: function(obj){
-			return _.map(obj, (prop, key) => {
+			return map(obj, (prop, key) => {
 				return {
 					key,
 					properties: prop
@@ -162,7 +167,7 @@ export default{
 			});
 		},
 		_arrayToObject: function(arr){
-			return _.reduce(arr, (acc, val) => {
+			return reduce(arr, (acc, val) => {
 				if(acc[val.key]){
 					throw new Error(`Duplicate field name: ${val.key}`);
 				}

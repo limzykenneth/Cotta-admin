@@ -1,7 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import jwtDecode from "jwt-decode";
-import findIndex from "lodash/findIndex";
+import {
+	findIndex,
+	defer,
+	find,
+	filter,
+	each,
+	size,
+	contains,
+	reduce
+} from "lodash";
 Vue.use(Vuex);
 
 import {siteTitle, generateRequest, sendRequest} from "./utils.js";
@@ -56,7 +65,7 @@ export default new Vuex.Store({
 		setToastMessage: function(state, message){
 			if(message === state.toastMessage && message.trim() !== ""){
 				state.toastMessage = "";
-				_.defer(() => {
+				defer(() => {
 					state.toastMessage = message;
 				});
 			}else{
@@ -67,7 +76,7 @@ export default new Vuex.Store({
 			state.schemas = newSchemas;
 		},
 		addNewEditSchema: function(state, schema){
-			const matchedSchemaIndex = _.findIndex(state.schemas, function(el){
+			const matchedSchemaIndex = findIndex(state.schemas, function(el){
 				return el.tableSlug == schema.tableSlug;
 			});
 			if(matchedSchemaIndex > -1){
@@ -77,7 +86,7 @@ export default new Vuex.Store({
 			}
 		},
 		removeSchema: function(state, tableSlug){
-			state.schemas = _.filter(state.schemas, function(el){
+			state.schemas = filter(state.schemas, function(el){
 				return el.tableSlug != tableSlug;
 			});
 		},
@@ -101,7 +110,7 @@ export default new Vuex.Store({
 			this.commit("setCurrentCollectionSchema", result.tableSlug);
 		},
 		setCurrentCollectionSchema: function(state, tableSlug){
-			const selectedSchema = _.find(state.schemas, function(el){
+			const selectedSchema = find(state.schemas, function(el){
 				return el.tableSlug == tableSlug;
 			}) || {};
 			state.currentCollectionSchema = selectedSchema;
@@ -111,14 +120,13 @@ export default new Vuex.Store({
 			this.commit("setCurrentCollectionSchema", result.tableSlug);
 		},
 		removeModel: function(state, options){
-			const tableSlug = options.tableSlug;
 			const model = options.model;
 
 			if(!model){
 				throw Error("No valid model defined");
 			}
 
-			state.currentCollection = _.filter(state.currentCollection, function(el){
+			state.currentCollection = filter(state.currentCollection, function(el){
 				return el._uid != model._uid;
 			});
 		},
@@ -259,21 +267,21 @@ export default new Vuex.Store({
 			const files = {};
 
 			// Check if there's upload field
-			_.each(schema.definition, (el, key) => {
+			each(schema.definition, (el, key) => {
 				if(el.app_type == "file"){
-					files[key] = _.reduce(model[key], (acc, item) => {
+					files[key] = reduce(model[key], (acc, item) => {
 						if(item.file) acc.push(item.file);
 						return acc;
 					}, []);
 				}
 			});
 
-			if(_.size(files) > 0){
+			if(size(files) > 0){
 				// There are at least one upload field
 				// Remove the binary file entry from the model
-				_.each(schema.definition, (el, key) => {
+				each(schema.definition, (el, key) => {
 					if(el.app_type == "file"){
-						_.each(model[key], (el2) => {
+						each(model[key], (el2) => {
 							if(el2.file) delete el2.file;
 						});
 					}
@@ -283,11 +291,11 @@ export default new Vuex.Store({
 				const configs = await context.dispatch("fetchConfigurations");
 
 				// Check file size
-				const maxFileSize = _.find(configs, (config) => {
+				const maxFileSize = find(configs, (config) => {
 					return config.config_name === "upload_file_size_max";
 				}).config_value;
 
-				_.each(files, (file) => {
+				each(files, (file) => {
 					for(const f of file){
 						if(f.size > maxFileSize){
 							failed = f.name;
@@ -301,13 +309,13 @@ export default new Vuex.Store({
 				}
 
 				// Check file type
-				const acceptedFileMIME = _.find(configs, (config) => {
+				const acceptedFileMIME = find(configs, (config) => {
 					return config.config_name === "upload_file_accepted_MIME";
 				}).config_value;
 
-				_.each(files, (file) => {
+				each(files, (file) => {
 					for(const f of file){
-						if(!_.contains(acceptedFileMIME, f.type)){
+						if(!contains(acceptedFileMIME, f.type)){
 							failed = f.name;
 							break;
 						}
@@ -329,10 +337,10 @@ export default new Vuex.Store({
 					const promises = [];
 
 					// Send individual images according to the link provided in the response
-					_.each(schema.definition, (definition, key) => {
+					each(schema.definition, (definition, key) => {
 						if(definition.app_type == "file"){
-							_.each(model[key], (property) => {
-								const file = _.find(files[key], (f) => {
+							each(model[key], (property) => {
+								const file = find(files[key], (f) => {
 									return f.name == property.file_name;
 								});
 

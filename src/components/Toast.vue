@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import {defer} from "lodash";
+
 export default {
 	name: "AppToast",
 	computed: {
@@ -27,7 +29,7 @@ function popToast(){
 	clearTimeout(timerFade);
 
 	this.$el.style.display = "block";
-	_.defer(() => {
+	defer(() => {
 		this.$el.style.opacity = 1;
 	});
 

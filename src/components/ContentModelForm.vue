@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import {each} from "lodash";
 import FileInput from "./ContentModelFormFile.vue";
 import WYSIWYGInput from "./ContentModelFormQuill.vue";
 
@@ -75,7 +76,7 @@ export default{
 	},
 	data: function(){
 		const wysiwygContents = {};
-		_.each(this.currentCollectionSchema.definition, (el, key) => {
+		each(this.currentCollectionSchema.definition, (el, key) => {
 			if(el.app_type === "wysiwyg"){
 				wysiwygContents[key] = this.currentModel[key] || "";
 			}
@@ -185,7 +186,7 @@ export default{
 			}
 
 			// Non-form type fields
-			_.each(this.wysiwygContents, (el, key) => {
+			each(this.wysiwygContents, (el, key) => {
 				result[key] = el;
 			});
 			return result;

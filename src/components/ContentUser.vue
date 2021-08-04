@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import {each} from "lodash";
+
 export default{
 	name: "UserPage",
 	computed: {
@@ -30,7 +32,7 @@ export default{
 		},
 		userModelLinks: function(){
 			let models = [];
-			_.each(this.currentViewUser.models, (model, i) => {
+			each(this.currentViewUser.models, (model, i) => {
 				let modelPaths = model.split(".");
 				let tableSlug = modelPaths[0];
 				let modelID = modelPaths[1];
