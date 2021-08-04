@@ -21,10 +21,13 @@
 </template>
 
 <script>
-import startCase from "lodash.startcase";
-import isString from "lodash/isString";
-import reduce from "lodash/reduce";
-import find from "lodash/find";
+import {
+	startCase,
+	isString,
+	isBoolean,
+	reduce,
+	find
+} from "lodash";
 
 export default {
 	name: "SettingsPage",
@@ -60,13 +63,13 @@ export default {
 					break;
 
 				case "boolean":
-					if(_.isBoolean(JSON.parse(result.config_value))){
+					if(isBoolean(JSON.parse(result.config_value))){
 						result.config_value = JSON.parse(result.config_value);
 					}
 					break;
 
 				case "number":
-					if(!_.isNaN(parseFloat(result.config_value))){
+					if(!Number.isNaN(parseFloat(result.config_value))){
 						result.config_value = parseFloat(result.config_value);
 					}
 					break;

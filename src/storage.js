@@ -488,7 +488,6 @@ export default new Vuex.Store({
 			}
 		},
 		submitConfigurations: async function(context, result){
-			console.log(result);
 			const request = generateRequest(`config/${result.config_name}`, "POST", result);
 			const {success, response} = await sendRequest(request);
 

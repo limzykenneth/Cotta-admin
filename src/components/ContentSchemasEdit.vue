@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import snakeCase from "lodash.snakecase";
+import {snakeCase} from "lodash";
 import SchemasEditField from "./ContentSchemasEditField.vue";
 
 export default{
