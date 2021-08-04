@@ -2,8 +2,6 @@
 	<model-form
 		:current-collection-schema="currentCollectionSchema"
 		:current-model="currentModel"
-
-		v-on:submitModel="submitModel"
 	/>
 </template>
 
@@ -21,11 +19,6 @@ export default{
 		},
 		currentModel: function(){
 			return this.$store.state.currentModel;
-		}
-	},
-	methods: {
-		submitModel: function(model, tableSlug, uid="", schema){
-			this.$emit("submitModel", model, tableSlug, uid, schema);
 		}
 	}
 };
